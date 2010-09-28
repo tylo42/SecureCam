@@ -1,6 +1,20 @@
-<!	VERSION 1.0.1
-	DATE: 8.20.08
->
+<!-- Copyright 2008, 2009, 2010 Tyler Hyndman
+   
+   This file is part of SecureCam.
+ 
+   SecureCam is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   SecureCam is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with SecureCam.  If not, see <http://www.gnu.org/licenses/>.
+-->
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
