@@ -1,0 +1,37 @@
+h1 {
+   text-align: center;
+   text-decoration: underline;
+}
+
+/* Calendar */
+#cal {
+   background-color: #666699;
+   color: #ffffff;
+}
+
+.cal_title {
+   text-align: center;
+   background-color: #9999cc;
+   color: #000000;
+   font-size: 18;
+}
+
+.cal_top {
+   text-align: center;
+   font-weight: bold;
+}
+
+.cal_empty {
+   background-color: #9999cc;
+   color: #000000;
+}
+
+.cal_day {
+   text-align: center;
+   background-color: #9999cc;
+   color: #000000;
+}
+
+.cal_selected_day {
+   text-align: center;
+}
