@@ -6,6 +6,7 @@
 CREATE TABLE camera(
 	camera_id	INT UNSIGNED	NOT NULL,
 	hostname	VARCHAR(255)	NOT NULL,
+   port INT UNSIGNED NOT NULL,
 	description	VARCHAR(255),
 	PRIMARY KEY(camera_id)
 )ENGINE=INNODB
