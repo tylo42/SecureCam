@@ -18,17 +18,6 @@
  */
 require_once('connect.php');
 
-// numcamera finds the number of cameras there are in the system
-function numcamera(){
-
-	$sql = "select count(distinct camera_id) from camera;";
-	$result = mysql_query($sql);
-	$num = mysql_fetch_array($result,MYSQL_ASSOC);
-	$numcam=$num['count(distinct camera_id)'];
-
-	return($numcam);
-}
-
 // flags the video and pic
 function flag($vid_id){
 	$sql="update video set flagged=1 where vid_id=$vid_id";

@@ -29,6 +29,11 @@ p#subtitle {
    display: inline;
 }
 
+img.preview {
+   width: 320px;
+   height: 240px;
+}
+
 /* Calendar */
 #cal {
    background-color: #666699;

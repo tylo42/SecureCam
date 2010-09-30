@@ -19,29 +19,38 @@
 
 require_once('connect.php');
 require_once('functions.php');
+require_once('page.php');
 
+class manage_page extends page {
+   protected function page_name() {
+      echo "Manage";
+   }
 
-if(isset($_GET['camera'])){
-	$camera=$_GET['camera'];
-	$desc=$_POST['desc'];
-	$sql = "update camera set description=\"$desc\" where camera_id=$camera";
-	$result = mysql_query($sql);
-}
+   public function body() {
 
-for($camnum=1;$camnum<=numcamera();$camnum++){
-	$sql = "select description from camera where camera_id=$camnum";
-	$result = mysql_query($sql);
-	$info = mysql_fetch_array($result,MYSQL_ASSOC);
+      if(isset($_GET['camera'])){
+         $camera=$_GET['camera'];
+         $desc=$_POST['desc'];
+         $sql = "update camera set description=\"$desc\" where camera_id=$camera";
+         $result = mysql_query($sql);
+      }
 
-	echo "<p><font size=\"6\"><u>Camera $camnum</u></font><br>";
+      for($camnum=1;$camnum<=numcamera();$camnum++){
+         $sql = "select description from camera where camera_id=$camnum";
+         $result = mysql_query($sql);
+         $info = mysql_fetch_array($result,MYSQL_ASSOC);
 
-	echo "<form action='manage.php?camera=$camnum' method='post'>";
-	echo "Description: ";
-	echo "<textarea name='desc' rows='1'>";
-	echo $info['description'];
-	echo "</textarea><br><br>";
-	echo "<input type='submit' value='Edit'>";
-	echo "</form>";
-	echo "<br><br>";
+         echo "<p><font size=\"6\"><u>Camera $camnum</u></font><br>";
+
+         echo "<form action='manage.php?camera=$camnum' method='post'>";
+         echo "Description: ";
+         echo "<textarea name='desc' rows='1'>";
+         echo $info['description'];
+         echo "</textarea><br><br>";
+         echo "<input type='submit' value='Edit'>";
+         echo "</form>";
+         echo "<br><br>";
+      }
+   }
 }
 ?>
