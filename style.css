@@ -1,7 +1,15 @@
+body {
+   background: #C0C0C0;
+}
+
 h1,h2,h3 {
    text-align: center;
    text-decoration: underline;
    margin: 0 0 0 0;
+}
+
+table {
+   width: 100%;
 }
 
 p#subtitle {
@@ -12,6 +20,7 @@ p#subtitle {
 #page_bg {
    margin: 0 auto;
    width: 960px;
+   background: #ffffff;
 }
 
 #camera-links {
