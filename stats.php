@@ -20,7 +20,7 @@
 require_once('connect.php');
 require_once('functions.php');
 require_once('calendar.php');
-require_once('stats.php');
+require_once('page.php');
 
 class stats_page extends page {
    protected function page_name() {
@@ -39,7 +39,7 @@ class stats_page extends page {
       echo "<br><u><h2>All Time</h2></u>";
 
       echo "<table border=\"1\"><tr><th>Camera</th><th># of videos</td></th><tr>";
-      for($count=1;$count<=numcamera()&&$count<9;$count++){
+      for($count=1;$count<=$this->number_of_cameras();$count++){
          $sql = "select count(vid_id) from video where camera_id=$count";
          $result = mysql_query($sql);
          $num = mysql_fetch_array($result,MYSQL_ASSOC);

@@ -31,20 +31,29 @@ class browse_page extends page {
 
    public function body() {
       // Add/remove flag
-      if($_GET['flag']==1) {
+      if($_POST['flag']==1) {
          flag($_GET['idvid']);
       }
 
-      if($_GET['flag']==0) {
+      if($_POST['flag']==0) {
          deflag($_GET['idvid']);
       }
 
       // set up check boxes
-      $checkarray= array (1 => $_GET['camera1'], 2 => $_GET['camera2'], 3 => $_GET['camera3'], 4 => $_GET['camera4'], 5 => $_GET['camera5'], 6 => $_GET['camera6'], 7 => $_GET['camera7'], 8 => $_GET['camera8'], 9 => $_GET['camera9']);
+      $checkarray= array (1 => $_GET['camera1'], 
+                          2 => $_GET['camera2'], 
+                          3 => $_GET['camera3'], 
+                          4 => $_GET['camera4'], 
+                          5 => $_GET['camera5'], 
+                          6 => $_GET['camera6'], 
+                          7 => $_GET['camera7'], 
+                          8 => $_GET['camera8'], 
+                          9 => $_GET['camera9']
+                         );
 
       //check all for first time
       if($_GET['first']==1){
-         for($count=1;$count<=numcamera();$count++)
+         for($count=1;$count<=$this->number_of_cameras();$count++)
             $checkarray[$count]=1;
          $date=getDate();
          $_SESSION['mday']= $date["mday"];
@@ -52,16 +61,14 @@ class browse_page extends page {
          $_SESSION['year'] = $date["year"];
       }
       else if(isset($_GET["mday"])){
-         $_SESSION['mday']= $_GET["mday"];
-         $_SESSION['mon'] = $_GET["mon"];
-         $_SESSION['year'] = $_GET["year"];
+         $_SESSION['mday']= $_POST["mday"];
+         $_SESSION['mon'] = $_POST["mon"];
+         $_SESSION['year'] = $_POST["year"];
       }
 
-      for($x=1;$x<=numcamera();$x++) {
+      for($x=1;$x<=$this->number_of_cameras();$x++) {
          $checkboxes.="&camera$x=$checkarray[$x]";
       }
-
-      echo "<link type=\"text/css\" rel=\"stylesheet\" media=\"all\" href=\"style.css\" />\n"; // FIXME: THIS SHOULD NOT GO HERE - ???
 
       //title
       echo "<h1>Browse</h1>";
@@ -69,7 +76,7 @@ class browse_page extends page {
       echo "<table border=\"0\" width=\"100%\"><tr><td>";
       echo "<form action=\"browse.php\" method=\"get\">";
 
-      for($count=1;$count<=numcamera();$count++){
+      for($count=1;$count<=$this->number_of_cameras();$count++){
          echo "Camera $count:";
          $checked = ($checkarray[$count]==1) ? "checked" : "";
          echo "<input type='checkbox' name='camera$count' value='1' $checked>";
@@ -90,11 +97,11 @@ class browse_page extends page {
       echo "</td></table>";
 
       //Display the videos
-      for($count=1;$count<=numcamera();$count++){
+      for($count=1;$count<=$this->number_of_cameras();$count++){
          if($checkarray[$count]==1)
             break;
-         if($count==numcamera())
-            echo "Please specify a camera <br>";
+         if($count==$this->number_of_cameras())
+            echo "<p>Please specify a camera</p>";
       }
 
       $day = $_SESSION["mday"];
@@ -107,7 +114,7 @@ class browse_page extends page {
       // generate sql 
       $sql = "select * from video where $begin_day <= time and time < $end_day and (";
       $first=0;
-      for($camnum=1; $camnum<=numcamera(); $camnum++) {
+      for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
          if($checkarray[$camnum]==1) {
             if($first==0) {
                $first = 1;
@@ -127,7 +134,7 @@ class browse_page extends page {
       }
 
       $action="browse.php?mday=$day&mon=$month&year=$year";
-      for($x=1;$x<=numcamera();$x++) {
+      for($x=1;$x<=$this->number_of_cameras();$x++) {
          $action.="&camera$x=$checkarray[$x]";
       }
       display($sql,$action);

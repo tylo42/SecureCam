@@ -28,29 +28,31 @@ class manage_page extends page {
 
    public function body() {
 
-      if(isset($_GET['camera'])){
-         $camera=$_GET['camera'];
-         $desc=$_POST['desc'];
-         $sql = "update camera set description=\"$desc\" where camera_id=$camera";
-         $result = mysql_query($sql);
+      if(isset($_POST['submit'])) {
+         for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
+            $desc=$_POST['desc'.$camnum];
+            $sql = "update camera set description=\"$desc\" where camera_id=$camnum";
+            $result = mysql_query($sql);
+         }
       }
 
-      for($camnum=1;$camnum<=numcamera();$camnum++){
-         $sql = "select description from camera where camera_id=$camnum";
+      echo "<form action='index.php?page=manage' method='post'>";
+      for($camnum=1;$camnum<=$this->number_of_cameras();$camnum++){
+         $sql = "select * from camera where camera_id=$camnum";
          $result = mysql_query($sql);
          $info = mysql_fetch_array($result,MYSQL_ASSOC);
 
-         echo "<p><font size=\"6\"><u>Camera $camnum</u></font><br>";
+         echo "<h3>Camera $camnum</h3><br />";
 
-         echo "<form action='manage.php?camera=$camnum' method='post'>";
-         echo "Description: ";
-         echo "<textarea name='desc' rows='1'>";
-         echo $info['description'];
-         echo "</textarea><br><br>";
-         echo "<input type='submit' value='Edit'>";
-         echo "</form>";
-         echo "<br><br>";
+         echo "<table id='manage'>";
+         echo "<tr><td><p>Description: </p></td><td><input type='text' name='desc$camnum' value='".$info['description']."' /></td></tr>";
+         echo "<tr><td><p>Host: </p></td><td><input type='text' name='host$camnum' value='".$info['hostname']."' /></td></tr>";
+         echo "<tr><td><p>Port: </p></td><td><input type='text' name='prot$camnum' value='".$info['port']."' /></td></tr>";
+         echo "</table>";
       }
+      echo "<br /><br />";
+      echo "<input type='submit' name='submit' value='Submit'>";
+      echo "</form>";
    }
 }
 ?>

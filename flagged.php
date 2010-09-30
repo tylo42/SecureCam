@@ -39,12 +39,12 @@ class flagged_page extends page {
 
       //check all for first time
       if($_GET['first']==1)
-         for($count=1;$count<=numcamera();$count++)
+         for($count=1;$count<=$this->number_of_cameras();$count++)
             $checkarray[$count]=1;
 
       echo "<form action=\"flagged.php?second=1\" method=\"get\">";
 
-      for($count=1;$count<=numcamera();$count++){
+      for($count=1;$count<=$this->number_of_cameras();$count++){
          echo "Camera $count:";
          $checked = ($checkarray[$count]==1) ? "checked" : "";
          echo "<input type='checkbox' name='camera$count' value='1' $checked>";
@@ -56,7 +56,7 @@ class flagged_page extends page {
       echo "</form>";
 
       // If no camera is specified
-      for($count=1;$count<=numcamera();$count++){
+      for($count=1;$count<=$this->number_of_cameras();$count++){
          if($checkarray[$count]==1) {
             break;
          }
@@ -67,7 +67,7 @@ class flagged_page extends page {
       // generate sql 
       $sql = "select * from video where flagged=1 and ( ";
       $first=0;
-      for($camnum=1; $camnum<=numcamera(); $camnum++) {
+      for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
          if($checkarray[$camnum]==1) {
             if($first==0) {
                $first = 1;
@@ -87,7 +87,7 @@ class flagged_page extends page {
       }
 
       $action="flagged.php?";
-      for($x=1;$x<=numcamera()&&$x<9;$x++)
+      for($x=1;$x<=$this->number_of_cameras()&&$x<9;$x++)
          $action.="&camera$x=$checkarray[$x]";
       display($sql,$action);
    }

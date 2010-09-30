@@ -1,4 +1,4 @@
-h1 {
+h1,h2,h3 {
    text-align: center;
    text-decoration: underline;
    margin: 0 0 0 0;
@@ -32,6 +32,14 @@ p#subtitle {
 img.preview {
    width: 320px;
    height: 240px;
+}
+
+#manage {
+   margin: 0 0 15px 0;
+}
+
+#manage p{
+   margin: 0;
 }
 
 /* Calendar */

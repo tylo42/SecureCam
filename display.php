@@ -34,10 +34,8 @@ function display($sql,$action){
 		
 		$date_time = date("F j, Y - h:i:s A",$video['time']);
 
-		$nflag=0;
 		$button="Remove Flag";
 		if($video['flagged']==0){
-			$nflag=1;
 			$button="Flag";
 		}
 
@@ -49,12 +47,12 @@ function display($sql,$action){
 		echo "<td width=\"320px\"><font size=\"4\"><p id=\"".$video['vid_id']."\" align=\"center\"><u>".$date_time."</u></p></font>";
 
 		// The page to link to when flagging to keep all the info the same				
-		echo "<form action=\"$action&flag=$nflag&idvid=".$video['vid_id']."#".$video['vid_id']."\" method=\"post\">";
-		echo "<input type='submit' value='$button'>";
+		echo "<form action=\"#".$video['vid_id']."\" method=\"post\">";
+		echo "<input type='submit' name='".$video['vid_id']."' value='$button'>";
 		echo "</form>";
 
-		echo "<a href=\"".$video['video_name']."\"><img width='320' height='240' src=\"".$video['picture_name']."\"></img></a><br>";
-		echo "<a href=\"".$video['picture_name']."\">Enlarge Picture</a><br><br></td>";
+		echo "<a href=\"".$video['video_name']."\"><img class='preview' src=\"".$video['picture_name']."\"></img></a><br />";
+		echo "<a href=\"".$video['picture_name']."\">Enlarge Picture</a><br /><br /></td>";
 		$counter++;
 	}
 	if(is_int($counter/2))

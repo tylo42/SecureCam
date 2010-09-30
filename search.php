@@ -33,16 +33,16 @@ class search_page extends page {
 
    public function body() {
       // Add remove flag
-      print_r($_POST);
-      if(isset($_POST['submit'])) {
-         echo "here";
+      if(isset($_POST['flag'])) {
          if($_POST['flag']==1) {
             flag($_POST['idvid'], $_POST['idpic']);
          }
          if($_POST['flag']==0) {
             deflag($_POST['idvid'], $_POST['idpic']);
          }
+      }
 
+      if(isset($_POST['submit'])) {
          $smonth = $_POST['smonth'];
          $sday   = $_POST['sday'];
          $syear  = $_POST['syear'];
@@ -99,13 +99,8 @@ class search_page extends page {
       echo "<input type='submit' value='Search' name='submit'>";
       echo "</form><br>";
 
-      if(isset($_POST['submit'])){  // checks for first search
+      if(isset($_POST['submit'])) {  // checks for first search
          // check for a specified camera
-         for($count=1;$count<=$this->number_of_cameras();$count++){
-            if($checkarray[$count]==1) {
-               break;
-            }
-         }
 
          $begin_time = mktime($shour + $sampm, $smin, 0, $smonth, $sday, $syear);
          $end_time   = mktime($ehour + $eampm, $emin, 0, $emonth, $eday, $eyear);
