@@ -32,6 +32,7 @@ $page = page_factory($_GET['page']);
 <title><?php $page->title(); ?></title></head>
 
 <body>
+<div id="page_bg">
 <h1>SecureCam</h1>
 <p id="subtitle">Camera Security System</p>
 
@@ -69,5 +70,6 @@ echo "</div>";
 </td>
 </tr>
 </table>
+</div>
 </body>
 </html>

@@ -61,9 +61,9 @@ class browse_page extends page {
          $_SESSION['year'] = $date["year"];
       }
       else if(isset($_GET["mday"])){
-         $_SESSION['mday']= $_POST["mday"];
-         $_SESSION['mon'] = $_POST["mon"];
-         $_SESSION['year'] = $_POST["year"];
+         $_SESSION['mday']= $_GET["mday"];
+         $_SESSION['mon'] = $_GET["mon"];
+         $_SESSION['year'] = $_GET["year"];
       }
 
       for($x=1;$x<=$this->number_of_cameras();$x++) {
@@ -74,7 +74,7 @@ class browse_page extends page {
       echo "<h1>Browse</h1>";
 
       echo "<table border=\"0\" width=\"100%\"><tr><td>";
-      echo "<form action=\"browse.php\" method=\"get\">";
+      echo "<form action=\"index.php?page=browse\" method=\"get\">";
 
       for($count=1;$count<=$this->number_of_cameras();$count++){
          echo "Camera $count:";
@@ -133,7 +133,7 @@ class browse_page extends page {
          $sql .= ") order by time";
       }
 
-      $action="browse.php?mday=$day&mon=$month&year=$year";
+      $action="index.php?page=browse&mday=$day&mon=$month&year=$year";
       for($x=1;$x<=$this->number_of_cameras();$x++) {
          $action.="&camera$x=$checkarray[$x]";
       }

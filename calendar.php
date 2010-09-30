@@ -56,9 +56,9 @@ function calendar($date,$checkboxes){
 
    $calendar_html = "<table id=\"cal\">";
 
-   $calendar_html .= "<tr class=\"cal_title\"><td colspan=\"7\"><a href=browse.php?mday=1&mon=$pmonth&year=$pyear$checkboxes>&larr;</a>&nbsp;&nbsp;";
+   $calendar_html .= "<tr class=\"cal_title\"><td colspan=\"7\"><a href=index.php?page=browse&mday=1&mon=$pmonth&year=$pyear$checkboxes>&larr;</a>&nbsp;&nbsp;";
    $calendar_html .= "$month_name $year";
-   $calendar_html .= "&nbsp;&nbsp;<a href=browse.php?mday=1&mon=$nmonth&year=$nyear$checkboxes>&rarr;</a></td></tr>";
+   $calendar_html .= "&nbsp;&nbsp;<a href=index.php?page=browse&mday=1&mon=$nmonth&year=$nyear$checkboxes>&rarr;</a></td></tr>";
                            
    $calendar_html .= "<tr>";
    $calendar_html .= "<td class=\"cal_top\">S</td>";
@@ -99,7 +99,7 @@ function calendar($date,$checkboxes){
       if($vid['vid_id']==null) {
          $calendar_html .= "<td class=\"$class\">$day_counter</td>";
       } else {
-         $calendar_html .= "<td class=\"$class\"><a href=browse.php?mday=$day_counter&mon=$month&year=$year$checkboxes>$day_counter</a></td>";
+         $calendar_html .= "<td class=\"$class\"><a href=index.php?page=browse&mday=$day_counter&mon=$month&year=$year$checkboxes>$day_counter</a></td>";
       }
             
       $week_day++;

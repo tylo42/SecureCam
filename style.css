@@ -9,6 +9,11 @@ p#subtitle {
    margin: 0 0 0 0;
 }
 
+#page_bg {
+   margin: 0 auto;
+   width: 960px;
+}
+
 #camera-links {
    text-align: center;
    margin: 0 auto 0 auto;
@@ -27,6 +32,17 @@ p#subtitle {
    padding: 0 15px 0 0;
    background: none;
    display: inline;
+}
+
+td.sidebar {
+   vertical-align: top;
+   width: 15%;
+}
+
+td.main-page {
+   vertical-align: top;
+   text-align: center;
+   width: 85%;
 }
 
 img.preview {
