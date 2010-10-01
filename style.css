@@ -12,6 +12,13 @@ table {
    width: 100%;
 }
 
+table.stats {
+   border-color: black;
+   border-width: 1px;
+   border-style: solid;
+   width: 50%;
+}
+
 p#subtitle {
    text-align: center;
    margin: 0 0 0 0;

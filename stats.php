@@ -29,16 +29,17 @@ class stats_page extends page {
 
    public function body() {
 
-      echo "<u><h1 align=\"center\">Stats</h1></u>";
+      echo "<h2>Stats</h2>";
 
       $sql = "select count(vid_id) from video";
       $result = mysql_query($sql);
       $num = mysql_fetch_array($result,MYSQL_ASSOC);
       $total=$num['count(vid_id)'];
 
-      echo "<br><u><h2>All Time</h2></u>";
+      echo "<h3>All Time</h3>";
 
-      echo "<table border=\"1\"><tr><th>Camera</th><th># of videos</td></th><tr>";
+      echo "<table class=\"stats\">";
+      echo "<tr><td>Camera</td><td># of videos</td><tr>";
       for($count=1;$count<=$this->number_of_cameras();$count++){
          $sql = "select count(vid_id) from video where camera_id=$count";
          $result = mysql_query($sql);
@@ -65,18 +66,15 @@ class stats_page extends page {
       $firyear  = $first_time['year'];
       $firmonnum=12*$firyear+$firmonth;
 
-      //set a lower limit to prevent infinite loop
-      $limmonnum=12*2008+6;
-
       // display each month stats
-      for($countmon=$curmonnum;$countmon>=$firmonnum&&$countmon>$limmonnum;$countmon--){
+      for($countmon=$curmonnum;$countmon>=$firmonnum;$countmon--){
          $year=floor($countmon/12);
          $month=$countmon%12;
          if($month==0){
             $month=12;
             $year--;
          }
-         $monthname=mon_name($month);
+         $monthname=date("F", mktime(0, 0, 0, $month, 1, 2010));
          echo "<br><u><h2>$monthname - $year</h2></u>";
 
          $start_time = mktime(0, 0, 0, $month, 1, $year);
@@ -86,8 +84,8 @@ class stats_page extends page {
          $num = mysql_fetch_array($result,MYSQL_ASSOC);
          $total=$num['count(vid_id)'];
 
-         echo "<table border=\"1\"><tr><th>Camera</th><th># of videos</td></th><tr>";
-         for($count=1;$count<=numcamera()&&$count<9;$count++){
+         echo "<table class=\"stats\"><tr><td>Camera</td><td># of videos</td><tr>";
+         for($count=1;$count<=$this->number_of_cameras();$count++){
             $sql = "select count(vid_id) from video where camera_id=$count and $start_time <= time and time < $end_time";
             $result = mysql_query($sql);
             $num = mysql_fetch_array($result,MYSQL_ASSOC);
