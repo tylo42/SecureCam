@@ -40,7 +40,7 @@ function display($sql,$action){
 		}
 
 		if($counter==1) {
-			$table.="<tr>";
+			echo "<tr>";
 		} else if(!(is_int($counter/2))) {
 			echo "</tr><tr>";
 		}

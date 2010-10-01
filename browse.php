@@ -33,50 +33,47 @@ class browse_page extends page {
       $this->camera_check();
 
       //check all for first time
-      if($_GET['first']==1){
-         for($count=1;$count<=$this->number_of_cameras();$count++)
-            $checkarray[$count]=1;
+      if(isset($_GET['mday'])) {
+         $_SESSION['mday'] = $_GET['mday'];
+         $_SESSION['mon']  = $_GET['mon'];
+         $_SESSION['year'] = $_GET['year'];
+      } else {
          $date=getDate();
-         $_SESSION['mday']= $date["mday"];
-         $_SESSION['mon'] = $date["mon"];
+         $_SESSION['mday'] = $date["mday"];
+         $_SESSION['mon']  = $date["mon"];
          $_SESSION['year'] = $date["year"];
-      }
-      else if(isset($_GET["mday"])){
-         $_SESSION['mday']= $_GET["mday"];
-         $_SESSION['mon'] = $_GET["mon"];
-         $_SESSION['year'] = $_GET["year"];
       }
 
       //title
       echo "<h2>Browse</h2>";
 
       echo "<table border=\"0\" width=\"100%\"><tr><td>";
-      echo "<form action=\"index.php?page=browse\" method=\"get\">";
+      echo "<form action=\"index.php?page=browse\" method=\"post\">";
 
       for($count=1; $count<=$this->number_of_cameras(); $count++){
          echo "Camera $count:";
          $checked = ($_SESSION['camera'.$count]==1) ? "checked" : "";
          echo "<input type='checkbox' name='camera$count' value='1' $checked>";
-         echo "<br>";
+         echo "<br />";
       }
       echo "<br />";
-      echo "<input type='submit' value='Add/Remove Cameras'>";
+      echo "<input action='index?page=browse' name='submit' type='submit' value='Add/Remove Cameras'>";
       echo "</form>";
 
       echo "</td><td align=\"right\">";
 
       // Display the calandar
-      $date["mday"]=$_SESSION['mday'];
-      $date["mon"]=$_SESSION['mon'];
-      $date["year"]=$_SESSION['year'];
+      $date["mday"] = $_SESSION['mday'];
+      $date["mon"]  = $_SESSION['mon'];
+      $date["year"] = $_SESSION['year'];
 
-      echo calendar($date,$checkboxes);
+      echo calendar($date);
       echo "</td></table>";
 
       //Display the videos
-      $day = $_SESSION["mday"];
+      $day   = $_SESSION["mday"];
       $month = $_SESSION["mon"];
-      $year = $_SESSION["year"];	
+      $year  = $_SESSION["year"];	
 
       $begin_day = mktime(0, 0, 0, $month, $day, $year);
       $end_day = mktime(0, 0, 0, $month, $day+1, $year);
@@ -85,7 +82,7 @@ class browse_page extends page {
       $sql = "select * from video where $begin_day <= time and time < $end_day and (";
       $first=0;
       for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
-         if($checkarray[$camnum]==1) {
+         if($_SESSION['camera'.$camnum]==1) {
             if($first==0) {
                $first = 1;
                $sql .= "camera_id = $camnum";
