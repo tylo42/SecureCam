@@ -31,7 +31,7 @@ class home_page extends page {
 
       echo "<h2>Most Recent Videos</h2>";
 
-      echo "<table id=\"recent-videos\">";
+      echo "<table class=\"display\">";
 
       // this can be done smarter with just one query!!!
       for($camnum=1;$camnum<=$this->number_of_cameras();$camnum++){

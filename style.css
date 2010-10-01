@@ -14,17 +14,19 @@ div#heading {
 }
 
 table {
-   width: 100%;
    border-width: 0px;
    margin: 0;
    padding: 0;
+}
+
+table#main, table.display {
+   width: 100%;
 }
 
 table.stats {
    border-color: black;
    border-width: 1px;
    border-style: solid;
-   width: 50%;
 }
 
 p#subtitle {

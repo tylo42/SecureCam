@@ -18,7 +18,7 @@
  */
 
 function display($sql,$action){
-	echo "<table align='center' border=\"1\">";
+	echo "<table class=\"display\">";
 
 	$result = mysql_query($sql);
 

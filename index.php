@@ -58,7 +58,7 @@ echo "</ul>";
 echo "</div>";
 ?>
 
-<table>
+<table id="main">
 <tr>
 <td class="sidebar">
 <ul class="sidebar">
