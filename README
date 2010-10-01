@@ -22,4 +22,13 @@ Email: tyler.hyndman@gmail.com
 
 == Dependencies
 
+Need a working web server with PHP and the program motion installed.
+
+Documentation on montion can be found at 
+<http://www.lavrsen.dk/twiki/bin/view/Motion/WebHome>
+
 == Installation
+
+=== Link motion.conf, threadX.conf to /etc/motion
+ln /path/to/config/motion.conf /etc/motion/motion.conf
+...
