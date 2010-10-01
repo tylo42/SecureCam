@@ -23,8 +23,11 @@ require_once('functions.php');
 require_once('page_factory.php');
 
 ini_set('display_errors', 'On');
+error_reporting(E_ALL);
 
+if(!isset($_GET['page'])) $_GET['page'] = "";
 $page = page_factory($_GET['page']);
+
 ?>
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
@@ -33,8 +36,10 @@ $page = page_factory($_GET['page']);
 
 <body>
 <div id="page_bg">
+<div id="heading">
 <h1>SecureCam</h1>
 <p id="subtitle">Camera Security System</p>
+</div>
 
 <?php
 

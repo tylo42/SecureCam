@@ -8,6 +8,11 @@ h1,h2,h3 {
    margin: 0 0 0 0;
 }
 
+div#heading {
+   background: #909090;
+   height: 100px;
+}
+
 table {
    width: 100%;
 }
