@@ -29,7 +29,7 @@ class home_page extends page {
    public function body() {
 
 
-      echo "<h1>Most Recent Videos</h1>";
+      echo "<h2>Most Recent Videos</h2>";
 
       echo "<table id=\"recent-videos\">";
 

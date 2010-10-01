@@ -30,9 +30,14 @@ class manage_page extends page {
 
       if(isset($_POST['submit'])) {
          for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
-            $desc=$_POST['desc'.$camnum];
-            $sql = "update camera set description=\"$desc\" where camera_id=$camnum";
-            $result = mysql_query($sql);
+            $desc = mysql_real_escape_string($_POST['desc'.$camnum]);
+            $host = mysql_real_escape_string($_POST['host'.$camnum]);
+            $port = mysql_real_escape_string($_POST['port'.$camnum]);
+            if(is_numeric($port)) {
+               $sql = "update camera set description=\"$desc\", hostname=\"$host\", port=$port where camera_id=$camnum";
+               echo $sql."<br />";
+               $result = mysql_query($sql);
+            }
          }
       }
 
@@ -47,7 +52,7 @@ class manage_page extends page {
          echo "<table id='manage'>";
          echo "<tr><td><p>Description: </p></td><td><input type='text' name='desc$camnum' value='".$info['description']."' /></td></tr>";
          echo "<tr><td><p>Host: </p></td><td><input type='text' name='host$camnum' value='".$info['hostname']."' /></td></tr>";
-         echo "<tr><td><p>Port: </p></td><td><input type='text' name='prot$camnum' value='".$info['port']."' /></td></tr>";
+         echo "<tr><td><p>Port: </p></td><td><input type='text' name='port$camnum' value='".$info['port']."' /></td></tr>";
          echo "</table>";
       }
       echo "<br /><br />";

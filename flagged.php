@@ -33,7 +33,7 @@ class flagged_page extends page {
       if($_GET['flag']==0)
          deflag($_GET['idvid'], $_GET['idpic']);
 
-      echo "<u><h1 align=\"center\">Flagged</h1></u>";
+      echo "<h2>Flagged</h2>";
 
       $checkarray= array (1 => $_GET['camera1'], 2 => $_GET['camera2'], 3 => $_GET['camera3'], 4 => $_GET['camera4'], 5 => $_GET['camera5'], 6 => $_GET['camera6'], 7 => $_GET['camera7'], 8 => $_GET['camera8'], 9 => $_GET['camera9']);
 

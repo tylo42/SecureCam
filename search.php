@@ -78,7 +78,7 @@ class search_page extends page {
       $curmonth = $date["mon"];
       $curyear = $date["year"];
 
-      echo "<u><h1 align=\"center\">Search</h1></u>";
+      echo "<h2>Search</h2>";
 
       echo "<form action=\"index.php?page=search\" method=\"post\">";
       startdate();

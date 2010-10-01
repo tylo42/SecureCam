@@ -71,7 +71,7 @@ class browse_page extends page {
       }
 
       //title
-      echo "<h1>Browse</h1>";
+      echo "<h2>Browse</h2>";
 
       echo "<table border=\"0\" width=\"100%\"><tr><td>";
       echo "<form action=\"index.php?page=browse\" method=\"get\">";
