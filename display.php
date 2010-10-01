@@ -44,15 +44,18 @@ function display($sql,$action){
 		} else if(!(is_int($counter/2))) {
 			echo "</tr><tr>";
 		}
-		echo "<td width=\"320px\"><font size=\"4\"><p id=\"".$video['vid_id']."\" align=\"center\"><u>".$date_time."</u></p></font>";
+		echo "<td><p id=\"".$video['vid_id']."\">".$date_time."<br />";
+      echo "<a href=\"".$video['picture_name']."\">Enlarge Picture</a></p>";
+      echo "<a href=\"".$video['video_name']."\"><img class='preview' src=\"".$video['picture_name']."\"></img></a>";
 
 		// The page to link to when flagging to keep all the info the same				
-		echo "<form action=\"#".$video['vid_id']."\" method=\"post\">";
-		echo "<input type='submit' name='".$video['vid_id']."' value='$button'>";
-		echo "</form>";
+		echo "<form action=\"$action#".$video['vid_id']."\" method=\"post\">";
+		echo "<input type='submit' name='".$video['vid_id']."' value='$button'>&nbsp;";
+      echo "<input type='submit' value='Remove'>";
+      echo "</form>";
 
-		echo "<a href=\"".$video['video_name']."\"><img class='preview' src=\"".$video['picture_name']."\"></img></a><br />";
-		echo "<a href=\"".$video['picture_name']."\">Enlarge Picture</a><br /><br /></td>";
+      echo "</td>";
+
 		$counter++;
 	}
 	if(is_int($counter/2))
