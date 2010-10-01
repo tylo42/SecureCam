@@ -22,5 +22,13 @@ abstract class page {
       }
       return $cameras;
    }
+
+   public function camera_check() {
+      if(isset($_POST['submit'])) {
+         for($i=1; $i<=$this->number_of_cameras(); $i++) {
+            $_SESSION['camera'.$i] = (isset($_POST['camera'.$i])) ? $_POST['camera'.$i] : 0;
+         }
+      }
+   }
 }
 ?>

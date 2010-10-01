@@ -30,26 +30,7 @@ class browse_page extends page {
    }
 
    public function body() {
-      // Add/remove flag
-      if($_POST['flag']==1) {
-         flag($_GET['idvid']);
-      }
-
-      if($_POST['flag']==0) {
-         deflag($_GET['idvid']);
-      }
-
-      // set up check boxes
-      $checkarray= array (1 => $_GET['camera1'], 
-                          2 => $_GET['camera2'], 
-                          3 => $_GET['camera3'], 
-                          4 => $_GET['camera4'], 
-                          5 => $_GET['camera5'], 
-                          6 => $_GET['camera6'], 
-                          7 => $_GET['camera7'], 
-                          8 => $_GET['camera8'], 
-                          9 => $_GET['camera9']
-                         );
+      $this->camera_check();
 
       //check all for first time
       if($_GET['first']==1){
@@ -66,23 +47,19 @@ class browse_page extends page {
          $_SESSION['year'] = $_GET["year"];
       }
 
-      for($x=1;$x<=$this->number_of_cameras();$x++) {
-         $checkboxes.="&camera$x=$checkarray[$x]";
-      }
-
       //title
       echo "<h2>Browse</h2>";
 
       echo "<table border=\"0\" width=\"100%\"><tr><td>";
       echo "<form action=\"index.php?page=browse\" method=\"get\">";
 
-      for($count=1;$count<=$this->number_of_cameras();$count++){
+      for($count=1; $count<=$this->number_of_cameras(); $count++){
          echo "Camera $count:";
-         $checked = ($checkarray[$count]==1) ? "checked" : "";
+         $checked = ($_SESSION['camera'.$count]==1) ? "checked" : "";
          echo "<input type='checkbox' name='camera$count' value='1' $checked>";
          echo "<br>";
       }
-      echo "<br>";
+      echo "<br />";
       echo "<input type='submit' value='Add/Remove Cameras'>";
       echo "</form>";
 
@@ -97,13 +74,6 @@ class browse_page extends page {
       echo "</td></table>";
 
       //Display the videos
-      for($count=1;$count<=$this->number_of_cameras();$count++){
-         if($checkarray[$count]==1)
-            break;
-         if($count==$this->number_of_cameras())
-            echo "<p>Please specify a camera</p>";
-      }
-
       $day = $_SESSION["mday"];
       $month = $_SESSION["mon"];
       $year = $_SESSION["year"];	
@@ -125,19 +95,15 @@ class browse_page extends page {
          }
       }
 
+      $sql .= ") order by time";
+
       // if no cameras selected
       if($first == 0) {
          echo "<p>Please select a camera</p>";
-         $sql = "";
       } else {
-         $sql .= ") order by time";
+         $action = "index.php?page=browse";
+         display($sql, $action);
       }
-
-      $action="index.php?page=browse&mday=$day&mon=$month&year=$year";
-      for($x=1;$x<=$this->number_of_cameras();$x++) {
-         $action.="&camera$x=$checkarray[$x]";
-      }
-      display($sql,$action);
    }
 }
 ?>

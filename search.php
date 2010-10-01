@@ -32,15 +32,8 @@ class search_page extends page {
    }
 
    public function body() {
-      // Add remove flag
-      if(isset($_POST['flag'])) {
-         if($_POST['flag']==1) {
-            flag($_POST['idvid'], $_POST['idpic']);
-         }
-         if($_POST['flag']==0) {
-            deflag($_POST['idvid'], $_POST['idpic']);
-         }
-      }
+
+      $this->camera_check();
 
       if(isset($_POST['submit'])) {
          $smonth = $_POST['smonth'];
@@ -77,7 +70,7 @@ class search_page extends page {
             echo "<br />";
          }
          echo "Camera $count:";
-         $checked = (isset($checkarray) && $checkarray[$count]==1) ? "checked" : "";
+         $checked = (isset($_SESSION['camera'.$count]) && $_SESSION['camera'.$count]==1) ? "checked" : "";
          echo "<input type='checkbox' name='camera$count' value='1' $checked>";
       }
       echo "<br />";
@@ -97,7 +90,7 @@ class search_page extends page {
             $sql = "select * from video where $begin_time <= time and time < $end_time and (";
             $first=0;
             for($camnum=1; $camnum<$this->number_of_cameras(); $camnum++) {
-               if($_POST['camera'.$camnum]==1) {
+               if($_SESSION['camera'.$camnum]==1) {
                   if($first==0) {
                      $first = 1;
                      $sql .= "camera_id = $camnum";
@@ -107,20 +100,15 @@ class search_page extends page {
                }
             }
 
+            $sql .= ") order by time";
+
             // if no cameras selected
             if($first == 0) {
                echo "<p>Please select a camera</p>";
-               $sql = "";
             } else {
-               $sql .= ") order by time";
+               $action = "index.php?page=search";
+               display($sql, $action);
             }
-
-            $action="index.php?page=search";
-            for($x=1;$x<=$this->number_of_cameras()&&$x<9;$x++) {
-               $action.="&camera$x=$checkarray[$x]";
-            }
-
-            display($sql,$action);
          }
       } 
    }

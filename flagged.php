@@ -29,46 +29,28 @@ class flagged_page extends page {
 
    public function body() {
 
-      // Remove flag
-      if($_GET['flag']==0)
-         deflag($_GET['idvid'], $_GET['idpic']);
-
       echo "<h2>Flagged</h2>";
 
-      $checkarray= array (1 => $_GET['camera1'], 2 => $_GET['camera2'], 3 => $_GET['camera3'], 4 => $_GET['camera4'], 5 => $_GET['camera5'], 6 => $_GET['camera6'], 7 => $_GET['camera7'], 8 => $_GET['camera8'], 9 => $_GET['camera9']);
+      $this->camera_check();
 
-      //check all for first time
-      if($_GET['first']==1)
-         for($count=1;$count<=$this->number_of_cameras();$count++)
-            $checkarray[$count]=1;
+      echo "<form action=\"index.php?page=flagged\" method=\"post\">";
 
-      echo "<form action=\"flagged.php?second=1\" method=\"get\">";
-
-      for($count=1;$count<=$this->number_of_cameras();$count++){
-         echo "Camera $count:";
-         $checked = ($checkarray[$count]==1) ? "checked" : "";
-         echo "<input type='checkbox' name='camera$count' value='1' $checked>";
-         echo "<br>";
+      for($i=1; $i<=$this->number_of_cameras(); $i++){
+         echo "Camera $i:";
+         $checked = ($_SESSION['camera'.$i] == 1) ? "checked" : "";
+         echo "<input type='checkbox' name='camera$i' value='1' $checked>";
+         echo "<br />";
       }
 
-      echo "<br>";
-      echo "<input type='submit' value='Add/Remove Cameras'>";
+      echo "<br />";
+      echo "<input type='submit' name='submit' value='Add/Remove Cameras'>";
       echo "</form>";
-
-      // If no camera is specified
-      for($count=1;$count<=$this->number_of_cameras();$count++){
-         if($checkarray[$count]==1) {
-            break;
-         }
-      }
-
-
 
       // generate sql 
       $sql = "select * from video where flagged=1 and ( ";
       $first=0;
       for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
-         if($checkarray[$camnum]==1) {
+         if($_SESSION['camera'.$camnum]==1) {
             if($first==0) {
                $first = 1;
                $sql .= "camera_id = $camnum";
@@ -78,18 +60,15 @@ class flagged_page extends page {
          }
       }
 
+      $sql .= ") order by time";
+
       // if no cameras selected
       if($first == 0) {
          echo "<p>Please select a camera</p>";
-         $sql = "";
       } else {
-         $sql .= ") order by time";
+         $action = "flagged.php";
+         display($sql, $action);
       }
-
-      $action="flagged.php?";
-      for($x=1;$x<=$this->number_of_cameras()&&$x<9;$x++)
-         $action.="&camera$x=$checkarray[$x]";
-      display($sql,$action);
    }
 }
 ?>
