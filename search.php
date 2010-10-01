@@ -57,21 +57,6 @@ class search_page extends page {
          $emin   = $_POST['emin'];
          $eampm  = $_POST['eampm'];
 
-         // FIXME: This is just plain stupid!!!
-         $checkarray= array (1 => $_POST['camera1'], 
-            2 => $_POST['camera2'], 
-            3 => $_POST['camera3'], 
-            4 => $_POST['camera4'], 
-            5 => $_POST['camera5'], 
-            6 => $_POST['camera6'], 
-            7 => $_POST['camera7'], 
-            8 => $_POST['camera8'], 
-            9 => $_POST['camera9']
-         );
-
-         for($x=1;$x<=$this->number_of_cameras();$x++) {
-            $checkboxes.="&camera$x=$checkarray[$x]";
-         }
       }
       $date = getDate();
       $curday = $date["mday"];
@@ -82,22 +67,22 @@ class search_page extends page {
 
       echo "<form action=\"index.php?page=search\" method=\"post\">";
       startdate();
-      echo "<br>";
+      echo "<br />";
       enddate();
-      echo "<br>";
+      echo "<br />";
 
       // ------- Check boxes for cameras ------------ 
       for($count=1;$count<=$this->number_of_cameras();$count++){
          if($count==5) {
-            echo "<br>";
+            echo "<br />";
          }
          echo "Camera $count:";
          $checked = (isset($checkarray) && $checkarray[$count]==1) ? "checked" : "";
          echo "<input type='checkbox' name='camera$count' value='1' $checked>";
       }
-      echo "<br>";
+      echo "<br />";
       echo "<input type='submit' value='Search' name='submit'>";
-      echo "</form><br>";
+      echo "</form><br />";
 
       if(isset($_POST['submit'])) {  // checks for first search
          // check for a specified camera
@@ -105,14 +90,14 @@ class search_page extends page {
          $begin_time = mktime($shour + $sampm, $smin, 0, $smonth, $sday, $syear);
          $end_time   = mktime($ehour + $eampm, $emin, 0, $emonth, $eday, $eyear);
          if($begin_time>=$end_time){
-            echo "<p>Invaid starting and ending time.<p/>";
+            echo "<p>Invaid starting and ending time.</p>";
          } else {
 
             // generate sql 
             $sql = "select * from video where $begin_time <= time and time < $end_time and (";
             $first=0;
             for($camnum=1; $camnum<$this->number_of_cameras(); $camnum++) {
-               if($checkarray[$camnum]==1) {
+               if($_POST['camera'.$camnum]==1) {
                   if($first==0) {
                      $first = 1;
                      $sql .= "camera_id = $camnum";
@@ -130,7 +115,7 @@ class search_page extends page {
                $sql .= ") order by time";
             }
 
-            $action="index.php?page=search&flag=$nflag&idvid=$idvid&idpic=$idpic&smonth=$smonth&sday=$sday&syear=$syear&shour=$shour&smin=$smin&sampm=$sampm&emonth=$emonth&eday=$eday&eyear=$eyear&ehour=$ehour&emin=$emin&eampm=$eampm";
+            $action="index.php?page=search";
             for($x=1;$x<=$this->number_of_cameras()&&$x<9;$x++) {
                $action.="&camera$x=$checkarray[$x]";
             }

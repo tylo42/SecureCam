@@ -15,6 +15,9 @@ div#heading {
 
 table {
    width: 100%;
+   border-width: 0px;
+   margin: 0;
+   padding: 0;
 }
 
 table.stats {
@@ -58,6 +61,7 @@ p#subtitle {
 td.sidebar {
    vertical-align: top;
    width: 15%;
+   background: #606060;
 }
 
 td.main-page {
