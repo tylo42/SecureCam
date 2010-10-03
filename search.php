@@ -57,10 +57,10 @@ class search_page extends page {
       echo "<h2>Search</h2>";
 
       echo "<form action=\"index.php?page=search\" method=\"post\">";
-      startdate();
-      echo "<br />";
-      enddate();
-      echo "<br />";
+      echo "<table>";
+      search_date("Starting", "s");
+      search_date("Ending", "e");
+      echo "</table>";
 
       // ------- Check boxes for cameras ------------ 
       for($count=1;$count<=$this->number_of_cameras();$count++){
