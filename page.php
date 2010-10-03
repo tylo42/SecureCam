@@ -86,9 +86,15 @@ abstract class page {
       return $cameras;
    }
 
+   /// If no cookies no cameras check, else set/keep cameras checked from last submit
    public function camera_check() {
       for($i=1; $i<=$this->number_of_cameras(); $i++) {
-         $_SESSION['camera'.$i] = (isset($_POST['camera'.$i])) ? $_POST['camera'.$i] : 0;
+         $camera = 'camera'.$i;
+         if(isset($_POST['submit'])) {
+            $_SESSION[$camera] = (isset($_POST[$camera])) ? $_POST[$camera] : 0;
+         } else {
+            $_SESSION[$camera] = (isset($_SESSION[$camera])) ? $_SESSION[$camera] : 0;
+         }
       }
    }
 
