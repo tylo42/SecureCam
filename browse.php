@@ -20,8 +20,6 @@ session_start();
 
 require_once('connect.php');
 require_once('calendar.php');
-require_once('functions.php');
-require_once('display.php');
 require_once('page.php');
 
 class browse_page extends page {
@@ -99,7 +97,7 @@ class browse_page extends page {
          echo "<p>Please select a camera</p>";
       } else {
          $action = "index.php?page=browse";
-         display($sql, $action);
+         $this->display($sql, $action);
       }
    }
 }

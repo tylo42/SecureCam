@@ -18,7 +18,6 @@
  */
 
 require_once('connect.php');
-require_once('functions.php');
 require_once('page.php');
 
 class manage_page extends page {

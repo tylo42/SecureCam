@@ -21,9 +21,7 @@
 // NOTES: at some point add in a count to tell if there is no videos in specified time
 
 require_once('connect.php');
-require_once('functions.php');
 require_once('searchfunc.php');
-require_once('display.php');
 require_once('page.php');
 
 class search_page extends page {
@@ -107,7 +105,7 @@ class search_page extends page {
                echo "<p>Please select a camera</p>";
             } else {
                $action = "index.php?page=search";
-               display($sql, $action);
+               $this->display($sql, $action);
             }
          }
       } 

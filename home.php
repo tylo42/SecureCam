@@ -18,7 +18,6 @@
  */
 
 require_once('connect.php');
-require_once('functions.php');
 require_once('page.php');
 
 class home_page extends page {
@@ -38,12 +37,12 @@ class home_page extends page {
 
          if(!(is_int($camnum/2))){
             echo "<tr><td><h3>Camera $camnum</h3>";
-            echo "<p>".getdescription($camnum)."</p>";
+            echo "<p>".$this->get_description($camnum)."</p>";
             echo "</td>";
             $ncamnum=$camnum+1;
             if($camnum<$this->number_of_cameras()){
                echo "<td><h3>Camera $ncamnum</h3>";
-               echo "<p>".getdescription($ncamnum)."</p>";
+               echo "<p>".$this->get_description($ncamnum)."</p>";
                echo "</td>";
             }else
                echo "<td>&nbsp;</td>";
@@ -62,8 +61,8 @@ class home_page extends page {
          $result = mysql_query($sql);
          $vid = mysql_fetch_array($result,MYSQL_ASSOC);
 
-         $subpic=rmvarwww($vid['picture_name']);
-         $subvid=rmvarwww($vid['video_name']);
+         $subpic=$this->get_path($vid['picture_name']);
+         $subvid=$this->get_path($vid['video_name']);
 
          if($subpic == "" || $subvid == "") {
             $subpic="img/error.gif";
