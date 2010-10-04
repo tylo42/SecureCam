@@ -33,21 +33,33 @@ class search_page extends page {
 
       $this->camera_check();
 
+      $start_time = array();
+      $end_time = array();
       if(isset($_POST['submit'])) {
-         $smonth = $_POST['smonth'];
-         $sday   = $_POST['sday'];
-         $syear  = $_POST['syear'];
-         $shour  = $_POST['shour'];
-         $smin   = $_POST['smin'];
-         $sampm  = $_POST['sampm'];
+         $start_time['month'] = $_POST['smonth'];
+         $start_time['day']   = $_POST['sday'];
+         $start_time['year']  = $_POST['syear'];
+         $start_time['hour']  = $_POST['shour'];
+         $start_time['min']   = $_POST['smin'];
+         $start_time['ampm']  = $_POST['sampm'];
 
-         $emonth = $_POST['emonth'];
-         $eday   = $_POST['eday'];
-         $eyear  = $_POST['eyear'];
-         $ehour  = $_POST['ehour'];
-         $emin   = $_POST['emin'];
-         $eampm  = $_POST['eampm'];
+         $end_time['month']   = $_POST['emonth'];
+         $end_time['day']     = $_POST['eday'];
+         $end_time['year']    = $_POST['eyear'];
+         $end_time['hour']    = $_POST['ehour'];
+         $end_time['min']     = $_POST['emin'];
+         $end_time['ampm']    = $_POST['eampm'];
 
+      } else {
+         $date = getDate();
+         $start_time['month'] = $date['mon'];
+         $start_time['day']   = $date['mday'];
+         $start_time['year']  = $date['year'];
+
+         $date = getDate(time() + 60*60*24);
+         $end_time['month']   = $date['mon'];
+         $end_time['day']     = $date['mday'];
+         $end_time['year']    = $date['year'];
       }
       $date = getDate();
       $curday = $date["mday"];
@@ -58,8 +70,8 @@ class search_page extends page {
 
       echo "<form action=\"index.php?page=search\" method=\"post\">";
       echo "<table>";
-      search_date("Starting", "s");
-      search_date("Ending", "e");
+      search_date("Starting",$start_time, "s");
+      search_date("Ending",  $end_time,   "e");
       echo "</table>";
 
       // ------- Check boxes for cameras ------------ 
@@ -78,8 +90,8 @@ class search_page extends page {
       if(isset($_POST['submit'])) {  // checks for first search
          // check for a specified camera
 
-         $begin_time = mktime($shour + $sampm, $smin, 0, $smonth, $sday, $syear);
-         $end_time   = mktime($ehour + $eampm, $emin, 0, $emonth, $eday, $eyear);
+         $begin_time = mktime($start_time['hour'] + $start_time['ampm'], $start_time['min'], 0, $start_time['month'], $start_time['day'], $start_time['year']);
+         $end_time   = mktime($end_time['hour']   + $end_time['ampm'],   $end_time['min'],   0, $end_time['month'],   $end_time['day'],   $end_time['year']);
          if($begin_time>=$end_time){
             echo "<p>Invaid starting and ending time.</p>";
          } else {
@@ -87,7 +99,7 @@ class search_page extends page {
             // generate sql 
             $sql = "select * from video where $begin_time <= time and time < $end_time and (";
             $first=0;
-            for($camnum=1; $camnum<$this->number_of_cameras(); $camnum++) {
+            for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
                if($_SESSION['camera'.$camnum]==1) {
                   if($first==0) {
                      $first = 1;

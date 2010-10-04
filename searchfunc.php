@@ -25,59 +25,59 @@ $minArray = array (0=> '00', 15 => '15', 30 => '30', 45 => '45');
 $ampmArray = array (0 => 'am', 12 => 'pm');
 
 function createOptionFromArray($myArray,$selected) {
-	if(!is_array($myArray)) {
-		return false;
-	}
-	$returned = $select = '';
-	foreach($myArray as $key => $value) {
-		if($selected == $key) {
-			$select = ' selected';
-		}
-		$returned .= "<option value=\"$key\"$select>$value</option>";
-		$select = '';
-	}
-	return $returned;
+   if(!is_array($myArray)) {
+      return false;
+   }
+   $returned = $select = '';
+   foreach($myArray as $key => $value) {
+      if($selected == $key) {
+         $select = ' selected';
+      }
+      $returned .= "<option value=\"$key\"$select>$value</option>";
+      $select = '';
+   }
+   return $returned;
 }
 
-function search_date($name,$prefix){
+function search_date($name, $time, $prefix){
    global $monthArray, $dayArray, $yearArray, $hourArray, $minArray, $ampmArray;
    echo "<tr><td>";
-	echo $name." Date:";
+   echo $name." Date:";
    echo "</td><td>";
 
-	$selected = (isset($_POST[$prefix.'month']) && intval($_POST[$prefix.'month']) < 13) ? $_POST[$prefix.'month'] : '';
-	echo "<select name=\"".$prefix."month\">";
-	echo createOptionFromArray($monthArray,$selected);
-	echo "</select>";
+   $selected = (isset($time['month']) && intval($time['month']) < 13) ? $time['month'] : '';
+   echo "<select name=\"".$prefix."month\">";
+   echo createOptionFromArray($monthArray,$selected);
+   echo "</select>";
 
-	$selected = (isset($_POST[$prefix.'day']) && intval($_POST[$prefix.'day']) < 32) ? $_POST[$prefix.'day'] : '';
-	echo "<select name=\"".$prefix."day\">";
-	echo createOptionFromArray($dayArray,$selected);
-	echo "</select>";
+   $selected = (isset($time['day']) && intval($time['day']) < 32) ? $time['day'] : '';
+   echo "<select name=\"".$prefix."day\">";
+   echo createOptionFromArray($dayArray,$selected);
+   echo "</select>";
 
-	$selected = (isset($_POST[$prefix.'year']) && intval($_POST[$prefix.'year']) < 3000) ? $_POST[$prefix.'year'] : '';
-	echo "<select name=\"".$prefix."year\">";
-	echo createOptionFromArray($yearArray,$selected);
-	echo "</select>";
+   $selected = (isset($time['year']) && intval($time['year']) < 3000) ? $time['year'] : '';
+   echo "<select name=\"".$prefix."year\">";
+   echo createOptionFromArray($yearArray,$selected);
+   echo "</select>";
 
-	echo "</td><td>at</td><td>";
+   echo "</td><td>at</td><td>";
 
-	$selected = (isset($_POST[$prefix.'hour']) && intval($_POST[$prefix.'hour']) < 24) ? $_POST[$prefix.'hour'] : '';
-	echo "<select name=\"".$prefix."hour\">";
-	echo createOptionFromArray($hourArray,$selected);
-	echo "</select>";
+   $selected = (isset($time['hour']) && intval($time['hour']) < 24) ? $time['hour'] : '';
+   echo "<select name=\"".$prefix."hour\">";
+   echo createOptionFromArray($hourArray,$selected);
+   echo "</select>";
 
-	echo ":";
+   echo ":";
 
-	$selected = (isset($_POST[$prefix.'min']) && intval($_POST[$prefix.'min']) < 60) ? $_POST[$prefix.'min'] : '';
-	echo "<select name=\"".$prefix."min\">";
-	echo createOptionFromArray($minArray,$selected);
-	echo "</select>";
+   $selected = (isset($time['min']) && intval($time['min']) < 60) ? $time['min'] : '';
+   echo "<select name=\"".$prefix."min\">";
+   echo createOptionFromArray($minArray,$selected);
+   echo "</select>";
 
-	$selected = (isset($_POST[$prefix.'ampm']) && intval($_POST[$prefix.'ampm']) < 24) ? $_POST[$prefix.'ampm'] : '';
-	echo "<select name=\"".$prefix."ampm\">";
-	echo createOptionFromArray($ampmArray,$selected);
-	echo "</select>";
+   $selected = (isset($time['ampm']) && intval($time['ampm']) < 24) ? $time['ampm'] : '';
+   echo "<select name=\"".$prefix."ampm\">";
+   echo createOptionFromArray($ampmArray,$selected);
+   echo "</select>";
 
    echo "</td></tr>";
 }
