@@ -17,11 +17,9 @@
  * along with SecureCam.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// Small Bug: If you check boxes and then click the today buttons without first clicking search the check boxes will be removed
 // NOTES: at some point add in a count to tell if there is no videos in specified time
 
 require_once('connect.php');
-require_once('searchfunc.php');
 require_once('page.php');
 
 class search_page extends page {
@@ -70,8 +68,8 @@ class search_page extends page {
 
       echo "<form action=\"index.php?page=search\" method=\"post\">";
       echo "<table>";
-      search_date("Starting",$start_time, "s");
-      search_date("Ending",  $end_time,   "e");
+      $this->search_date("Starting",$start_time, "s");
+      $this->search_date("Ending",  $end_time,   "e");
       echo "</table>";
 
       // ------- Check boxes for cameras ------------ 
@@ -121,6 +119,87 @@ class search_page extends page {
             }
          }
       } 
+   }
+
+   private function createOptionFromArray($myArray,$selected) {
+      if(!is_array($myArray)) {
+         return false;
+      }
+      $returned = $select = '';
+      foreach($myArray as $key => $value) {
+         if($selected == $key) {
+            $select = ' selected';
+         }
+         $returned .= "<option value=\"$key\"$select>$value</option>";
+         $select = '';
+      }
+      return $returned;
+   }
+
+   private function search_date($name, $time, $prefix) {
+      $monthArray = array();
+      for($i=1; $i<=12; $i++) {
+         $monthArray[$i] = date("F", mktime(0, 0, 0, $i, 1, 2010));
+      }
+
+      $dayArray = array();
+      for($i=1; $i<=31; $i++) {
+         $dayArray[$i] = $i;
+      }
+
+      $yearArray = array();
+      for($i=$this->first_year(); $i<=$this->last_year(); $i++) {
+         $yearArray[$i] = $i;
+      }
+
+      $hourArray = array();
+      $hourArray[0] = 12;
+      for($i=1; $i<12; $i++) {
+         $hourArray[$i] = $i;
+      }
+
+      $minArray = array(0 => '00', 15 => '15', 30 => '30', 45 => '45');
+      $ampmArray = array(0 => 'am', 12 => 'pm');
+        
+      echo "<tr><td>";
+      echo $name." Date:";
+      echo "</td><td>";
+
+      $selected = (isset($time['month']) && intval($time['month']) < 13) ? $time['month'] : '';
+      echo "<select name=\"".$prefix."month\">";
+      echo $this->createOptionFromArray($monthArray,$selected);
+      echo "</select>";
+
+      $selected = (isset($time['day']) && intval($time['day']) < 32) ? $time['day'] : '';
+      echo "<select name=\"".$prefix."day\">";
+      echo $this->createOptionFromArray($dayArray,$selected);
+      echo "</select>";
+
+      $selected = (isset($time['year']) && intval($time['year']) < 3000) ? $time['year'] : '';
+      echo "<select name=\"".$prefix."year\">";
+      echo $this->createOptionFromArray($yearArray,$selected);
+      echo "</select>";
+
+      echo "</td><td>at</td><td>";
+
+      $selected = (isset($time['hour']) && intval($time['hour']) < 24) ? $time['hour'] : '';
+      echo "<select name=\"".$prefix."hour\">";
+      echo $this->createOptionFromArray($hourArray,$selected);
+      echo "</select>";
+
+      echo ":";
+
+      $selected = (isset($time['min']) && intval($time['min']) < 60) ? $time['min'] : '';
+      echo "<select name=\"".$prefix."min\">";
+      echo $this->createOptionFromArray($minArray,$selected);
+      echo "</select>";
+
+      $selected = (isset($time['ampm']) && intval($time['ampm']) < 24) ? $time['ampm'] : '';
+      echo "<select name=\"".$prefix."ampm\">";
+      echo $this->createOptionFromArray($ampmArray,$selected);
+      echo "</select>";
+
+      echo "</td></tr>";
    }
 }
 ?>

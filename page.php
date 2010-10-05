@@ -86,6 +86,22 @@ abstract class page {
       return $cameras;
    }
 
+   public function first_year() {
+      static $first_year = 0;
+      if($first_year < 1) {
+         $first_year = date("Y",$this->get_time("min"));
+      }
+      return $first_year;
+   }
+
+   public function last_year() {
+      static $last_year = 0;
+      if($last_year < 1) {
+         $last_year = date("Y",$this->get_time("max"));
+      }
+      return $last_year;
+   }
+
    /// If no cookies no cameras check, else set/keep cameras checked from last submit
    public function camera_check() {
       for($i=1; $i<=$this->number_of_cameras(); $i++) {
@@ -121,7 +137,14 @@ abstract class page {
    // HELPER FUNCTIONS
    private function flag_sql($vid_id, $flag) {
       $sql = "update video set flagged=$flag where vid_id=$vid_id";
-      mysql_query($sql);
+      $reslut = mysql_query($sql);
+   }
+
+   private function get_time($minmax) {
+      $sql = "select $minmax(time) from video";
+      $result = mysql_query($sql);
+      $time = mysql_fetch_array($result, MYSQL_ASSOC);
+      return $time[$minmax.'(time)'];
    }
 }
 ?>
