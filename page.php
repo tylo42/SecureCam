@@ -52,7 +52,7 @@ abstract class page {
 
          if($counter==1) {
             echo "<tr>";
-         } else if(!(is_int($counter/2))) {
+         } else if(1 == $counter % 2) {
             echo "</tr><tr>";
          }
          echo "<td><p id=\"".$video['vid_id']."\">".$date_time."<br />";
