@@ -48,10 +48,8 @@ $page = page_factory($_GET['page']);
 
 echo "<div id=\"camera-links\">";
 echo "<ul>";
-$sql="select * from camera order by camera_id";
-$result = mysql_query($sql);
-while($camera = mysql_fetch_array($result, MYSQL_ASSOC)) {
-   echo "<li><a href=\"http://".$camera['hostname'].":".$camera['port']."\">Camera ".$camera['camera_id']."</a></li>";
+for($camnum=1; $camnum <= $page->number_of_cameras(); $camnum++) {
+   echo "<li><a href=\"http://".$page->get_hostname($camnum).":".$page->get_port($camnum)."\">Camera ".$camnum."</a></li>";
 }
 echo "</ul>";
 echo "</div>";
