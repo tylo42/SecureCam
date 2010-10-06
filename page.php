@@ -127,14 +127,34 @@ abstract class page {
    }
 
    public function get_description($camera_id) {
-      $sql = "select description from camera where camera_id=$camera_id";
-      $result = mysql_query($sql);
-      $info = mysql_fetch_array($result, MYSQL_ASSOC);
+      $this->reset_camera(); 
+      return $_SESSION['description'.$camera_id];
+   }
 
-      return $info['description'];
+   public function get_hostname($camera_id) {
+      $this->reset_camera();
+      return $_SESSION['hostname'.$camera_id]; 
+   }
+
+   public function get_port($camera_id) {
+      $this->reset_camera();
+      return $_SESSION['port'.$camera_id];
    }
 
    // HELPER FUNCTIONS
+   private function reset_camera() {
+      if(!isset($_SESSION['description1'])) {
+         $sql = "select * from camera order by camera_id";
+         $result = mysql_query($sql);
+         $num = 1;
+         while($info = mysql_fetch_array($result, MYSQL_ASSOC)) {
+            $_SESSION['description'.$num] = $info['description'];
+            $_SESSION['hostname'.$num] = $info['hostname'];
+            $_SESSION['port'.$num++] = $info['port'];
+         } 
+      }
+   }
+
    private function flag_sql($vid_id, $flag) {
       $sql = "update video set flagged=$flag where vid_id=$vid_id";
       $reslut = mysql_query($sql);

@@ -32,26 +32,25 @@ class manage_page extends page {
             $desc = mysql_real_escape_string($_POST['desc'.$camnum]);
             $host = mysql_real_escape_string($_POST['host'.$camnum]);
             $port = mysql_real_escape_string($_POST['port'.$camnum]);
-            if(is_numeric($port)) {
+            if( is_numeric($port) &&
+                ( $desc != $this->get_description($camnum) ||
+                  $host != $this->get_hostname($camnum)    || 
+                  $port != $this->get_port($camnum)) ) {
                $sql = "update camera set description=\"$desc\", hostname=\"$host\", port=$port where camera_id=$camnum";
-               echo $sql."<br />";
                $result = mysql_query($sql);
+               unset($_SESSION['description1']); // Session variables need to be reset from database
             }
          }
       }
 
       echo "<form action='index.php?page=manage' method='post'>";
       for($camnum=1;$camnum<=$this->number_of_cameras();$camnum++){
-         $sql = "select * from camera where camera_id=$camnum";
-         $result = mysql_query($sql);
-         $info = mysql_fetch_array($result,MYSQL_ASSOC);
-
          echo "<h3>Camera $camnum</h3><br />";
 
          echo "<table id='manage'>";
-         echo "<tr><td><p>Description: </p></td><td><input type='text' name='desc$camnum' value='".$info['description']."' /></td></tr>";
-         echo "<tr><td><p>Host: </p></td><td><input type='text' name='host$camnum' value='".$info['hostname']."' /></td></tr>";
-         echo "<tr><td><p>Port: </p></td><td><input type='text' name='port$camnum' value='".$info['port']."' /></td></tr>";
+         echo "<tr><td><p>Description: </p></td><td><input type='text' name='desc$camnum' value='".$this->get_description($camnum)."' /></td></tr>";
+         echo "<tr><td><p>Host: </p></td><td><input type='text' name='host$camnum' value='".$this->get_hostname($camnum)."' /></td></tr>";
+         echo "<tr><td><p>Port: </p></td><td><input type='text' name='port$camnum' value='".$this->get_port($camnum)."' /></td></tr>";
          echo "</table>";
       }
       echo "<br /><br />";
