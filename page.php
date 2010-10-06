@@ -37,7 +37,7 @@ abstract class page {
       $counter = 1;
       while($video = mysql_fetch_array($result,MYSQL_ASSOC)) {
          if(!isset($video['picture_name'])) {
-            $video['picture_name'] = "img/nopic.gif";
+            $video['picture_name'] = "img/nopic.gif"; // FIXME: should have image here
          }
 
          $video['picture_name'] = $this->get_path($video['picture_name']);
