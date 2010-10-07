@@ -28,9 +28,13 @@ abstract class page {
       $this->page_name();
    }
 
-   public function display($sql,$action){
+   public function display($sql,$action) {
       echo "<table class=\"display\">";
 
+      $sql .= " LIMIT 20";
+      if(isset($_GET['page_num']) && is_numeric($_GET['page_num']) && $_GET['page_num'] > 1) {
+         $sql .= " OFFSET ".($_GET['page_num']-1)*20;
+      }
       $result = mysql_query($sql);
 
       // populate the array
@@ -46,7 +50,7 @@ abstract class page {
          $date_time = date("F j, Y - h:i:s A",$video['time']);
 
          $button="Remove Flag";
-         if($video['flagged']==0){
+         if($video['flagged']==0) {
             $button="Flag";
          }
 
@@ -69,8 +73,9 @@ abstract class page {
 
          $counter++;
       }
-      if(is_int($counter/2))
+      if(1 == $counter % 2) {
          echo "<td width=\"320px\">&nbsp</td>";
+      }
       echo "</tr></table>";
    }
 

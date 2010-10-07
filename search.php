@@ -53,11 +53,17 @@ class search_page extends page {
          $start_time['month'] = $date['mon'];
          $start_time['day']   = $date['mday'];
          $start_time['year']  = $date['year'];
+         $start_time['hour']  = 0;
+         $start_time['min']   = 0;
+         $start_time['ampm']  = 0;
 
          $date = getDate(time() + 60*60*24);
          $end_time['month']   = $date['mon'];
          $end_time['day']     = $date['mday'];
          $end_time['year']    = $date['year'];
+         $end_time['hour']    = 0;
+         $end_time['min']     = 0;
+         $end_time['ampm']    = 0;
       }
       $date = getDate();
       $curday = $date["mday"];
@@ -85,7 +91,7 @@ class search_page extends page {
       echo "<input type='submit' value='Search' name='submit'>";
       echo "</form><br />";
 
-      if(isset($_POST['submit'])) {  // checks for first search
+      //if(isset($_POST['submit'])) {  // checks for first search
          // check for a specified camera
 
          $begin_time = mktime($start_time['hour'] + $start_time['ampm'], $start_time['min'], 0, $start_time['month'], $start_time['day'], $start_time['year']);
@@ -118,7 +124,7 @@ class search_page extends page {
                $this->display($sql, $action);
             }
          }
-      } 
+     // } 
    }
 
    private function createOptionFromArray($myArray,$selected) {
