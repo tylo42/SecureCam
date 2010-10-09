@@ -77,6 +77,8 @@ abstract class page {
          echo "<td width=\"320px\">&nbsp</td>";
       }
       echo "</tr></table>";
+
+      $this->print_page_nums($sql,$action);
    }
 
    /// return the number of cameras
@@ -147,6 +149,29 @@ abstract class page {
    }
 
    // HELPER FUNCTIONS
+   private function print_page_nums($sql, $action) {
+      if(!isset($_GET['page_num'])) {
+         $_GET['page_num'] = 1;
+      }
+      if(!is_numeric($_GET['page_num'])) {
+         $_GET['page_num'] = 1;
+      }
+
+      $sql = strstr($sql, " LIMIT 20", true);
+      $sql = strstr($sql, "*");
+      $sql = substr($sql, 1);
+      $sql = "select count(vid_id)".$sql;
+
+      $result = mysql_query($sql);
+      $count = mysql_fetch_array($result, MYSQL_ASSOC);
+      $count = $count['count(vid_id)'];
+
+      for($i=1; $i<($count/20) + 1; $i++) {
+         echo "<a href=$action&page_num=$i>$i</a>&nbsp&nbsp&nbsp";
+      }
+   }
+
+
    private function reset_camera() {
       if(!isset($_SESSION['description1'])) {
          $sql = "select * from camera order by camera_id";
