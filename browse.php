@@ -48,9 +48,14 @@ class browse_page extends page {
       echo "<table border=\"0\" width=\"100%\"><tr><td>";
       echo "<form action=\"index.php?page=browse\" method=\"post\">";
 
+      $cameras = array();
       for($count=1; $count<=$this->number_of_cameras(); $count++){
          echo "Camera $count:";
-         $checked = ($_SESSION['camera'.$count]==1) ? "checked" : "";
+         $checked = "";
+         if($_SESSION['camera'.$count]==1) {
+            $checked = "checked";
+            $cameras[$count] = $count;
+         }
          echo "<input type='checkbox' name='camera$count' value='1' $checked>";
          echo "<br />";
       }
@@ -76,29 +81,8 @@ class browse_page extends page {
       $begin_day = mktime(0, 0, 0, $month, $day, $year);
       $end_day = mktime(0, 0, 0, $month, $day+1, $year);
 
-      // generate sql 
-      $sql = "select * from video where $begin_day <= time and time < $end_day and (";
-      $first=0;
-      for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
-         if($_SESSION['camera'.$camnum]==1) {
-            if($first==0) {
-               $first = 1;
-               $sql .= "camera_id = $camnum";
-            } else {
-               $sql .= " or camera_id = $camnum";
-            }
-         }
-      }
-
-      $sql .= ") order by time";
-
-      // if no cameras selected
-      if($first == 0) {
-         echo "<p>Please select a camera</p>";
-      } else {
-         $action = "index.php?page=browse";
-         $this->display($sql, $action);
-      }
+      $action = "index.php?page=browse";
+      $this->display($begin_day, $end_day, $cameras, $action);
    }
 }
 ?>
