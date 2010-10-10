@@ -79,52 +79,30 @@ class search_page extends page {
       echo "</table>";
 
       // ------- Check boxes for cameras ------------ 
+      $cameras = array();
       for($count=1;$count<=$this->number_of_cameras();$count++){
          if($count==5) {
             echo "<br />";
          }
          echo "Camera $count:";
-         $checked = (isset($_SESSION['camera'.$count]) && $_SESSION['camera'.$count]==1) ? "checked" : "";
+         $checked = "";
+         if(isset($_SESSION['camera'.$count]) && $_SESSION['camera'.$count]==1) {
+            $checked = "checked";
+            $cameras[$count] = $count;
+         }
+
          echo "<input type='checkbox' name='camera$count' value='1' $checked>";
       }
       echo "<br />";
       echo "<input type='submit' value='Search' name='submit'>";
       echo "</form><br />";
 
-      //if(isset($_POST['submit'])) {  // checks for first search
-         // check for a specified camera
 
-         $begin_time = mktime($start_time['hour'] + $start_time['ampm'], $start_time['min'], 0, $start_time['month'], $start_time['day'], $start_time['year']);
-         $end_time   = mktime($end_time['hour']   + $end_time['ampm'],   $end_time['min'],   0, $end_time['month'],   $end_time['day'],   $end_time['year']);
-         if($begin_time>=$end_time){
-            echo "<p>Invaid starting and ending time.</p>";
-         } else {
+      $begin_time = mktime($start_time['hour'] + $start_time['ampm'], $start_time['min'], 0, $start_time['month'], $start_time['day'], $start_time['year']);
+      $end_time   = mktime($end_time['hour']   + $end_time['ampm'],   $end_time['min'],   0, $end_time['month'],   $end_time['day'],   $end_time['year']);
 
-            // generate sql 
-            $sql = "select * from video where $begin_time <= time and time < $end_time and (";
-            $first=0;
-            for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
-               if($_SESSION['camera'.$camnum]==1) {
-                  if($first==0) {
-                     $first = 1;
-                     $sql .= "camera_id = $camnum";
-                  } else {
-                     $sql .= " or camera_id = $camnum";
-                  }
-               }
-            }
-
-            $sql .= ") order by time";
-
-            // if no cameras selected
-            if($first == 0) {
-               echo "<p>Please select a camera</p>";
-            } else {
-               $action = "index.php?page=search";
-               $this->display($sql, $action);
-            }
-         }
-     // } 
+      $action = "index.php?page=search";
+      $this->display($begin_time, $end_time, $cameras, $action);
    }
 
    private function createOptionFromArray($myArray,$selected) {
@@ -166,7 +144,7 @@ class search_page extends page {
 
       $minArray = array(0 => '00', 15 => '15', 30 => '30', 45 => '45');
       $ampmArray = array(0 => 'am', 12 => 'pm');
-        
+
       echo "<tr><td>";
       echo $name." Date:";
       echo "</td><td>";

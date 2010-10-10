@@ -22,8 +22,9 @@
 require_once('connect.php');
 require_once('page_factory.php');
 
-ini_set('display_errors', 'On');
 error_reporting(E_ALL);
+ini_set('display_errors', 'On');
+
 
 if(!isset($_GET['page'])) $_GET['page'] = "";
 $page = page_factory($_GET['page']);

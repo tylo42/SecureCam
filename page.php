@@ -23,19 +23,25 @@ abstract class page {
    abstract protected function page_name();
    abstract public function body();
 
+   // DATA
+   private $database;
+
+   public function __construct() {
+      $this->database = new securecam_database();
+   }
+
    public function title() {
       echo "SecureCam - Camera Security System - ";
       $this->page_name();
    }
 
-   public function display($sql,$action) {
+   public function display($begin_time, $end_time, $cameras, $action) {
       echo "<table class=\"display\">";
 
-      $sql .= " LIMIT 20";
-      if(isset($_GET['page_num']) && is_numeric($_GET['page_num']) && $_GET['page_num'] > 1) {
-         $sql .= " OFFSET ".($_GET['page_num']-1)*20;
+      $result = $this->database->search_videos($begin_time, $end_time, $cameras);
+      if(empty($result)) {
+         return;
       }
-      $result = mysql_query($sql);
 
       // populate the array
       $counter = 1;
@@ -78,7 +84,7 @@ abstract class page {
       }
       echo "</tr></table>";
 
-      $this->print_page_nums($sql,$action);
+      $this->print_page_nums($begin_time, $end_time, $cameras, $action);
    }
 
    /// return the number of cameras
@@ -149,7 +155,7 @@ abstract class page {
    }
 
    // HELPER FUNCTIONS
-   private function print_page_nums($sql, $action) {
+   private function print_page_nums($begin_time, $end_time, $cameras, $action) {
       if(!isset($_GET['page_num'])) {
          $_GET['page_num'] = 1;
       }
@@ -157,14 +163,7 @@ abstract class page {
          $_GET['page_num'] = 1;
       }
 
-      $sql = strstr($sql, " LIMIT 20", true);
-      $sql = strstr($sql, "*");
-      $sql = substr($sql, 1);
-      $sql = "select count(vid_id)".$sql;
-
-      $result = mysql_query($sql);
-      $count = mysql_fetch_array($result, MYSQL_ASSOC);
-      $count = $count['count(vid_id)'];
+      $count = $this->database->number_of_videos($begin_time, $end_time, $cameras);
 
       for($i=1; $i<($count/20) + 1; $i++) {
          echo "<a href=$action&page_num=$i>$i</a>&nbsp&nbsp&nbsp";

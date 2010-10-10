@@ -53,29 +53,53 @@ class securecam_database {
     * $cameras          Array of cameras in use
     */
    public function search_videos($start_time, $end_time, $cameras, $page_num=1) {
-      if(!is_numeric($start_time) && !is_numeric($end_time) && empty($cameras) && !is_numeric($page_num) && $page_num < 1) {
+      if(!is_numeric($start_time) || !is_numeric($end_time) || !is_numeric($page_num) || $page_num < 1) {
          return array();
       }
 
-      $sql = "SELECT * FROM video WHERE $start_time < time AND time < $end_time";
+      if(empty($cameras)) {
+         echo "<p>Please specify a camera.</p>";
+         return array();
+      }
 
+      if($start_time>$end_time) {
+         echo "<p>Invalid starting and ending time.</p>";
+         return array();
+      }
+
+      $sql = $this->generate_video_sql($start_time, $end_time, $cameras, "*");
+      $sql .= "ORDER BY time LIMIT 20 OFFSET ".(($page_num-1)*20);
+
+      return mysql_query($sql);
+   }
+
+   public function number_of_videos($start_time, $end_time, $cameras) {
+      if(!is_numeric($start_time) || !is_numeric($end_time) || empty($cameras) || $start_time>$end_time) {
+         return 0; // possible throw error at some point
+      }
+
+      $sql = $this->generate_video_sql($start_time, $end_time, $cameras, "COUNT(vid_id)");
+      $result = mysql_query($sql);
+      $count = mysql_fetch_array($result,MYSQL_ASSOC);
+      return $count['COUNT(vid_id)'];
+   }
+
+   // HELPER FUNCTIONS
+   private function generate_video_sql($start_time, $end_time, $cameras, $what) {
+      $sql = "SELECT $what FROM video WHERE $start_time < time AND time < $end_time AND (";
+
+      $first = true;
       foreach($cameras as $camera_num) {
          if(is_numeric($camera_num)) {
-            $sql .= "AND camera_id = $camera_num";
+            if(!$first) $sql .= " OR ";
+            $sql .= "camera_id = $camera_num";
+            if($first) $first = false;
          } else {
             return array();
          }
       }
-
-      $sql .= "LIMIT 20 OFFSET ".(($page_num-1)*20);
-
-      return $this->query_array($sql);
-   }
-
-   // HELPER FUNCTIONS
-   private function query_array($sql) {
-      $result = mysql_query($sql);
-      return mysql_fetch_array($result);
+      $sql .= ")";
+      return $sql;
    }
 
    // DATA
