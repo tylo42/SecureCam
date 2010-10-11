@@ -42,11 +42,13 @@ class browse_page extends page {
          $_SESSION['year'] = $date["year"];
       }
 
+      $action = "index.php?page=browse&mday=".$_SESSION['mday']."&mon=".$_SESSION['mon']."&year=".$_SESSION['year'];
+      
       //title
       echo "<h2>Browse</h2>";
 
       echo "<table border=\"0\" width=\"100%\"><tr><td>";
-      echo "<form action=\"index.php?page=browse\" method=\"post\">";
+      echo "<form action=\"$action\" method=\"post\">";
 
       $cameras = array();
       for($count=1; $count<=$this->number_of_cameras(); $count++){
@@ -81,7 +83,6 @@ class browse_page extends page {
       $begin_day = mktime(0, 0, 0, $month, $day, $year);
       $end_day = mktime(0, 0, 0, $month, $day+1, $year);
 
-      $action = "index.php?page=browse";
       $this->display($begin_day, $end_day, $cameras, $action);
    }
 }
