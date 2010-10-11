@@ -79,8 +79,8 @@ abstract class page {
 
          $counter++;
       }
-      if(1 == $counter % 2) {
-         echo "<td width=\"320px\">&nbsp</td>";
+      if(0 == $counter % 2) {
+         echo "<td>&nbsp</td>";
       }
       echo "</tr></table>";
 
