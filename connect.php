@@ -53,7 +53,7 @@ class securecam_database {
     * $cameras          Array of cameras in use
     */
    public function search_videos($start_time, $end_time, $cameras, $page_num=1) {
-      if(!is_numeric($start_time) || !is_numeric($end_time) || !is_numeric($page_num) || $page_num < 1) {
+      if(!is_numeric($start_time) || !is_numeric($end_time)) {
          return array();
       }
 
@@ -65,6 +65,10 @@ class securecam_database {
       if($start_time>$end_time) {
          echo "<p>Invalid starting and ending time.</p>";
          return array();
+      }
+
+      if(!is_numeric($page_num) || $page_num < 1) {
+         $page_num = 1;
       }
 
       $sql = $this->generate_video_sql($start_time, $end_time, $cameras, "*");
