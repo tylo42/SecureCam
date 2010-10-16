@@ -77,9 +77,9 @@ class home_page extends page {
       //  ----- Print how many videos have been taken today ---------
       $date = getDate();
 
-      $day = $date["mday"];
+      $day   = $date["mday"];
       $month = $date["mon"];
-      $year = $date["year"];
+      $year  = $date["year"];
 
       $begin_day = mktime(0, 0, 0, $month, $day, $year);
       $end_day = mktime(0, 0, 0, $month, $day+1, $year);

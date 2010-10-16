@@ -38,7 +38,8 @@ abstract class page {
    public function display($begin_time, $end_time, $cameras, $action) {
       echo "<table class=\"display\">";
 
-      $result = $this->database->search_videos($begin_time, $end_time, $cameras, $_GET['page_num']);
+      $page_num = isset($_GET['page_num']) ? $_GET['page_num'] : 1;
+      $result = $this->database->search_videos($begin_time, $end_time, $cameras, $page_num);
       if(empty($result)) {
          return;
       }

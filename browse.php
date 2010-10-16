@@ -1,5 +1,4 @@
 <?php
-session_start();
 /* Copyright 2008, 2009, 2010 Tyler Hyndman
  * 
  * This file is part of SecureCam.
@@ -47,7 +46,7 @@ class browse_page extends page {
       //title
       echo "<h2>Browse</h2>";
 
-      echo "<table border=\"0\" width=\"100%\"><tr><td>";
+      echo "<table><tr><td>";
       echo "<form action=\"$action\" method=\"post\">";
 
       $cameras = array();
@@ -65,7 +64,7 @@ class browse_page extends page {
       echo "<input action='index?page=browse' name='submit' type='submit' value='Add/Remove Cameras'>";
       echo "</form>";
 
-      echo "</td><td align=\"right\">";
+      echo "</td><td>";
 
       // Display the calandar
       $date["mday"] = $_SESSION['mday'];
