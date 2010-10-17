@@ -18,6 +18,7 @@
  */
 
 require_once('connect.php');
+require_once('camera_collection.php');
 
 abstract class page {
    abstract protected function page_name();
@@ -25,9 +26,11 @@ abstract class page {
 
    // DATA
    private $database;
+   private $cameras;
 
    public function __construct() {
       $this->database = new securecam_database();
+      $this->cameras  = new camera_collection();
    }
 
    public function title() {
@@ -90,14 +93,8 @@ abstract class page {
 
    /// return the number of cameras
    public function number_of_cameras() {
-      static $cameras = 0;
-      if($cameras < 1) {
-         $sql = "select count(distinct camera_id) from camera";
-         $result = mysql_query($sql);
-         $num = mysql_fetch_array($result,MYSQL_ASSOC);
-         $cameras = $num['count(distinct camera_id)'];
-      }
-      return $cameras;
+      $this->reset_camera();
+      return $this->cameras->size();
    }
 
    public function first_year() {
@@ -142,17 +139,17 @@ abstract class page {
 
    public function get_description($camera_id) {
       $this->reset_camera(); 
-      return $_SESSION['description'.$camera_id];
+      return $this->cameras->get_description($camera_id);
    }
 
    public function get_hostname($camera_id) {
       $this->reset_camera();
-      return $_SESSION['hostname'.$camera_id]; 
+      return $this->cameras->get_hostname($camera_id); 
    }
 
    public function get_port($camera_id) {
       $this->reset_camera();
-      return $_SESSION['port'.$camera_id];
+      return $this->cameras->get_port($camera_id);
    }
 
    // HELPER FUNCTIONS
@@ -173,14 +170,11 @@ abstract class page {
 
 
    private function reset_camera() {
-      if(!isset($_SESSION['description1'])) {
-         $sql = "select * from camera order by camera_id";
+      if(empty($cameras)) {
+         $sql = "select * from camera";
          $result = mysql_query($sql);
-         $num = 1;
          while($info = mysql_fetch_array($result, MYSQL_ASSOC)) {
-            $_SESSION['description'.$num] = $info['description'];
-            $_SESSION['hostname'.$num] = $info['hostname'];
-            $_SESSION['port'.$num++] = $info['port'];
+            $this->cameras->add_camera($info['camera_id'], $info['hostname'], $info['port'], $info['description']);
          } 
       }
    }
