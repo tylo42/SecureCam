@@ -27,8 +27,6 @@ class browse_page extends page {
    }
 
    public function body() {
-      $this->camera_check();
-
       //check all for first time
       if(isset($_GET['mday'])) {
          $_SESSION['mday'] = $_GET['mday'];
@@ -45,25 +43,13 @@ class browse_page extends page {
       
       //title
       echo "<h2>Browse</h2>";
-
+      
       echo "<table><tr><td>";
+      
       echo "<form action=\"$action\" method=\"post\">";
-
-      $cameras = array();
-      for($count=1; $count<=$this->number_of_cameras(); $count++){
-         echo "Camera $count:";
-         $checked = "";
-         if($_SESSION['camera'.$count]==1) {
-            $checked = "checked";
-            $cameras[$count] = $count;
-         }
-         echo "<input type='checkbox' name='camera$count' value='1' $checked>";
-         echo "<br />";
-      }
-      echo "<br />";
+      $cameras = $this->put_camera_check_boxes();
       echo "<input action='index?page=browse' name='submit' type='submit' value='Add/Remove Cameras'>";
       echo "</form>";
-
       echo "</td><td>";
 
       // Display the calandar

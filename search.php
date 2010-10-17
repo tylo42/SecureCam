@@ -28,9 +28,6 @@ class search_page extends page {
    }
 
    public function body() {
-
-      $this->camera_check();
-
       $start_time = array();
       $end_time = array();
       if(isset($_POST['submit'])) {
@@ -78,22 +75,7 @@ class search_page extends page {
       $this->search_date("Ending",  $end_time,   "e");
       echo "</table>";
 
-      // ------- Check boxes for cameras ------------ 
-      $cameras = array();
-      for($count=1;$count<=$this->number_of_cameras();$count++){
-         if($count==5) {
-            echo "<br />";
-         }
-         echo "Camera $count:";
-         $checked = "";
-         if(isset($_SESSION['camera'.$count]) && $_SESSION['camera'.$count]==1) {
-            $checked = "checked";
-            $cameras[$count] = $count;
-         }
-
-         echo "<input type='checkbox' name='camera$count' value='1' $checked>";
-      }
-      echo "<br />";
+      $cameras = $this->put_camera_check_boxes();
       echo "<input type='submit' value='Search' name='submit'>";
       echo "</form><br />";
 

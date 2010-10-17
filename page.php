@@ -113,16 +113,21 @@ abstract class page {
       return $last_year;
    }
 
-   /// If no cookies no cameras check, else set/keep cameras checked from last submit
-   public function camera_check() {
-      for($i=1; $i<=$this->number_of_cameras(); $i++) {
-         $camera = 'camera'.$i;
-         if(isset($_POST['submit'])) {
-            $_SESSION[$camera] = (isset($_POST[$camera])) ? $_POST[$camera] : 0;
-         } else {
-            $_SESSION[$camera] = (isset($_SESSION[$camera])) ? $_SESSION[$camera] : 0;
+   public function put_camera_check_boxes() {
+      $this->camera_check();
+      
+      $cameras = array();
+      for($count=1; $count<=$this->number_of_cameras(); $count++){
+         $checked = "";
+         if($_SESSION['camera'.$count]==1) {
+            $checked = "checked";
+            $cameras[$count] = $count;
          }
+         echo "<input type='checkbox' name='camera$count' value='1' $checked>";
+         echo "Camera $count (".$this->get_description($count).")";
+         echo "<br />";
       }
+      return $cameras;
    }
 
    public function add_flag($vid_id) {
@@ -189,6 +194,18 @@ abstract class page {
       $result = mysql_query($sql);
       $time = mysql_fetch_array($result, MYSQL_ASSOC);
       return $time[$minmax.'(time)'];
+   }
+   
+   /// If no cookies no cameras check, else set/keep cameras checked from last submit
+   private function camera_check() {
+      for($i=1; $i<=$this->number_of_cameras(); $i++) {
+         $camera = 'camera'.$i;
+         if(isset($_POST['submit'])) {
+            $_SESSION[$camera] = (isset($_POST[$camera])) ? $_POST[$camera] : 0;
+         } else {
+            $_SESSION[$camera] = (isset($_SESSION[$camera])) ? $_SESSION[$camera] : 0;
+         }
+      }
    }
 }
 ?>
