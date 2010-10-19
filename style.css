@@ -7,6 +7,14 @@ h1,h2,h3 {
    margin: 0 0 0 0;
 }
 
+p {
+   margin: 0 0 10px 0;
+}
+
+img {
+   border: none;
+}
+
 div#heading {
    background: #909090;
    height: 100px;
@@ -18,13 +26,18 @@ table {
    padding: 0;
 }
 
-table#main, table.display {
+table#main {
    width: 100%;
+}
+
+table.display {
+   margin: 20px 0 0 40px;
 }
 
 table.display td {
    vertical-align: top;
    text-align: left;
+   padding: 0 10px 35px 0;
 }
 
 table.stats {
