@@ -39,39 +39,37 @@ abstract class page {
    }
 
    public function display($begin_time, $end_time, $cameras, $action) {
-      echo "<table class=\"display\">";
-
       $page_num = isset($_GET['page_num']) ? $_GET['page_num'] : 1;
       $result = $this->database->search_videos($begin_time, $end_time, $cameras, $page_num);
       if(empty($result)) {
          return;
       }
 
-      // populate the array
-      $counter = 1;
+      echo "<table class=\"display\">";
       while($video = mysql_fetch_array($result,MYSQL_ASSOC)) {
          if(!isset($video['picture_name'])) {
             $video['picture_name'] = "img/nopic.gif"; // FIXME: should have image here
          }
 
          $video['picture_name'] = $this->get_path($video['picture_name']);
-         $video['video_name'] = $this->get_path($video['video_name']);
+         $video['video_name']   = $this->get_path($video['video_name']);
 
-         $date_time = date("F j, Y - h:i:s A",$video['time']);
+         $date_time = date("F j, Y - h:i:s A", $video['time']);
 
          $button="Remove Flag";
          if($video['flagged']==0) {
             $button="Flag";
          }
 
-         if($counter==1) {
-            echo "<tr>";
-         } else if(1 == $counter % 2) {
-            echo "</tr><tr>";
-         }
-         echo "<td><p id=\"".$video['vid_id']."\">".$date_time."<br />";
+         echo "<tr><td>";
+
+         echo "<a href=\"".$video['video_name']."\"><img class='preview' src=\"".$video['picture_name']."\"></img></a><br />";
          echo "<a href=\"".$video['picture_name']."\">Enlarge Picture</a></p>";
-         echo "<a href=\"".$video['video_name']."\"><img class='preview' src=\"".$video['picture_name']."\"></img></a>";
+
+         echo "</td><td>";
+         
+         echo "<a href=\"".$video['video_name']."\" id=\"".$video['vid_id']."\">".$date_time."</a><br />";
+         echo "<p>Camera ".$video['camera_id']." (".$this->get_description($video['camera_id']).")</p>";
 
          // The page to link to when flagging to keep all the info the same            
          echo "<form action=\"$action#".$video['vid_id']."\" method=\"post\">";
@@ -79,14 +77,9 @@ abstract class page {
          echo "<input type='submit' value='Remove'>";
          echo "</form>";
 
-         echo "</td>";
-
-         $counter++;
+         echo "</td></tr>";
       }
-      if(0 == $counter % 2) {
-         echo "<td>&nbsp</td>";
-      }
-      echo "</tr></table>";
+      echo "</table>";
 
       $this->print_page_nums($begin_time, $end_time, $cameras, $action);
    }

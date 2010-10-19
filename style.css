@@ -4,7 +4,6 @@ body {
 
 h1,h2,h3 {
    text-align: center;
-   text-decoration: underline;
    margin: 0 0 0 0;
 }
 
@@ -21,6 +20,11 @@ table {
 
 table#main, table.display {
    width: 100%;
+}
+
+table.display td {
+   vertical-align: top;
+   text-align: left;
 }
 
 table.stats {
@@ -72,9 +76,14 @@ td.main-page {
    width: 85%;
 }
 
-img.preview {
+img.home-preview {
    width: 320px;
    height: 240px;
+}
+
+img.preview {
+   width: 160px;
+   height: 120px;
 }
 
 #manage {

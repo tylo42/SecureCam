@@ -69,7 +69,7 @@ class home_page extends page {
             $subvid="";
          }
 
-         echo "<a href=$subvid><img class=\"preview\" src=$subpic></img></a>  ";
+         echo "<a href=$subvid><img class=\"home-preview\" src=$subpic></img></a>  ";
          echo "</td>";
       }
       echo "</tr></table>";
