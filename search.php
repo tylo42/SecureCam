@@ -17,8 +17,6 @@
  * along with SecureCam.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// NOTES: at some point add in a count to tell if there is no videos in specified time
-
 require_once('connect.php');
 require_once('page.php');
 
@@ -31,19 +29,34 @@ class search_page extends page {
       $start_time = array();
       $end_time = array();
       if(isset($_POST['submit'])) {
-         $start_time['month'] = $_POST['smonth'];
-         $start_time['day']   = $_POST['sday'];
-         $start_time['year']  = $_POST['syear'];
-         $start_time['hour']  = $_POST['shour'];
-         $start_time['min']   = $_POST['smin'];
-         $start_time['ampm']  = $_POST['sampm'];
+         $start_time['month'] = $_SESSION['smonth'] = $_POST['smonth'];
+         $start_time['day']   = $_SESSION['sday']   = $_POST['sday'];
+         $start_time['year']  = $_SESSION['syear']  = $_POST['syear'];
+         $start_time['hour']  = $_SESSION['shour']  = $_POST['shour'];
+         $start_time['min']   = $_SESSION['smin']   = $_POST['smin'];
+         $start_time['ampm']  = $_SESSION['sampm']  = $_POST['sampm'];
 
-         $end_time['month']   = $_POST['emonth'];
-         $end_time['day']     = $_POST['eday'];
-         $end_time['year']    = $_POST['eyear'];
-         $end_time['hour']    = $_POST['ehour'];
-         $end_time['min']     = $_POST['emin'];
-         $end_time['ampm']    = $_POST['eampm'];
+         $end_time['month']   = $_SESSION['emonth'] = $_POST['emonth'];
+         $end_time['day']     = $_SESSION['eday']   = $_POST['eday'];
+         $end_time['year']    = $_SESSION['eyear']  = $_POST['eyear'];
+         $end_time['hour']    = $_SESSION['ehour']  = $_POST['ehour'];
+         $end_time['min']     = $_SESSION['emin']   = $_POST['emin'];
+         $end_time['ampm']    = $_SESSION['eampm']  = $_POST['eampm'];
+
+      } else if(isset($_SESSION['smonth'])) {
+         $start_time['month'] = $_SESSION['smonth'];
+         $start_time['day']   = $_SESSION['sday'];
+         $start_time['year']  = $_SESSION['syear'];
+         $start_time['hour']  = $_SESSION['shour'];
+         $start_time['min']   = $_SESSION['smin'];
+         $start_time['ampm']  = $_SESSION['sampm'];
+
+         $end_time['month']   = $_SESSION['emonth'];
+         $end_time['day']     = $_SESSION['eday'];
+         $end_time['year']    = $_SESSION['eyear'];
+         $end_time['hour']    = $_SESSION['ehour'];
+         $end_time['min']     = $_SESSION['emin'];
+         $end_time['ampm']    = $_SESSION['eampm'];
 
       } else {
          $date = getDate();
@@ -62,10 +75,6 @@ class search_page extends page {
          $end_time['min']     = 0;
          $end_time['ampm']    = 0;
       }
-      $date = getDate();
-      $curday = $date["mday"];
-      $curmonth = $date["mon"];
-      $curyear = $date["year"];
 
       echo "<h2>Search</h2>";
 
