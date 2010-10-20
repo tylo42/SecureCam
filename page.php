@@ -74,11 +74,11 @@ abstract class page {
 
          echo "</td><td>";
          
-         echo "<a href=\"".$video['video_name']."\" id=\"".$video['vid_id']."\">".$date_time."</a><br />";
+         echo "<a href=\"".$video['video_name']."\">".$date_time."</a><br />";
          echo "<p>Camera ".$video['camera_id']." (".$this->get_description($video['camera_id']).")</p>";
 
          // The page to link to when flagging to keep all the info the same            
-         echo "<form action=\"$action#".$video['vid_id']."\" method=\"post\">";
+         echo "<form action=\"$action\" method=\"post\">";
          echo "<input type='hidden' name='vid_id' value=".$video['vid_id'].">";
          echo "<input type='hidden' name='flagged' value=".$video['flagged'].">";
          echo "<input type='submit' name='flag' value='$button'>&nbsp;";
@@ -89,7 +89,7 @@ abstract class page {
       }
       echo "</table>";
 
-      $this->print_page_nums($begin_time, $end_time, $cameras, $action);
+      $this->print_page_nums($begin_time, $end_time, $cameras, $action, $flagged);
    }
 
    /// return the number of cameras
@@ -151,7 +151,7 @@ abstract class page {
    }
 
    // HELPER FUNCTIONS
-   private function print_page_nums($begin_time, $end_time, $cameras, $action) {
+   private function print_page_nums($begin_time, $end_time, $cameras, $action, $flagged=0) {
       if(!isset($_GET['page_num'])) {
          $_GET['page_num'] = 1;
       }
@@ -159,7 +159,7 @@ abstract class page {
          $_GET['page_num'] = 1;
       }
 
-      $count = $this->database->number_of_videos($begin_time, $end_time, $cameras);
+      $count = $this->database->number_of_videos($begin_time, $end_time, $cameras, $flagged);
 
       for($i=1; $i<($count/20) + 1; $i++) {
          echo "<a href=$action&page_num=$i>$i</a>&nbsp&nbsp&nbsp";

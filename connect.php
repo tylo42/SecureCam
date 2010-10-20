@@ -82,12 +82,15 @@ class securecam_database {
       return mysql_query($sql);
    }
 
-   public function number_of_videos($start_time, $end_time, $cameras) {
+   public function number_of_videos($start_time, $end_time, $cameras, $flagged=0) {
       if(!is_numeric($start_time) || !is_numeric($end_time) || empty($cameras) || $start_time>$end_time) {
          return 0; // possible throw error at some point
       }
 
       $sql = $this->generate_video_sql($start_time, $end_time, $cameras, "COUNT(vid_id)");
+      if($flagged == 1) {
+         $sql .= " AND flagged=1";
+      }
       $result = mysql_query($sql);
       $count = mysql_fetch_array($result,MYSQL_ASSOC);
       return $count['COUNT(vid_id)'];
