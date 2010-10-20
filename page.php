@@ -38,9 +38,15 @@ abstract class page {
       $this->page_name();
    }
 
-   public function display($begin_time, $end_time, $cameras, $action) {
+   public function display($begin_time, $end_time, $cameras, $action, $flagged=0) {
+      if(isset($_POST['flag'])) {
+         $this->database->add_remove_flag($_POST['vid_id'], $_POST['flagged']);
+      } else if(isset($_POST['remove'])) {
+         $this->database->remove_video($_POST['vid_id']);
+      }
+
       $page_num = isset($_GET['page_num']) ? $_GET['page_num'] : 1;
-      $result = $this->database->search_videos($begin_time, $end_time, $cameras, $page_num);
+      $result = $this->database->search_videos($begin_time, $end_time, $cameras, $page_num, $flagged);
       if(empty($result)) {
          return;
       }
@@ -73,8 +79,10 @@ abstract class page {
 
          // The page to link to when flagging to keep all the info the same            
          echo "<form action=\"$action#".$video['vid_id']."\" method=\"post\">";
-         echo "<input type='submit' name='".$video['vid_id']."' value='$button'>&nbsp;";
-         echo "<input type='submit' value='Remove'>";
+         echo "<input type='hidden' name='vid_id' value=".$video['vid_id'].">";
+         echo "<input type='hidden' name='flagged' value=".$video['flagged'].">";
+         echo "<input type='submit' name='flag' value='$button'>&nbsp;";
+         echo "<input type='submit' name='remove' value='Remove'>";
          echo "</form>";
 
          echo "</td></tr>";
@@ -123,14 +131,6 @@ abstract class page {
       return $cameras;
    }
 
-   public function add_flag($vid_id) {
-      $this->flag_sql($vid_id, 1);
-   }
-
-   public function remove_flag($vid_id) {
-      $this->flag_sql($vid_id, 0);
-   }
-
    public function get_path($input) {
       return strstr($input, "snapshots");
    }
@@ -175,11 +175,6 @@ abstract class page {
             $this->cameras->add_camera($info['camera_id'], $info['hostname'], $info['port'], $info['description']);
          } 
       }
-   }
-
-   private function flag_sql($vid_id, $flag) {
-      $sql = "update video set flagged=$flag where vid_id=$vid_id";
-      $reslut = mysql_query($sql);
    }
 
    private function get_time($minmax) {

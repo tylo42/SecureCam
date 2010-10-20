@@ -29,44 +29,13 @@ class flagged_page extends page {
 
       echo "<h2>Flagged</h2>";
 
-      $this->camera_check();
-
       echo "<form action=\"index.php?page=flagged\" method=\"post\">";
-
-      for($i=1; $i<=$this->number_of_cameras(); $i++){
-         echo "Camera $i:";
-         $checked = ($_SESSION['camera'.$i] == 1) ? "checked" : "";
-         echo "<input type='checkbox' name='camera$i' value='1' $checked>";
-         echo "<br />";
-      }
-
-      echo "<br />";
-      echo "<input type='submit' name='submit' value='Add/Remove Cameras'>";
+      $cameras = $this->put_camera_check_boxes();
+      echo "<input name='submit' type='submit' value='Add/Remove Cameras'>";
       echo "</form>";
 
-      // generate sql 
-      $sql = "select * from video where flagged=1 and ( ";
-      $first=0;
-      for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
-         if($_SESSION['camera'.$camnum]==1) {
-            if($first==0) {
-               $first = 1;
-               $sql .= "camera_id = $camnum";
-            } else {
-               $sql .= " or camera_id = $camnum";
-            }
-         }
-      }
-
-      $sql .= ") order by time";
-
-      // if no cameras selected
-      if($first == 0) {
-         echo "<p>Please select a camera</p>";
-      } else {
-         $action = "flagged.php";
-         $this->display($sql, $action);
-      }
+      $action = "index.php?page=flagged";
+      $this->display(0, mktime(), $cameras, $action, 1);
    }
 }
 ?>

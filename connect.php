@@ -51,8 +51,10 @@ class securecam_database {
     * $start_time       Unix timestamp for a date
     * $end_time         Unix timestamp for a date
     * $cameras          Array of cameras in use
+    * $page_num         The page to display
+    * $flagged          If 1 only display flagged videos 
     */
-   public function search_videos($start_time, $end_time, $cameras, $page_num=1) {
+   public function search_videos($start_time, $end_time, $cameras, $page_num=1, $flagged=0) {
       if(!is_numeric($start_time) || !is_numeric($end_time)) {
          return array();
       }
@@ -72,6 +74,9 @@ class securecam_database {
       }
 
       $sql = $this->generate_video_sql($start_time, $end_time, $cameras, "*");
+      if($flagged == 1) {
+         $sql .= "and flagged=1 ";
+      }
       $sql .= "ORDER BY time LIMIT 20 OFFSET ".(($page_num-1)*20);
 
       return mysql_query($sql);
@@ -86,6 +91,23 @@ class securecam_database {
       $result = mysql_query($sql);
       $count = mysql_fetch_array($result,MYSQL_ASSOC);
       return $count['COUNT(vid_id)'];
+   }
+
+   public function add_remove_flag($vid_id, $old_flag) {
+      if(!is_numeric($vid_id) || !is_numeric($old_flag)) {
+         return;
+      }
+      $flag = ($old_flag==0) ? 1 : 0;
+      $sql = "update video set flagged=$flag where vid_id=$vid_id";
+      mysql_query($sql);
+   }
+
+   public function remove_video($vid_id) {
+      if(!is_numeric($vid_id)) {
+         return;
+      }
+      $sql = "DELETE FROM video WHERE vid_id=$vid_id";
+      mysql_query($sql);
    }
 
    // HELPER FUNCTIONS
