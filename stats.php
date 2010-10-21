@@ -56,11 +56,11 @@ class stats_page extends page {
       $curmonnum=12*$curyear+$curmonth;
 
       //get first recorded date
-      $sql = "select time from video where vid_id=1";
+      $sql = "select min(time) from video";
       $result = mysql_query($sql);
       $firdate = mysql_fetch_array($result,MYSQL_ASSOC);
 
-      $first_time = getdate($firdate['time']);
+      $first_time = getdate($firdate['min(time)']);
       $firmonth = $first_time['mon'];
       $firyear  = $first_time['year'];
       $firmonnum=12*$firyear+$firmonth;

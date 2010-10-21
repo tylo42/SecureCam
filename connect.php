@@ -23,7 +23,7 @@ $dbuser = 'root';
 $dbpass = 'root';
 
 $conn = mysql_connect($dbhost, $dbuser, $dbpass) or die 
-	('Error connectiong to mysql');
+   ('Error connectiong to mysql');
 
 $dbname = 'securecam';
 mysql_select_db($dbname);
