@@ -38,7 +38,7 @@ abstract class page {
       $this->page_name();
    }
 
-   public function display($begin_time, $end_time, $cameras, $action, $flagged=0) {
+   protected function display($begin_time, $end_time, $cameras, $action, $flagged=0) {
       if(isset($_POST['flag'])) {
          $this->database->add_remove_flag($_POST['vid_id'], $_POST['flagged']);
       } else if(isset($_POST['remove'])) {
@@ -98,7 +98,7 @@ abstract class page {
       return $this->cameras->size();
    }
 
-   public function first_year() {
+   protected function first_year() {
       static $first_year = 0;
       if($first_year < 1) {
          $first_year = date("Y",$this->get_time("min"));
@@ -106,7 +106,7 @@ abstract class page {
       return $first_year;
    }
 
-   public function last_year() {
+   protected function last_year() {
       static $last_year = 0;
       if($last_year < 1) {
          $last_year = date("Y",$this->get_time("max"));
@@ -114,7 +114,7 @@ abstract class page {
       return $last_year;
    }
 
-   public function put_camera_check_boxes() {
+   protected function put_camera_check_boxes() {
       $this->camera_check();
       
       $cameras = array();
@@ -131,7 +131,7 @@ abstract class page {
       return $cameras;
    }
 
-   public function get_path($input) {
+   protected function get_path($input) {
       return strstr($input, "snapshots");
    }
 
