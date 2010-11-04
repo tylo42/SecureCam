@@ -137,3 +137,112 @@ class results_display extends display {
       }
    }
 }
+
+class stats_display extends display {
+   public function __construct() {
+
+   }
+
+   public function __toString() {
+      echo "<h2>Stats</h2>";
+
+      echo "<h3>Total</h3>";
+
+      echo "<table class=\"stats\">";
+      echo "<tr><td>Camera</td><td># of videos</td><tr>";
+      for($count=1;$count<=$this->number_of_cameras();$count++){
+         $sql = "select count(vid_id) from video where camera_id=$count";
+         $result = mysql_query($sql);
+         $num = mysql_fetch_array($result,MYSQL_ASSOC);
+         $camcount=$num['count(vid_id)'];
+         echo "<td>Camera $count</td><td>$camcount</td></tr>";
+      }
+      echo "<td>Total</td><td>$total</td></tr>";
+      echo "</table>";
+
+      //get the current date
+      $date = getDate();
+      $curmonth = $date["mon"];
+      $curyear = $date["year"];
+      $curmonnum=12*$curyear+$curmonth;
+
+      //get first recorded date
+      $sql = "select min(time) from video";
+      $result = mysql_query($sql);
+      $firdate = mysql_fetch_array($result,MYSQL_ASSOC);
+
+      $first_time = getdate($firdate['min(time)']);
+      $firmonth = $first_time['mon'];
+      $firyear  = $first_time['year'];
+      $firmonnum=12*$firyear+$firmonth;
+
+      // display each month stats
+      for($countmon=$curmonnum;$countmon>=$firmonnum;$countmon--){
+         $year=floor($countmon/12);
+         $month=$countmon%12;
+         if($month==0){
+            $month=12;
+            $year--;
+         }
+         $monthname=date("F", mktime(0, 0, 0, $month, 1, 2010));
+         echo "<br><u><h2>$monthname - $year</h2></u>";
+
+         $start_time = mktime(0, 0, 0, $month, 1, $year);
+         $end_time   = mktime(0, 0, 0, $month + 1, 1, $year);
+         $sql = "select count(vid_id) from video where $start_time <= time and time < $end_time";
+         $result = mysql_query($sql);
+         $num = mysql_fetch_array($result,MYSQL_ASSOC);
+         $total=$num['count(vid_id)'];
+
+         echo "<table class=\"stats\"><tr><td>Camera</td><td># of videos</td><tr>";
+         for($count=1;$count<=$this->number_of_cameras();$count++){
+            $sql = "select count(vid_id) from video where camera_id=$count and $start_time <= time and time < $end_time";
+            $result = mysql_query($sql);
+            $num = mysql_fetch_array($result,MYSQL_ASSOC);
+            $camcount=$num['count(vid_id)'];
+            echo "<td>Camera $count</td><td>$camcount</td></tr>";
+         }
+         echo "<td>Total</td><td>$total</td></tr>";
+         echo "</table>";
+      }
+
+   }
+}
+
+class manage_display extends display {
+   public function __construct() {
+
+   }
+
+   public function __toString() {
+      if(isset($_POST['submit'])) {
+         for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
+            $desc = mysql_real_escape_string($_POST['desc'.$camnum]);
+            $host = mysql_real_escape_string($_POST['host'.$camnum]);
+            $port = mysql_real_escape_string($_POST['port'.$camnum]);
+            if( is_numeric($port) &&
+                ( $desc != $this->get_description($camnum) ||
+                  $host != $this->get_hostname($camnum)    || 
+                  $port != $this->get_port($camnum)) ) {
+               $sql = "update camera set description=\"$desc\", hostname=\"$host\", port=$port where camera_id=$camnum";
+               $result = mysql_query($sql);
+               unset($_SESSION['description1']); // Session variables need to be reset from database
+            }
+         }
+      }
+
+      echo "<form action='index.php?page=manage' method='post'>";
+      for($camnum=1;$camnum<=$this->number_of_cameras();$camnum++){
+         echo "<h3>Camera $camnum</h3><br />";
+
+         echo "<table id='manage'>";
+         echo "<tr><td><p>Description: </p></td><td><input type='text' name='desc$camnum' value='".$this->get_description($camnum)."' /></td></tr>";
+         echo "<tr><td><p>Host: </p></td><td><input type='text' name='host$camnum' value='".$this->get_hostname($camnum)."' /></td></tr>";
+         echo "<tr><td><p>Port: </p></td><td><input type='text' name='port$camnum' value='".$this->get_port($camnum)."' /></td></tr>";
+         echo "</table>";
+      }
+      echo "<br /><br />";
+      echo "<input type='submit' name='submit' value='Submit'>";
+      echo "</form>";
+   }
+}
