@@ -17,18 +17,20 @@
  * along with SecureCam.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('connect.php');
+require_once('database.php');
 require_once('camera_collection.php');
 
-abstract class page {
-   abstract protected function page_name();
-   abstract public function body();
+class page {
+   protected function page_name() { echo ""; }
+   public function body() { echo $this->display; }
 
    // DATA
    private $database;
    private $cameras;
+   private $display;
 
-   public function __construct() {
+   public function __construct($display) {
+      $this->display = $display;
       $this->database = new securecam_database();
       $this->cameras  = new camera_collection();
    }

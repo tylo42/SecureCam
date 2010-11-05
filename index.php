@@ -19,7 +19,7 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <?php
-require_once('connect.php');
+require_once('database.php');
 require_once('page_factory.php');
 
 error_reporting(E_ALL);

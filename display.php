@@ -23,48 +23,50 @@ class home_display extends display {
    }
 
    public function __toString() {
-      echo "<h2>Most Recent Videos</h2>";
+      $string = "<h2>Most Recent Videos</h2>";
 
-      echo "<table class=\"display\">";
+      $string .= "<table class=\"display\">";
 
       $counter = 0;
       foreach($this->videos as $video) {
          if($counter % 2 == 0) {
-            echo "<tr>";
-            $this->print_video($video);
+            $string .= "<tr>";
+            $string .= $this->print_video($video);
          } else {
-            $this->print_video($video);
-            echo "</tr>";
+            $string .= $this->print_video($video);
+            $string .= "</tr>";
          }
       }
       if($counter % 2 == 1) {
-         echo "<td>&nbsp</td>";
-         echo "</tr>";
+         $string .= "<td>&nbsp</td>";
+         $string .= "</tr>";
       }
-      echo "</table>";
+      $string .= "</table>";
 
       if($this->today==1) {
-         echo "There has been one video today.";
+         $string .=  "There has been one video today.";
       } else {
-         echo "There have been ".$this->today." videos today.";
+         $string .= "There have been ".$this->today." videos today.";
       }
+      return $string;
    }
 
    private function print_video($video) {
-      echo "<td>";
-      echo "<h3>Camera $video->vid_id()</h3>";
-      echo "<p>".$cameras->get_description($camnum)."</p>";
+      $string = "<td>";
+      $string .= "<h3>Camera $video->vid_id()</h3>";
+      //$string .= "<p>".$cameras->get_description($camnum)."</p>";
 
-      $subpic = $this->get_path($video->get_picture_name());
-      $subvid = $this->get_path($video->get_video_name());
+      $subpic = $video->picture_name();
+      $subvid = $video->video_name();
 
       if($subpic == "" || $subvid == "") {
          $subpic="img/error.gif";
          $subvid="";
       }
 
-      echo "<a href=$subvid><img class=\"home-preview\" src=$subpic></img></a>";
-      echo "</td>";
+      $string .= "<a href=$subvid><img class=\"home-preview\" src=$subpic></img></a>";
+      $string .= "</td>";
+      return $string;
    }
 }
 
@@ -86,7 +88,7 @@ class results_display extends display {
       foreach($this->videos as $video) {
          echo "<tr>";
          $this->print_video($video);
-         echo "</tr>"
+         echo "</tr>";
       }
       echo "</table>";
 

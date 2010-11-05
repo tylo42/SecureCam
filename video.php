@@ -1,6 +1,6 @@
 <?php
 
-abstract class video {
+class video {
    private $time;
    private $video_name;
    private $picture_name;
