@@ -133,10 +133,6 @@ class page {
       return $cameras;
    }
 
-   protected function get_path($input) {
-      return strstr($input, "snapshots");
-   }
-
    public function get_description($camera_id) {
       $this->reset_camera(); 
       return $this->cameras->get_description($camera_id);
@@ -171,11 +167,11 @@ class page {
 
    private function reset_camera() {
       if(empty($cameras)) {
-         $sql = "select * from camera";
-         $result = mysql_query($sql);
-         while($info = mysql_fetch_array($result, MYSQL_ASSOC)) {
-            $this->cameras->add_camera($info['camera_id'], $info['hostname'], $info['port'], $info['description']);
-         } 
+         //$sql = "select * from camera";
+         //$result = mysql_query($sql);
+         //while($info = mysql_fetch_array($result, MYSQL_ASSOC)) {
+         //   $this->cameras->add_camera($info['camera_id'], $info['hostname'], $info['port'], $info['description']);
+         //} 
       }
    }
 

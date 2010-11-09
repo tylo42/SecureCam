@@ -1,6 +1,8 @@
 <?php
 
 require_once('video.php');
+require_once('camera_collection.php');
+require_once('database.php');
 
 abstract class display {
    abstract function __toString();
@@ -52,9 +54,10 @@ class home_display extends display {
    }
 
    private function print_video($video) {
+      $cameras = get_cameras();
       $string = "<td>";
-      $string .= "<h3>Camera $video->vid_id()</h3>";
-      //$string .= "<p>".$cameras->get_description($camnum)."</p>";
+      $string .= "<h3>Camera ".$video->camera_id()."</h3>";
+      $string .= "<p>".$cameras->get_description($video->camera_id())."</p>";
 
       $subpic = $video->picture_name();
       $subvid = $video->video_name();

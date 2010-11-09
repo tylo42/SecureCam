@@ -17,7 +17,16 @@
  * along with SecureCam.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-require_once('connect.php');
+// connect to database
+$dbhost = 'localhost';
+$dbuser = 'root';
+$dbpass = 'root';
+
+$conn = mysql_connect($dbhost, $dbuser, $dbpass) or die 
+   ('Error connectiong to mysql');
+
+$dbname = 'securecam';
+mysql_select_db($dbname);
 
 error_reporting(E_ALL);
 ini_set("display_errors", 1);

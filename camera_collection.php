@@ -65,4 +65,13 @@ class camera_collection {
    private $camera_array;
 }
 
+function get_cameras() {
+   if(!isset($_SESSION['cameras'])) {
+      $database = new securecam_database();
+      $_SESSION['cameras'] = $database->get_cameras();
+   }
+   echo $_SESSION['cameras']->get_port(1);
+   return $_SESSION['cameras'];
+}
+
 ?>

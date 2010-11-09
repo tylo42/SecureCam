@@ -1,6 +1,7 @@
 <?php
 
 class video {
+   private $vid_id;
    private $time;
    private $video_name;
    private $picture_name;
@@ -10,8 +11,8 @@ class video {
    public function __construct($vid_id, $time, $video_name, $picture_name, $camera_id, $flagged) {
       $this->vid_id       = $vid_id;
       $this->time         = $time;
-      $this->video_name   = $video_name;
-      $this->picture_name = $picture_name;
+      $this->video_name   = $this->strip_path($video_name);
+      $this->picture_name = $this->strip_path($picture_name);
       $this->camera_id    = $camera_id;
       $this->flagged      = $flagged;
    }
@@ -38,6 +39,11 @@ class video {
 
    public function flagged() {
       return $this->flagged;
+   }
+
+   // HELPER FUNCTIONS
+   private function strip_path($input) {
+      return strstr($input, "snapshots");
    }
 }
 
