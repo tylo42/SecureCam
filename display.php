@@ -87,15 +87,21 @@ class results_display extends display {
    }
 
    public function __toString() {
-      echo "<table class=\"display\">";
-      foreach($this->videos as $video) {
-         echo "<tr>";
-         $this->print_video($video);
-         echo "</tr>";
+      $string = "";
+      if(!empty($this->videos)) {
+         $string .= "<table class=\"display\">";
+         foreach($this->videos as $video) {
+            $string .= "<tr>";
+            $string .= $this->print_video($video);
+            $string .= "</tr>";
+         }
+         $string .= "</table>";
+      } else {
+         $string .= "<p>No videos found</p>";
       }
-      echo "</table>";
 
-      $this->print_page_nums($begin_time, $end_time, $cameras);
+      $string .= $this->print_page_nums();
+      return $string;
    }
 
    private function print_video($video) {
@@ -104,28 +110,29 @@ class results_display extends display {
             $button="Flag";
          }
 
-         echo "<td>";
+         $string = "<td>";
 
-         echo "<a href=\"".$video->video_name()."\"><img class='preview' src=\"".$video->picture_name()."\"></img></a><br />";
-         echo "<a href=\"".$video->picture_name()."\">Enlarge Picture</a></p>";
+         $string .= "<a href=\"".$video->video_name()."\"><img class='preview' src=\"".$video->picture_name()."\"></img></a><br />";
+         $string .= "<a href=\"".$video->picture_name()."\">Enlarge Picture</a></p>";
 
-         echo "</td><td>";
+         $string .= "</td><td>";
          
-         echo "<a href=\"".$video->video_name()."\">".$date_time."</a><br />";
-         echo "<p>Camera ".$video->camera_id()." (".$this->get_description($video['camera_id']).")</p>";
+         $string .= "<a href=\"".$video->video_name()."\">".$date_time."</a><br />";
+         $string .= "<p>Camera ".$video->camera_id()." (".$this->get_description($video['camera_id']).")</p>";
 
          // The page to link to when flagging to keep all the info the same            
-         echo "<form action=\"".$this->action."\" method=\"post\">";
-         echo "<input type='hidden' name='vid_id' value=".$video->vid_id().">";
-         echo "<input type='hidden' name='flagged' value=".$video->flagged().">";
-         echo "<input type='submit' name='flag' value='$button'>&nbsp;";
-         echo "<input type='submit' name='remove' value='Remove'>";
-         echo "</form>";
+         $string .= "<form action=\"".$this->action."\" method=\"post\">";
+         $string .= "<input type='hidden' name='vid_id' value=".$video->vid_id().">";
+         $string .= "<input type='hidden' name='flagged' value=".$video->flagged().">";
+         $string .= "<input type='submit' name='flag' value='$button'>&nbsp;";
+         $string .= "<input type='submit' name='remove' value='Remove'>";
+         $string .= "</form>";
 
-         echo "</td>";
+         $string .= "</td>";
+         return $string;
    }
 
-   private function print_page_nums($begin_time, $end_time, $cameras) {
+   private function print_page_nums() {
       if(!isset($_GET['page_num'])) {
          $_GET['page_num'] = 1;
       }
@@ -133,13 +140,15 @@ class results_display extends display {
          $_GET['page_num'] = 1;
       }
 
+      $string = "";
       for($i=1; $i<($this->number_of_videos/20) + 1; $i++) {
          if($_GET['page_num'] == $i) {
-            echo "$i&nbsp&nbsp&nbsp";
+            $string .= "$i&nbsp&nbsp&nbsp";
          } else {
-            echo "<a href=".$this->action."&page_num=$i>$i</a>&nbsp&nbsp&nbsp";
+            $string .= "<a href=".$this->action."&page_num=$i>$i</a>&nbsp&nbsp&nbsp";
          }
       }
+      return $string;
    }
 }
 
