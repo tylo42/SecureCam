@@ -246,7 +246,7 @@ class manage_display extends display {
       }
 
       echo "<form action='index.php?page=manage' method='post'>";
-      for($camnum=1;$camnum<=$this->number_of_cameras();$camnum++){
+      foreach($this->cameras as $camera) {
          echo "<h3>Camera $camnum</h3><br />";
 
          echo "<table id='manage'>";

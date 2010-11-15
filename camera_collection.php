@@ -34,43 +34,11 @@ class camera {
    private $description;
 }
 
-class camera_collection {
-   public function __construct() {
-      $camera_array = array();
-   }
-
-   public function add_camera($id, $hostname, $port, $description) {
-      $this->camera_array[$id] = new camera($hostname, $port, $description);
-   }
-
-   public function size() {
-      return count($this->camera_array);
-   }
-
-   public function get_hostname($id) { 
-      assert($this->camera_array[$id]);
-      return $this->camera_array[$id]->get_hostname();
-   }
-
-   public function get_port($id) {
-      assert($this->camera_array[$id]);
-      return $this->camera_array[$id]->get_port();
-   }
-
-   public function get_description($id) {
-      assert($this->camera_array[$id]);
-      return $this->camera_array[$id]->get_description();
-   }
-
-   private $camera_array;
-}
-
 function get_cameras() {
    if(!isset($_SESSION['cameras'])) {
       $database = new securecam_database();
       $_SESSION['cameras'] = $database->get_cameras();
    }
-   echo $_SESSION['cameras']->get_port(1);
    return $_SESSION['cameras'];
 }
 
