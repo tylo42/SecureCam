@@ -131,9 +131,9 @@ class securecam_database {
    public function get_cameras() {
       $sql = "SELECT * FROM camera ORDER BY camera_id";
       $mysql_cameras = mysql_query($sql);
-      $cameras = new camera_collection();
+      $cameras = array();
       while($mysql_camera = mysql_fetch_array($mysql_cameras,MYSQL_ASSOC)) {
-         $cameras->add_camera($mysql_camera['camera_id'], $mysql_camera['hostname'], $mysql_camera['port'], $mysql_camera['description']);
+         $cameras[$mysql_camera['camera_id'] = new camera($mysql_camera['camera_id'], $mysql_camera['hostname'], $mysql_camera['port'], $mysql_camera['description']);
       }
       return $cameras;
    }
