@@ -18,7 +18,7 @@
  */
 
 require_once('video.php');
-require_once('camera_collection.php');
+require_once('camera.php');
 
 class securecam_database {
    private $conn;
@@ -133,10 +133,27 @@ class securecam_database {
       $mysql_cameras = mysql_query($sql);
       $cameras = array();
       while($mysql_camera = mysql_fetch_array($mysql_cameras,MYSQL_ASSOC)) {
-         $cameras[$mysql_camera['camera_id'] = new camera($mysql_camera['camera_id'], $mysql_camera['hostname'], $mysql_camera['port'], $mysql_camera['description']);
+         $cameras[$mysql_camera['camera_id']] = new camera($mysql_camera['camera_id'], $mysql_camera['hostname'], $mysql_camera['port'], $mysql_camera['description']);
       }
       return $cameras;
    }
+
+   public function update_camera($camera_id, $desc, $host, $port) {
+      assert(is_numeric($camera_id));
+      $cameras = $this->get_cameras();
+      $desc = mysql_real_escape_string($desc);
+      $host = mysql_real_escape_string($host);
+      $port = mysql_real_escape_string($port);
+      if( is_numeric($port) &&
+         ( $desc != $cameras[$camera_id]->get_description() ||
+           $host != $cameras[$camera_id]->get_hostname()    || 
+           $port != $cameras[$camera_id]->get_port() ) ) 
+      {
+         $sql = "update camera set description=\"$desc\", hostname=\"$host\", port=$port where camera_id=$camera_id";
+         $result = mysql_query($sql);
+      }
+   }
+
 
    // HELPER FUNCTIONS
    private function to_video_collection($mysql_result) {

@@ -48,8 +48,9 @@ $page = page_factory($_GET['page']);
 
 echo "<div id=\"camera-links\">";
 echo "<ul>";
-for($camnum=1; $camnum <= $page->number_of_cameras(); $camnum++) {
-   echo "<li><a href=\"http://".$page->get_hostname($camnum).":".$page->get_port($camnum)."\">Camera ".$camnum."</a></li>";
+$cameras = get_cameras();
+foreach($cameras as $camera) {
+   echo "<li><a href=\"http://".$camera->get_hostname().":".$camera->get_port()."\">Camera ".$camera->get_id()."</a></li>";
 }
 echo "</ul>";
 echo "</div>";

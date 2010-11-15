@@ -18,7 +18,7 @@
  */
 
 require_once('database.php');
-require_once('camera_collection.php');
+require_once('camera.php');
 
 class page {
    protected function page_name() { echo ""; }
@@ -32,7 +32,7 @@ class page {
    public function __construct($display) {
       $this->display = $display;
       $this->database = new securecam_database();
-      $this->cameras  = new camera_collection();
+      //$this->cameras  = new camera_collection();
    }
 
    public function title() {
@@ -92,12 +92,6 @@ class page {
       echo "</table>";
 
       $this->print_page_nums($begin_time, $end_time, $cameras, $action, $flagged);
-   }
-
-   /// return the number of cameras
-   public function number_of_cameras() {
-      $this->reset_camera();
-      return $this->cameras->size();
    }
 
    protected function first_year() {

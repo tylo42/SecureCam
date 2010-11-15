@@ -58,6 +58,18 @@ function page_factory($page_name) {
 
       return new page($browse_display);
    } else if($page_name == "manage") {
+      // update camera data if data changed
+      if(isset($_POST['submit'])) {
+         $cameras = get_cameras();
+         foreach($cameras as $camera) {
+            $camnum = $camera->get_id();
+            $desc = $_POST['desc'.$camnum];
+            $host = $_POST['host'.$camnum];
+            $port = $_POST['port'.$camnum];
+            $sc_database->update_camera($camnum, $desc, $host, $port);
+         }
+      }
+
       return new page(new manage_display());
    } else if($page_name == "stats") {
       return new page(new stats_display());

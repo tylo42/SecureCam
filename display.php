@@ -1,7 +1,7 @@
 <?php
 
 require_once('video.php');
-require_once('camera_collection.php');
+require_once('camera.php');
 require_once('database.php');
 
 abstract class display {
@@ -57,7 +57,7 @@ class home_display extends display {
       $cameras = get_cameras();
       $string = "<td>";
       $string .= "<h3>Camera ".$video->camera_id()."</h3>";
-      $string .= "<p>".$cameras->get_description($video->camera_id())."</p>";
+      $string .= "<p>".$cameras[$video->camera_id()]->get_description()."</p>";
 
       $subpic = $video->picture_name();
       $subvid = $video->video_name();
@@ -224,39 +224,27 @@ class stats_display extends display {
 }
 
 class manage_display extends display {
-   public function __construct() {
+   private $cameras;
 
+   public function __construct() {
    }
 
    public function __toString() {
-      if(isset($_POST['submit'])) {
-         for($camnum=1; $camnum<=$this->number_of_cameras(); $camnum++) {
-            $desc = mysql_real_escape_string($_POST['desc'.$camnum]);
-            $host = mysql_real_escape_string($_POST['host'.$camnum]);
-            $port = mysql_real_escape_string($_POST['port'.$camnum]);
-            if( is_numeric($port) &&
-                ( $desc != $this->get_description($camnum) ||
-                  $host != $this->get_hostname($camnum)    || 
-                  $port != $this->get_port($camnum)) ) {
-               $sql = "update camera set description=\"$desc\", hostname=\"$host\", port=$port where camera_id=$camnum";
-               $result = mysql_query($sql);
-               unset($_SESSION['description1']); // Session variables need to be reset from database
-            }
-         }
-      }
+      $string = "<form action='index.php?page=manage' method='post'>";
+      $cameras = get_cameras();
+      foreach($cameras as $camera) {
+         $camnum = $camera->get_id();
+         $string .= "<h3>Camera $camnum</h3><br />";
 
-      echo "<form action='index.php?page=manage' method='post'>";
-      foreach($this->cameras as $camera) {
-         echo "<h3>Camera $camnum</h3><br />";
-
-         echo "<table id='manage'>";
-         echo "<tr><td><p>Description: </p></td><td><input type='text' name='desc$camnum' value='".$this->get_description($camnum)."' /></td></tr>";
-         echo "<tr><td><p>Host: </p></td><td><input type='text' name='host$camnum' value='".$this->get_hostname($camnum)."' /></td></tr>";
-         echo "<tr><td><p>Port: </p></td><td><input type='text' name='port$camnum' value='".$this->get_port($camnum)."' /></td></tr>";
-         echo "</table>";
+         $string .= "<table id='manage'>";
+         $string .= "<tr><td><p>Description: </p></td><td><input type='text' name='desc$camnum' value='".$camera->get_description()."' /></td></tr>";
+         $string .= "<tr><td><p>Host: </p></td><td><input type='text' name='host$camnum' value='".$camera->get_hostname()."' /></td></tr>";
+         $string .= "<tr><td><p>Port: </p></td><td><input type='text' name='port$camnum' value='".$camera->get_port()."' /></td></tr>";
+         $string .= "</table>";
       }
-      echo "<br /><br />";
-      echo "<input type='submit' name='submit' value='Submit'>";
-      echo "</form>";
+      $string .= "<br /><br />";
+      $string .= "<input type='submit' name='submit' value='Submit'>";
+      $string .= "</form>";
+      return $string;
    }
 }
