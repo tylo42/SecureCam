@@ -34,7 +34,7 @@ function page_factory($page_name) {
 
       $search_display = new results_display($videos, $number_of_videos);
 
-      return new page($search_display);
+      return new page($search_display, "Search");
    } else if($page_name == "browse") {
       $date = getDate();
       $begin_day = mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']);
@@ -45,7 +45,7 @@ function page_factory($page_name) {
 
       $browse_display = new results_display($videos, $number_of_videos);
 
-      return new page($browse_display);
+      return new page($browse_display, "Browse");
    } else if($page_name == "flagged") {
       $date = getDate();
       $begin_day = mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']);
@@ -56,7 +56,7 @@ function page_factory($page_name) {
 
       $browse_display = new results_display($videos, $number_of_videos);
 
-      return new page($browse_display);
+      return new page($browse_display, "Flagged");
    } else if($page_name == "manage") {
       // update camera data if data changed
       if(isset($_POST['submit'])) {
@@ -70,9 +70,9 @@ function page_factory($page_name) {
          }
       }
 
-      return new page(new manage_display());
+      return new page(new manage_display(), "Manage");
    } else if($page_name == "stats") {
-      return new page(new stats_display());
+      return new page(new stats_display(), "Stats");
    } else {
       $videos = $sc_database->get_max_videos();
 
@@ -85,6 +85,6 @@ function page_factory($page_name) {
 
       $home_display = new home_display($videos, $today, $action);
 
-      return new page($home_display);
+      return new page($home_display, "Home");
    }
 }

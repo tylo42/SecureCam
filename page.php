@@ -25,19 +25,16 @@ class page {
    public function body() { echo $this->display; }
 
    // DATA
-   private $database;
-   private $cameras;
+   private $page_name;
    private $display;
 
-   public function __construct($display) {
-      $this->display = $display;
-      $this->database = securecam_database::singleton(); // probably should consider just calling singleton instead
-      //$this->cameras  = new camera_collection();
+   public function __construct($display, $page_name) {
+      $this->display   = $display;
+      $this->page_name = $page_name;
    }
 
    public function title() {
-      echo "SecureCam - Camera Security System - ";
-      $this->page_name();
+      echo "SecureCam - Camera Security System - ".$this->page_name;
    }
 
    protected function display($begin_time, $end_time, $cameras, $action, $flagged=0) {
