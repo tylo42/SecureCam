@@ -31,7 +31,7 @@ class page {
 
    public function __construct($display) {
       $this->display = $display;
-      $this->database = new securecam_database();
+      $this->database = securecam_database::singleton(); // probably should consider just calling singleton instead
       //$this->cameras  = new camera_collection();
    }
 

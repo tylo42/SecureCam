@@ -20,10 +20,19 @@
 require_once('video.php');
 require_once('camera.php');
 
+
+/**
+ * @class securecam_database
+ *
+ * Singleton class
+ */
 class securecam_database {
+   private static $instance;
+
+   // DATA
    private $conn;
 
-   function __construct() {
+   private function __construct() {
       $dbhost = 'localhost';
       $dbuser = 'root';
       $dbpass = 'root';
@@ -37,6 +46,20 @@ class securecam_database {
 
    function __destruct() {
       mysql_close($this->conn);
+   }
+
+   /// singleton method
+   public static function singleton() {
+      if(!isset(self::$instance)) {
+         $c = __CLASS__;
+         self::$instance = new $c;
+      }
+      return self::$instance;
+   }
+
+   // Prevent users to clone the instance
+   public function __clone() {
+      trigger_error('Clone is not allowed.', E_USER_ERROR);
    }
 
    /**

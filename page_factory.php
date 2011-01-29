@@ -22,7 +22,7 @@ require_once('display.php');
 require_once('database.php');
 
 function page_factory($page_name) {
-   $sc_database = new securecam_database();
+   $sc_database = securecam_database::singleton();
 
    if($page_name == "search") {
       $date = getDate();
