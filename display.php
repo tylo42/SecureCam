@@ -71,7 +71,7 @@ class home_display extends display {
       $string .= "</td>";
       return $string;
    }
-}
+} // end class home_display
 
 class results_display extends display {
    private $videos;
@@ -150,7 +150,7 @@ class results_display extends display {
       }
       return $string;
    }
-}
+} // end class results_display
 
 class stats_display extends display {
    public function __construct() {
@@ -224,7 +224,7 @@ class stats_display extends display {
       }
       return $string;
    }
-}
+} // end class stats_display
 
 class manage_display extends display {
    private $cameras;
@@ -250,4 +250,4 @@ class manage_display extends display {
       $string .= "</form>";
       return $string;
    }
-}
+} // end class manage_display
