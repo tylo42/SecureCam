@@ -124,21 +124,6 @@ class page {
       return $cameras;
    }
 
-   public function get_description($camera_id) {
-      $this->reset_camera(); 
-      return $this->cameras->get_description($camera_id);
-   }
-
-   public function get_hostname($camera_id) {
-      $this->reset_camera();
-      return $this->cameras->get_hostname($camera_id); 
-   }
-
-   public function get_port($camera_id) {
-      $this->reset_camera();
-      return $this->cameras->get_port($camera_id);
-   }
-
    // HELPER FUNCTIONS
    private function print_page_nums($begin_time, $end_time, $cameras, $action, $flagged=0) {
       if(!isset($_GET['page_num'])) {
@@ -152,17 +137,6 @@ class page {
 
       for($i=1; $i<($count/20) + 1; $i++) {
          echo "<a href=$action&page_num=$i>$i</a>&nbsp&nbsp&nbsp";
-      }
-   }
-
-
-   private function reset_camera() {
-      if(empty($cameras)) {
-         //$sql = "select * from camera";
-         //$result = mysql_query($sql);
-         //while($info = mysql_fetch_array($result, MYSQL_ASSOC)) {
-         //   $this->cameras->add_camera($info['camera_id'], $info['hostname'], $info['port'], $info['description']);
-         //} 
       }
    }
 
