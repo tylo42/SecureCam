@@ -76,6 +76,7 @@ class home_display extends display {
 class results_display extends display {
    private $videos;
    private $number_of_videos;
+   private $action;
 
    public function __construct($videos, $number_of_videos) {
       $this->videos = $videos;
@@ -117,8 +118,9 @@ class results_display extends display {
 
          $string .= "</td><td>";
          
-         $string .= "<a href=\"".$video->video_name()."\">".$date_time."</a><br />";
-         $string .= "<p>Camera ".$video->camera_id()." (".$this->get_description($video['camera_id']).")</p>";
+         $cameras = get_cameras();
+         $string .= "<a href=\"".$video->video_name()."\">".$video->print_time()."</a><br />";
+         $string .= "<p>Camera ".$video->camera_id()." (".$cameras[$video->camera_id()]->get_description().")</p>";
 
          // The page to link to when flagging to keep all the info the same            
          $string .= "<form action=\"".$this->action."\" method=\"post\">";

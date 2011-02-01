@@ -22,7 +22,7 @@ class video {
    }
 
    public function print_time() {
-      return date("F j, Y - h:i:s A", $time);
+      return date("F j, Y - h:i:s A", $this->time);
    }
 
    public function video_name() {

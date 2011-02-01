@@ -129,7 +129,10 @@ class securecam_database {
    }
 
    public function get_max_videos() {
-      $sql = "SELECT MAX(vid_id),time,video_name,picture_name,camera_id,flagged FROM video GROUP BY camera_id";
+      $sql  = "SELECT vid.* FROM video vid ";
+      $sql .= "INNER JOIN(SELECT camera_id, MAX(vid_id) As MaxVid FROM video ";
+      $sql .= "WHERE picture_name != '' GROUP BY camera_id) grouped ";
+      $sql .= "ON vid.camera_id = grouped.camera_id AND vid.vid_id = grouped.MaxVid";
       $result = mysql_query($sql);
       return $this->to_video_collection($result);
    }
@@ -182,7 +185,7 @@ class securecam_database {
    private function to_video_collection($mysql_result) {
       $videos = array();
       while($video = mysql_fetch_array($mysql_result,MYSQL_ASSOC)) {
-         $videos[] = new video($video['MAX(vid_id)'], $video['time'], $video['video_name'], $video['picture_name'], $video['camera_id'], $video['flagged']);
+         $videos[] = new video($video['vid_id'], $video['time'], $video['video_name'], $video['picture_name'], $video['camera_id'], $video['flagged']);
       }
       return $videos;
    }
