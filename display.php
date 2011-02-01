@@ -158,21 +158,23 @@ class stats_display extends display {
    }
 
    public function __toString() {
-      echo "<h2>Stats</h2>";
+      $string  = "<h2>Stats</h2>";
+      $string .= "<h3>Total</h3>";
 
-      echo "<h3>Total</h3>";
-
-      echo "<table class=\"stats\">";
-      echo "<tr><td>Camera</td><td># of videos</td><tr>";
-      for($count=1;$count<=$this->number_of_cameras();$count++){
-         $sql = "select count(vid_id) from video where camera_id=$count";
+      $string .= "<table class=\"stats\">";
+      $string .= "<tr><td>Camera</td><td># of videos</td><tr>";
+      $cameras = get_cameras();
+      $total = 0;
+      foreach($cameras as $camera){
+         $sql = "select count(vid_id) from video where camera_id=".$camera->get_id();
          $result = mysql_query($sql);
          $num = mysql_fetch_array($result,MYSQL_ASSOC);
          $camcount=$num['count(vid_id)'];
-         echo "<td>Camera $count</td><td>$camcount</td></tr>";
+         $string .= "<td>Camera ".$camera->get_id()."</td><td>$camcount</td></tr>";
+         $total += $camcount;
       }
-      echo "<td>Total</td><td>$total</td></tr>";
-      echo "</table>";
+      $string .= "<td>Total</td><td>$total</td></tr>";
+      $string .= "</table>";
 
       //get the current date
       $date = getDate();
@@ -199,7 +201,7 @@ class stats_display extends display {
             $year--;
          }
          $monthname=date("F", mktime(0, 0, 0, $month, 1, 2010));
-         echo "<br><u><h2>$monthname - $year</h2></u>";
+         $string .= "<h2>$monthname - $year</h2>";
 
          $start_time = mktime(0, 0, 0, $month, 1, $year);
          $end_time   = mktime(0, 0, 0, $month + 1, 1, $year);
@@ -208,18 +210,19 @@ class stats_display extends display {
          $num = mysql_fetch_array($result,MYSQL_ASSOC);
          $total=$num['count(vid_id)'];
 
-         echo "<table class=\"stats\"><tr><td>Camera</td><td># of videos</td><tr>";
-         for($count=1;$count<=$this->number_of_cameras();$count++){
-            $sql = "select count(vid_id) from video where camera_id=$count and $start_time <= time and time < $end_time";
+         $string .= "<table class=\"stats\"><tr><td>Camera</td><td># of videos</td><tr>";
+         $total = 0;
+         foreach($cameras as $camera){
+            $sql = "select count(vid_id) from video where camera_id=".$camera->get_id()." and $start_time <= time and time < $end_time";
             $result = mysql_query($sql);
             $num = mysql_fetch_array($result,MYSQL_ASSOC);
             $camcount=$num['count(vid_id)'];
-            echo "<td>Camera $count</td><td>$camcount</td></tr>";
+            $string .= "<td>Camera ".$camera->get_id()."</td><td>$camcount</td></tr>";
          }
-         echo "<td>Total</td><td>$total</td></tr>";
-         echo "</table>";
+         $string .= "<td>Total</td><td>$total</td></tr>";
+         $string .= "</table>";
       }
-
+      return $string;
    }
 }
 
