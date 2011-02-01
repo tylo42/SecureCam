@@ -78,13 +78,14 @@ class results_display extends display {
    private $number_of_videos;
    private $action;
 
-   public function __construct($videos, $number_of_videos) {
+   public function __construct($videos, $number_of_videos, $page) {
       $this->videos = $videos;
       if(is_numeric($number_of_videos) && $number_of_videos > 0) {
          $this->number_of_videos = $number_of_videos;
       } else {
          $this->number_of_videos = 0;
       }
+      $this->action = "index.php?page=".$page;
    }
 
    public function __toString() {
@@ -145,9 +146,9 @@ class results_display extends display {
       $string = "";
       for($i=1; $i<($this->number_of_videos/20) + 1; $i++) {
          if($_GET['page_num'] == $i) {
-            $string .= "$i&nbsp&nbsp&nbsp";
+            $string .= "$i&nbsp&nbsp&nbsp ";
          } else {
-            $string .= "<a href=".$this->action."&page_num=$i>$i</a>&nbsp&nbsp&nbsp";
+            $string .= "<a href=".$this->action."&page_num=$i>$i</a>&nbsp&nbsp&nbsp ";
          }
       }
       return $string;

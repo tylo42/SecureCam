@@ -21,7 +21,7 @@ require_once('page.php');
 require_once('display.php');
 require_once('database.php');
 
-function page_factory($page_name) {
+function page_factory($page_name, $page_num) {
    $sc_database = securecam_database::singleton();
 
    if($page_name == "search") {
@@ -29,10 +29,10 @@ function page_factory($page_name) {
       $begin_day = mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']);
       $end_day = mktime(0, 0, 0, $date['mon'], $date['mday']+1, $date['year']);
 
-      $videos = $sc_database->search_videos($begin_day, $end_day, array(1, 2));
+      $videos = $sc_database->search_videos($begin_day, $end_day, array(1, 2), $page_num);
       $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day);
 
-      $search_display = new results_display($videos, $number_of_videos);
+      $search_display = new results_display($videos, $number_of_videos, $page_name);
 
       return new page($search_display, "Search");
    } else if($page_name == "browse") {
@@ -40,10 +40,10 @@ function page_factory($page_name) {
       $begin_day = mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']);
       $end_day = mktime(0, 0, 0, $date['mon'], $date['mday']+1, $date['year']);
 
-      $videos = $sc_database->search_videos($begin_day, $end_day, array(1, 2));
+      $videos = $sc_database->search_videos($begin_day, $end_day, array(1, 2), $page_num);
       $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day);
 
-      $browse_display = new results_display($videos, $number_of_videos);
+      $browse_display = new results_display($videos, $number_of_videos, $page_name);
 
       return new page($browse_display, "Browse");
    } else if($page_name == "flagged") {
@@ -51,10 +51,10 @@ function page_factory($page_name) {
       $begin_day = mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']);
       $end_day = mktime(0, 0, 0, $date['mon'], $date['mday']+1, $date['year']);
 
-      $videos = $sc_database->search_videos($begin_day, $end_day, array(1, 2));
+      $videos = $sc_database->search_videos($begin_day, $end_day, array(1, 2), $page_num);
       $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day);
 
-      $browse_display = new results_display($videos, $number_of_videos);
+      $browse_display = new results_display($videos, $number_of_videos, $page_name);
 
       return new page($browse_display, "Flagged");
    } else if($page_name == "manage") {
