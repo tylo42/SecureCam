@@ -21,7 +21,6 @@ require_once('database.php');
 require_once('camera.php');
 
 class page {
-   protected function page_name() { echo ""; }
    public function body() { echo $this->display; }
 
    // DATA
