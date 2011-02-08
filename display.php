@@ -76,20 +76,25 @@ class home_display extends display {
 class results_display extends display {
    private $videos;
    private $number_of_videos;
+   private $input;
    private $action;
+   private $page_num;
 
-   public function __construct($videos, $number_of_videos, $page) {
+   public function __construct($videos, $number_of_videos, $input, $page, $page_num) {
       $this->videos = $videos;
       if(is_numeric($number_of_videos) && $number_of_videos > 0) {
          $this->number_of_videos = $number_of_videos;
       } else {
          $this->number_of_videos = 0;
       }
+      $this->input = $input;
       $this->action = "index.php?page=".$page;
+      $this->page_num = $page_num;
    }
 
    public function __toString() {
       $string = "";
+      if($this->input) $string += (string)$this->input;
       if(!empty($this->videos)) {
          $string .= "<table class=\"display\">";
          foreach($this->videos as $video) {
@@ -136,16 +141,9 @@ class results_display extends display {
    }
 
    private function print_page_nums() {
-      if(!isset($_GET['page_num'])) {
-         $_GET['page_num'] = 1;
-      }
-      if(!is_numeric($_GET['page_num'])) {
-         $_GET['page_num'] = 1;
-      }
-
       $string = "";
       for($i=1; $i<($this->number_of_videos/20) + 1; $i++) {
-         if($_GET['page_num'] == $i) {
+         if($this->page_num == $i) {
             $string .= "$i&nbsp&nbsp&nbsp ";
          } else {
             $string .= "<a href=".$this->action."&page_num=$i>$i</a>&nbsp&nbsp&nbsp ";

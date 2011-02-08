@@ -69,7 +69,7 @@ class securecam_database {
     * $page_num         The page to display
     * $flagged          If 1 only display flagged videos 
     */
-   public function search_videos($start_time, $end_time, $cameras, $page_num=1, $flagged=0) {
+   public function search_videos($start_time, $end_time, $cameras, $page_num=1, $flagged=false) {
       if(!is_numeric($start_time) || !is_numeric($end_time)) {
          return array();
       }
@@ -89,7 +89,7 @@ class securecam_database {
       }
 
       $sql = $this->generate_video_sql($start_time, $end_time, $cameras, "*");
-      if($flagged == 1) {
+      if($flagged) {
          $sql .= "AND flagged=1 ";
       }
       $sql .= "ORDER BY time LIMIT 20 OFFSET ".(($page_num-1)*20);
@@ -108,7 +108,7 @@ class securecam_database {
       return $number_of_cameras;
    }
 
-   public function number_of_videos($start_time, $end_time, $cameras=array(), $flagged=0) {
+   public function number_of_videos($start_time, $end_time, $cameras=array(), $flagged=false) {
       if(!is_numeric($start_time) || !is_numeric($end_time) || $start_time>$end_time) {
          return 0; // possible throw error at some point
       }
@@ -120,7 +120,7 @@ class securecam_database {
       }
 
       $sql = $this->generate_video_sql($start_time, $end_time, $cameras, "COUNT(vid_id)");
-      if($flagged == 1) {
+      if($flagged) {
          $sql .= " AND flagged=1";
       }
       $result = mysql_query($sql);
@@ -179,7 +179,14 @@ class securecam_database {
          $result = mysql_query($sql);
       }
    }
-
+   
+   public function get_time($minmax) {
+      $minmax = mysql_real_escape_string($minmax);
+      $sql = "select $minmax(time) from video";
+      $result = mysql_query($sql);
+      $time = mysql_fetch_array($result, MYSQL_ASSOC);
+      return $time[$minmax.'(time)'];
+   }
 
    // HELPER FUNCTIONS
    private function to_video_collection($mysql_result) {

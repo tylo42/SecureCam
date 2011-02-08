@@ -26,7 +26,7 @@ ini_set('display_errors', 'On');
 
 
 if(!isset($_GET['page'])) $_GET['page'] = "";
-if(!isset($_GET['page_num'])) $_GET['page_num'] = 1;
+if(!isset($_GET['page_num']) || !is_numeric($_GET['page_num'])) $_GET['page_num'] = 1;
 $page = page_factory($_GET['page'], $_GET['page_num']);
 
 ?>

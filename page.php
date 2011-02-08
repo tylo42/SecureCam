@@ -90,22 +90,6 @@ class page {
       $this->print_page_nums($begin_time, $end_time, $cameras, $action, $flagged);
    }
 
-   protected function first_year() {
-      static $first_year = 0;
-      if($first_year < 1) {
-         $first_year = date("Y",$this->get_time("min"));
-      }
-      return $first_year;
-   }
-
-   protected function last_year() {
-      static $last_year = 0;
-      if($last_year < 1) {
-         $last_year = date("Y",$this->get_time("max"));
-      }
-      return $last_year;
-   }
-
    protected function put_camera_check_boxes() {
       $this->camera_check();
       
@@ -137,13 +121,6 @@ class page {
       for($i=1; $i<($count/20) + 1; $i++) {
          echo "<a href=$action&page_num=$i>$i</a>&nbsp&nbsp&nbsp";
       }
-   }
-
-   private function get_time($minmax) {
-      $sql = "select $minmax(time) from video";
-      $result = mysql_query($sql);
-      $time = mysql_fetch_array($result, MYSQL_ASSOC);
-      return $time[$minmax.'(time)'];
    }
    
    /// If no cookies no cameras check, else set/keep cameras checked from last submit
