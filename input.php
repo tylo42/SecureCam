@@ -19,15 +19,34 @@
  
  abstract class input {
    abstract function __toString();
+   
+   private $cameras;
+   
+   public function __construct($cameras) {
+      $this->cameras = $cameras;
+   }
+   
+   protected function put_camera_check_boxes() {
+      $string = "";
+      foreach($this->cameras as $camera) {
+         $checked = $camera->get_checked() ? "checked" : "";
+         $string .= "<input type='checkbox' name='camera".$camera->get_id()."' value='1' $checked>";
+         $string .= "Camera ".$camera->get_id()." (".$camera->get_description().")";
+         $string .= "<br />";
+      }
+      return $string;
+   }
  } // end class input
  
-class search_input {
+class search_input extends input {
    private $first_year;
    private $last_year;
    private $begin_time;
    private $end_time;
    
-   public function __construct($first_year, $last_year, $begin_time=NULL, $end_time=NULL) {
+   public function __construct($cameras, $first_year, $last_year, $begin_time=NULL, $end_time=NULL) {
+      parent::__construct($cameras);
+      
       $this->first_year = $first_year;
       $this->last_year  = $last_year;
       if(isset($begin_time) && isset($end_time)) {
@@ -42,15 +61,17 @@ class search_input {
    }
     
    public function __toString() {
-      echo "<form action=\"index.php?page=search\" method=\"post\">";
-      echo "<table>";
-      $this->search_date("Starting",$this->begin_time, "s");
-      $this->search_date("Ending",  $this->end_time,   "e");
-      echo "</table>";
+      $string = "";
+      $string .= "<form action=\"index.php?page=search\" method=\"post\">";
+      $string .= "<table>";
+      $string .= $this->search_date("Starting",$this->begin_time, "s");
+      $string .= $this->search_date("Ending",  $this->end_time,   "e");
+      $string .= "</table>";
 
-      $cameras = $this->put_camera_check_boxes();
-      echo "<input type='submit' value='Search' name='submit'>";
-      echo "</form><br />";
+      $string .= $this->put_camera_check_boxes();
+      $string .= "<input type='submit' value='Search' name='submit'>";
+      $string .= "</form><br />";
+      return $string;
    }
    
    private function search_date($name, $unix_time, $prefix) {
@@ -78,45 +99,47 @@ class search_input {
       $minArray = array(0 => '00', 15 => '15', 30 => '30', 45 => '45');
       $ampmArray = array(0 => 'am', 12 => 'pm');
 
-      echo "<tr><td>";
-      echo $name." Date:";
-      echo "</td><td>";
+      $string = "";
+      $string .= "<tr><td>";
+      $string .= $name." Date:";
+      $string .= "</td><td>";
 
       $month = date("n", $unix_time);
-      echo "<select name=\"".$prefix."month\">";
-      echo $this->createOptionFromArray($monthArray, $month);
-      echo "</select>";
+      $string .= "<select name=\"".$prefix."month\">";
+      $string .= $this->createOptionFromArray($monthArray, $month);
+      $string .= "</select>";
 
       $day   = date("j", $unix_time);
-      echo "<select name=\"".$prefix."day\">";
-      echo $this->createOptionFromArray($dayArray, $day);
-      echo "</select>";
+      $string .= "<select name=\"".$prefix."day\">";
+      $string .= $this->createOptionFromArray($dayArray, $day);
+      $string .= "</select>";
 
       $year  = date("Y", $unix_time);
-      echo "<select name=\"".$prefix."year\">";
-      echo $this->createOptionFromArray($yearArray, $year);
-      echo "</select>";
+      $string .= "<select name=\"".$prefix."year\">";
+      $string .= $this->createOptionFromArray($yearArray, $year);
+      $string .= "</select>";
 
-      echo "</td><td>at</td><td>";
+      $string .= "</td><td>at</td><td>";
 
       $hour  = date("g", $unix_time);
-      echo "<select name=\"".$prefix."hour\">";
-      echo $this->createOptionFromArray($hourArray, $hour);
-      echo "</select>";
+      $string .= "<select name=\"".$prefix."hour\">";
+      $string .= $this->createOptionFromArray($hourArray, $hour);
+      $string .= "</select>";
 
-      echo ":";
+      $string .= ":";
 
       $min   = date("i", $unix_time);
-      echo "<select name=\"".$prefix."min\">";
-      echo $this->createOptionFromArray($minArray, $min);
-      echo "</select>";
+      $string .= "<select name=\"".$prefix."min\">";
+      $string .= $this->createOptionFromArray($minArray, $min);
+      $string .= "</select>";
 
       $ampm  = date("A", $unix_time) == "AM" ? 0 : 1;
-      echo "<select name=\"".$prefix."ampm\">";
-      echo $this->createOptionFromArray($ampmArray,$ampm);
-      echo "</select>";
+      $string .= "<select name=\"".$prefix."ampm\">";
+      $string .= $this->createOptionFromArray($ampmArray,$ampm);
+      $string .= "</select>";
 
-      echo "</td></tr>";
+      $string .= "</td></tr>";
+      return $string;
    }
    
    private function createOptionFromArray($myArray,$selected) {

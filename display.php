@@ -94,7 +94,7 @@ class results_display extends display {
 
    public function __toString() {
       $string = "";
-      if($this->input) $string += (string)$this->input;
+      if($this->input) $string .= (string)$this->input;
       if(!empty($this->videos)) {
          $string .= "<table class=\"display\">";
          foreach($this->videos as $video) {

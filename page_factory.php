@@ -52,7 +52,7 @@ function page_factory($page_name, $page_num) {
       $videos = $sc_database->search_videos($begin_day, $end_day, array(1, 2), $page_num);
       $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day);
 
-      $input = new search_input(first_year(), last_year());
+      $input = new search_input(get_cameras(), first_year(), last_year());
       $search_display = new results_display($videos, $number_of_videos, $input, $page_name, $page_num);
 
       return new page($search_display, "Search");
