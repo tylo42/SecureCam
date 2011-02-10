@@ -69,18 +69,8 @@ class securecam_database {
     * $page_num         The page to display
     * $flagged          If 1 only display flagged videos 
     */
-   public function search_videos($start_time, $end_time, $cameras, $page_num=1, $flagged=false) {
+   public function search_videos($start_time, $end_time, $page_num=1, $flagged=false) {
       if(!is_numeric($start_time) || !is_numeric($end_time)) {
-         return array();
-      }
-
-      if(empty($cameras)) {
-         echo "<p>Please specify a camera.</p>";
-         return array();
-      }
-
-      if($start_time>$end_time) {
-         echo "<p>Invalid starting and ending time.</p>";
          return array();
       }
 
@@ -88,7 +78,7 @@ class securecam_database {
          $page_num = 1;
       }
 
-      $sql = $this->generate_video_sql($start_time, $end_time, $cameras, "*");
+      $sql = $this->generate_video_sql($start_time, $end_time, "*");
       if($flagged) {
          $sql .= "AND flagged=1 ";
       }
@@ -108,7 +98,7 @@ class securecam_database {
       return $number_of_cameras;
    }
 
-   public function number_of_videos($start_time, $end_time, $cameras=array(), $flagged=false) {
+   public function number_of_videos($start_time, $end_time, $flagged=false) {
       if(!is_numeric($start_time) || !is_numeric($end_time) || $start_time>$end_time) {
          return 0; // possible throw error at some point
       }
@@ -119,7 +109,7 @@ class securecam_database {
          }
       }
 
-      $sql = $this->generate_video_sql($start_time, $end_time, $cameras, "COUNT(vid_id)");
+      $sql = $this->generate_video_sql($start_time, $end_time, "COUNT(vid_id)");
       if($flagged) {
          $sql .= " AND flagged=1";
       }
@@ -197,20 +187,26 @@ class securecam_database {
       return $videos;
    }
 
-   private function generate_video_sql($start_time, $end_time, $cameras, $what) {
-      $sql = "SELECT $what FROM video WHERE $start_time < time AND time < $end_time AND (";
+   private function generate_video_sql($start_time, $end_time, $what) {
+      $sql = "SELECT $what FROM video WHERE $start_time < time AND time < $end_time ";
 
       $first = true;
-      foreach($cameras as $camera_num) {
-         if(is_numeric($camera_num)) {
-            if(!$first) $sql .= " OR ";
-            $sql .= "camera_id = $camera_num";
+      foreach(get_cameras() as $camera) {
+         if($camera->get_checked()) {
+            if($first) {
+               $sql .= "AND (";
+            } else {
+               $sql .= " OR ";
+            }
+            $sql .= "camera_id = ".$camera->get_id();
             if($first) $first = false;
-         } else {
-            return array();
          }
       }
-      $sql .= ")";
+      // if first is true then no videos were added
+      if(!$first) {
+         $sql .= ")";
+      }
+
       return $sql;
    }
 }

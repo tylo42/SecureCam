@@ -44,18 +44,14 @@ class search_input extends input {
    private $begin_time;
    private $end_time;
    
-   public function __construct($cameras, $first_year, $last_year, $begin_time=NULL, $end_time=NULL) {
+   public function __construct($cameras, $first_year, $last_year, $begin_time, $end_time) {
       parent::__construct($cameras);
       
       $this->first_year = $first_year;
       $this->last_year  = $last_year;
-      if(isset($begin_time) && isset($end_time)) {
-         $this->begin_time = $begin_time;
-         $this->end_time = $end_time;
-      } else {
-         $this->begin_time = mktime(0, 0, 0);
-         $this->end_time   = mktime(0, 0, 0) + 60*60*24;
-      }
+      $this->begin_time = $begin_time;
+      $this->end_time = $end_time;
+      
       assert($this->first_year < $this->last_year);
       assert($this->begin_time < $this->end_time);
    }
@@ -133,7 +129,7 @@ class search_input extends input {
       $string .= $this->createOptionFromArray($minArray, $min);
       $string .= "</select>";
 
-      $ampm  = date("A", $unix_time) == "AM" ? 0 : 1;
+      $ampm  = date("A", $unix_time) == "AM" ? 0 : 12;
       $string .= "<select name=\"".$prefix."ampm\">";
       $string .= $this->createOptionFromArray($ampmArray,$ampm);
       $string .= "</select>";
