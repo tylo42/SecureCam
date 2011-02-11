@@ -107,7 +107,7 @@ class results_display extends display {
          $string .= "<p>No videos found</p>";
       }
 
-      $string .= $this->print_page_nums();
+      $string .= $this->print_page_navigation();
       return $string;
    }
 
@@ -140,15 +140,26 @@ class results_display extends display {
          return $string;
    }
 
-   private function print_page_nums() {
+   private function print_page_navigation() {
+      if($this->number_of_videos < 2) return "";
+      $first_video = (($this->page_num-1)*20+1);
+      $last_video  = min((($this->page_num)*20), $this->number_of_videos);
+      assert($first_video < $last_video);
+      
       $string = "";
-      for($i=1; $i<($this->number_of_videos/20) + 1; $i++) {
-         if($this->page_num == $i) {
-            $string .= "$i&nbsp&nbsp&nbsp ";
-         } else {
-            $string .= "<a href=".$this->action."&page_num=$i>$i</a>&nbsp&nbsp&nbsp ";
-         }
+      if($last_video == $first_video) { // just one video on this page
+         $string .= "Video $last_video";
+      } else {
+         $string .= "Videos $first_video-$last_video of ".$this->number_of_videos."<br />";
       }
+      $max_page = floor($this->number_of_videos/20) + 1;
+
+      $first    = ($this->page_num != 1)      ? "<a href=".$this->action."&page_num=1>first</a>" : "first";
+      $previous = (($this->page_num - 1) > 0) ? "<a href=".$this->action."&page_num=".($this->page_num - 1).">previous</a>" : "previous";
+      $next     = (($this->page_num) < $max_page) ? "<a href=".$this->action."&page_num=".($this->page_num + 1).">next</a>" : "next";
+      $last     = ($this->page_num != $max_page) ? "<a href=".$this->action."&page_num=".$max_page.">last</a>" : "last";
+      $string .= "$first | $previous | $next | $last<br />";
+
       return $string;
    }
 } // end class results_display

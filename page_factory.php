@@ -43,6 +43,12 @@ function last_year() {
 
 function page_factory($page_name, $page_num) {
    $sc_database = securecam_database::singleton();
+   
+   // reset the session if the previous page is not the same as the current page
+   if(isset($_SESSION['previous_page']) && $_SESSION['previous_page'] != $page_name) {
+         session_destroy();
+   }
+   $_SESSION['previous_page'] = $page_name;
 
    if($page_name == "search") {
       $date = getDate();
@@ -50,16 +56,20 @@ function page_factory($page_name, $page_num) {
       $end_day   = mktime(0, 0, 0, $date['mon'], $date['mday']+1, $date['year']);
       $selected_cameras = array();
       if(isset($_POST['submit'])) {
-         $begin_day = mktime($_POST['shour']+$_POST['sampm'], $_POST['smin'], 0, $_POST['smonth'], $_POST['sday'], $_POST['syear']);
-         $end_day   = mktime($_POST['ehour']+$_POST['eampm'], $_POST['emin'], 0, $_POST['emonth'], $_POST['eday'], $_POST['eyear']);
+         $begin_day = $_SESSION['search_begin'] = mktime($_POST['shour']+$_POST['sampm'], $_POST['smin'], 0, $_POST['smonth'], $_POST['sday'], $_POST['syear']);
+         $end_day   = $_SESSION['search_end']   = mktime($_POST['ehour']+$_POST['eampm'], $_POST['emin'], 0, $_POST['emonth'], $_POST['eday'], $_POST['eyear']);
 
          foreach(get_cameras() as $camera) {
             if(isset($_POST['camera'.$camera->get_id()])) { 
                $camera->put_checked(true); 
+            } else {
+               $camera->put_checked(false);
             }
          }
+      } else if(isset($_SESSION['search_begin'])) {
+         $begin_day = $_SESSION['search_begin'];
+         $end_day   = $_SESSION['search_end'];
       }
-      
 
       $videos = $sc_database->search_videos($begin_day, $end_day, $page_num);
       $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day);
