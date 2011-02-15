@@ -31,7 +31,8 @@
       foreach($this->cameras as $camera) {
          $checked = $camera->get_checked() ? "checked" : "";
          $string .= "<input type='checkbox' name='camera".$camera->get_id()."' value='1' $checked>";
-         $string .= "Camera ".$camera->get_id()." (".$camera->get_description().")";
+         $string .= $camera->get_id().".) ".$camera->get_description();
+         
          $string .= "<br />";
       }
       return $string;
@@ -59,16 +60,14 @@ class search_input extends input {
    public function get_end_time()   { return $this->end_time; }
     
    public function __toString() {
-      $string = "";
+      $string  = "<h2>Search for videos&hellip;</h2>";
       $string .= "<form action=\"index.php?page=search\" method=\"post\">";
-      $string .= "<table>";
       $string .= $this->search_date("Starting",$this->begin_time, "s");
       $string .= $this->search_date("Ending",  $this->end_time,   "e");
-      $string .= "</table>";
 
       $string .= $this->put_camera_check_boxes();
       $string .= "<input type='submit' value='Search' name='submit'>";
-      $string .= "</form><br />";
+      $string .= "</form>";
       return $string;
    }
    
@@ -97,46 +96,49 @@ class search_input extends input {
       $minArray = array(0 => '00', 15 => '15', 30 => '30', 45 => '45');
       $ampmArray = array(0 => 'am', 12 => 'pm');
 
-      $string = "";
+      $string  = "<table class=\"search\">";
+      $string .= "<tr><th>$name Date</th>";
+      $string .= "<td></td>";
+      $string .= "<th>$name Time</th></tr>\n";
+
       $string .= "<tr><td>";
-      $string .= $name." Date:";
-      $string .= "</td><td>";
 
       $month = date("n", $unix_time);
       $string .= "<select name=\"".$prefix."month\">";
       $string .= $this->createOptionFromArray($monthArray, $month);
-      $string .= "</select>";
+      $string .= "</select>\n";
 
       $day   = date("j", $unix_time);
       $string .= "<select name=\"".$prefix."day\">";
       $string .= $this->createOptionFromArray($dayArray, $day);
-      $string .= "</select>";
+      $string .= "</select>\n";
 
       $year  = date("Y", $unix_time);
       $string .= "<select name=\"".$prefix."year\">";
       $string .= $this->createOptionFromArray($yearArray, $year);
-      $string .= "</select>";
+      $string .= "</select>\n";
 
-      $string .= "</td><td>at</td><td>";
+      $string .= "</td><td>at</td><td>\n";
 
       $hour  = date("g", $unix_time);
       $string .= "<select name=\"".$prefix."hour\">";
       $string .= $this->createOptionFromArray($hourArray, $hour);
-      $string .= "</select>";
+      $string .= "</select>\n";
 
-      $string .= ":";
+      $string .= ":\n";
 
       $min   = date("i", $unix_time);
       $string .= "<select name=\"".$prefix."min\">";
       $string .= $this->createOptionFromArray($minArray, $min);
-      $string .= "</select>";
+      $string .= "</select>\n";
 
       $ampm  = date("A", $unix_time) == "AM" ? 0 : 12;
       $string .= "<select name=\"".$prefix."ampm\">";
       $string .= $this->createOptionFromArray($ampmArray,$ampm);
-      $string .= "</select>";
+      $string .= "</select>\n";
 
-      $string .= "</td></tr>";
+      $string .= "</td></tr>\n";
+      $string .= "</table>";
       return $string;
    }
    

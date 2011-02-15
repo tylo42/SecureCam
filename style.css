@@ -40,6 +40,10 @@ table.display td {
    padding: 0 10px 35px 0;
 }
 
+table.search {
+   margin: 0 0 20px 0;
+}
+
 table.stats {
    border-color: black;
    border-width: 1px;
