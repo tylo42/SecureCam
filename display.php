@@ -104,7 +104,11 @@ class results_display extends display {
          }
          $string .= "</table>";
       } else {
-         $string .= "<p>No videos found</p>";
+         if($this->input->get_begin_time() >= $this->input->get_end_time()) {
+            $string .= "<p>Invalid starting and ending dates.</p>";
+         } else {
+            $string .= "<p>No videos found.</p>";
+         }
       }
 
       $string .= $this->print_page_navigation();

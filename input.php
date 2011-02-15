@@ -53,8 +53,10 @@ class search_input extends input {
       $this->end_time = $end_time;
       
       assert($this->first_year < $this->last_year);
-      assert($this->begin_time < $this->end_time);
    }
+   
+   public function get_begin_time() { return $this->begin_time; }
+   public function get_end_time()   { return $this->end_time; }
     
    public function __toString() {
       $string = "";
