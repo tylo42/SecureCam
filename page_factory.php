@@ -39,14 +39,39 @@ function last_year() {
    return $last_year;
 }
 
+function valid_user($username, $password) {
+   if($username == "Tylo42" && $password == "lame") {
+      return true;
+   } else {
+      return false;
+   }
+}
 
+function logged_in() {
+   $secret_word = "jt+*=i>b&woq~;TC/:<60917v]B:xmT7)gWljcr->j.r$%nr#/X{BQi{,~xO[yI";
+   if(isset($_COOKIE['login'])) {
+      list($username,$hash) = explode(',',$_COOKIE['login']);
+      if(md5($username.$secret_word) != $hash) { // invalid cookie
+         return false;
+      }
+   } else if(isset($_POST['username']) && valid_user($_POST['username'], $_POST['password'])) { // login attempt
+      setcookie('login', $_POST['username'].','.md5($_POST['username'].$secret_word), time()+60*60*4); // set 4 hour cookie
+   } else { // first time visitor
+      return false;
+   }
+   return true;
+}
 
 function page_factory($page_name, $page_num) {
    $sc_database = securecam_database::singleton();
    
+   if(!logged_in()) {
+      return new page(new login_display(), "Login");
+   }
+   
    // reset the session if the previous page is not the same as the current page
    if(isset($_SESSION['previous_page']) && $_SESSION['previous_page'] != $page_name) {
-         session_destroy();
+      session_destroy();
    }
    $_SESSION['previous_page'] = $page_name;
 

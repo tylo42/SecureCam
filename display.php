@@ -267,3 +267,20 @@ class manage_display extends display {
       return $string;
    }
 } // end class manage_display
+
+class login_display extends display {
+   
+   public function __construct() {
+   }
+   
+   public function __toString() {
+      $string  = "<form method='POST' action='index.php'>";
+      $string .= "<table>";
+      $string .= "<tr><td>Username:</td><td><input type='text' name='username'</td></tr>";
+      $string .= "<tr><td>Password:</td><td><input type='password' name='password'</td></tr>";
+      $string .= "</table>";
+      $string .= "<input type='submit' value='Log In'>";
+      $string .= "</form>";
+      return $string;
+   }
+} // end class login
