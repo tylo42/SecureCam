@@ -169,75 +169,71 @@ class results_display extends display {
 } // end class results_display
 
 class stats_display extends display {
-   public function __construct() {
-
+   private $stats;
+   
+   public function __construct($stats) {
+      $this->stats = $stats;
    }
 
    public function __toString() {
       $string  = "<h2>Stats</h2>";
-      $string .= "<h3>Total</h3>";
-
-      $string .= "<table class=\"stats\">";
-      $string .= "<tr><td>Camera</td><td># of videos</td><tr>";
-      $cameras = get_cameras();
-      $total = 0;
-      foreach($cameras as $camera){
-         $sql = "select count(vid_id) from video where camera_id=".$camera->get_id();
-         $result = mysql_query($sql);
-         $num = mysql_fetch_array($result,MYSQL_ASSOC);
-         $camcount=$num['count(vid_id)'];
-         $string .= "<td>Camera ".$camera->get_id()."</td><td>$camcount</td></tr>";
-         $total += $camcount;
-      }
-      $string .= "<td>Total</td><td>$total</td></tr>";
-      $string .= "</table>";
 
       //get the current date
       $date = getDate();
       $curmonth = $date["mon"];
       $curyear = $date["year"];
       $curmonnum=12*$curyear+$curmonth;
-
-      //get first recorded date
-      $sql = "select min(time) from video";
-      $result = mysql_query($sql);
-      $firdate = mysql_fetch_array($result,MYSQL_ASSOC);
-
-      $first_time = getdate($firdate['min(time)']);
-      $firmonth = $first_time['mon'];
-      $firyear  = $first_time['year'];
-      $firmonnum=12*$firyear+$firmonth;
-
-      // display each month stats
-      for($countmon=$curmonnum;$countmon>=$firmonnum;$countmon--){
+      
+      $string .= "<table border='1px' width='100%'>";
+      $string .= "<tr><td></td>";
+      $count = 0;
+      $countmon=$curmonnum;
+      while($count < 12) {
          $year=floor($countmon/12);
          $month=$countmon%12;
          if($month==0){
             $month=12;
             $year--;
          }
-         $monthname=date("F", mktime(0, 0, 0, $month, 1, 2010));
-         $string .= "<h2>$monthname - $year</h2>";
-
-         $start_time = mktime(0, 0, 0, $month, 1, $year);
-         $end_time   = mktime(0, 0, 0, $month + 1, 1, $year);
-         $sql = "select count(vid_id) from video where $start_time <= time and time < $end_time";
-         $result = mysql_query($sql);
-         $num = mysql_fetch_array($result,MYSQL_ASSOC);
-         $total=$num['count(vid_id)'];
-
-         $string .= "<table class=\"stats\"><tr><td>Camera</td><td># of videos</td><tr>";
-         $total = 0;
-         foreach($cameras as $camera){
-            $sql = "select count(vid_id) from video where camera_id=".$camera->get_id()." and $start_time <= time and time < $end_time";
-            $result = mysql_query($sql);
-            $num = mysql_fetch_array($result,MYSQL_ASSOC);
-            $camcount=$num['count(vid_id)'];
-            $string .= "<td>Camera ".$camera->get_id()."</td><td>$camcount</td></tr>";
-         }
-         $string .= "<td>Total</td><td>$total</td></tr>";
-         $string .= "</table>";
+         $monthname=date("M", mktime(0, 0, 0, $month, 1, $year));
+         $string .= "<td>$monthname</td>";
+         $count++;
+         $countmon--;
       }
+      $string .= "</tr>";
+      
+      foreach(get_cameras() as $camera) {
+         $string .= $this->print_row($curmonnum, $camera->get_id(), $camera->get_id().".) ".$camera->get_description());
+      }
+      $string .= $this->print_row($curmonnum, "total", "Total");
+      $string .= "</table>";
+      
+      return $string;
+   }
+   
+   private function print_row($curmonnum, $name, $description) {
+      $string  = "<tr>";
+      $string .= "<td>$description</td>";
+      $count = 0;
+      $countmon=$curmonnum;
+      while($count < 12) {
+         $year=floor($countmon/12);
+         $month=$countmon%12;
+         if($month==0){
+            $month=12;
+            $year--;
+         }
+         
+         $key = "$name-".date("Y-m", mktime(0, 0, 0, $month, 1, $year));
+         if(isset($this->stats[$key])) {
+            $string .= "<td>".$this->stats[$key]."</td>";
+         } else {
+            $string .= "<td>0</td>";
+         }
+         $count++;
+         $countmon--;
+      }
+      $string .= "</tr>";
       return $string;
    }
 } // end class stats_display

@@ -120,7 +120,9 @@ function page_factory($page_name, $page_num) {
       return new page(new manage_display(), "Manage");
       
    } else if($page_name == "stats") {
-      return new page(new stats_display(), "Stats");
+      $stats = $sc_database->get_stats();
+      $stats_display = new stats_display($stats);
+      return new page($stats_display, "Stats");
       
    } else {
       $videos = $sc_database->get_max_videos();
