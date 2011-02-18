@@ -66,8 +66,6 @@ echo "</div>";
    <li><a href="index.php">Home</a></li>
    <li><a href="index.php?page=search">Search</a></li>
    <li><a href="index.php?page=browse">Browse</a></li>
-   <li><a href="index.php?page=flagged">Flagged</a></li>
-   <li><a href="index.php?page=manage">Manage</a></li>
    <li><a href="index.php?page=stats">Stats</a></li>
 </ul>
 </td>

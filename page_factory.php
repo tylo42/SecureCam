@@ -103,31 +103,7 @@ function page_factory($page_name, $page_num) {
       $search_display = new results_display($videos, $number_of_videos, $input, $page_name, $page_num);
 
       return new page($search_display, "Search");
-      
-   } else if($page_name == "browse") {
-      $date = getDate();
-      $begin_day = mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']);
-      $end_day = mktime(0, 0, 0, $date['mon'], $date['mday']+1, $date['year']);
 
-      $videos = $sc_database->search_videos($begin_day, $end_day, array(1, 2), $page_num);
-      $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day);
-
-      $browse_display = new results_display($videos, $number_of_videos, NULL, $page_name, $page_num);
-
-      return new page($browse_display, "Browse");
-      
-   } else if($page_name == "flagged") {
-      $date = getDate();
-      $begin_day = mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']);
-      $end_day = mktime(0, 0, 0, $date['mon'], $date['mday']+1, $date['year']);
-
-      $videos = $sc_database->search_videos($begin_day, $end_day, array(1, 2), $page_num, true);
-      $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day, true);
-
-      $browse_display = new results_display($videos, $number_of_videos, NULL, $page_name, $page_num);
-
-      return new page($browse_display, "Flagged");
-      
    } else if($page_name == "manage") {
       // update camera data if data changed
       if(isset($_POST['submit'])) {
