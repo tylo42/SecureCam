@@ -61,20 +61,20 @@ p#subtitle {
    background: #ffffff;
 }
 
-#camera-links {
+#top-bar {
    text-align: center;
    margin: 0 auto 0 auto;
    width: 940px;
    height: 50px;
 }
 
-#camera-links ul {
+#top-bar ul {
    margin: 0 auto;
    padding: 0 auto;
    list-style: none;
 }
 
-#camera-links li {
+#top-bar li {
    margin: 0 auto;
    padding: 0 15px 0 0;
    background: none;
@@ -109,6 +109,12 @@ img.preview {
 
 #manage p{
    margin: 0;
+}
+
+iframe {
+   width: 320px;
+   height: 240px;
+   border: 0;
 }
 
 /* Calendar */

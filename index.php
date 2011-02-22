@@ -45,31 +45,19 @@ $page = page_factory($_GET['page'], $_GET['page_num']);
 </div>
 
 <?php
-
-
-// ------- Camera links at top bar ----------
-
-echo "<div id=\"camera-links\">";
+echo "<div id=\"top-bar\">";
 echo "<ul>";
-$cameras = get_cameras();
-foreach($cameras as $camera) {
-   echo "<li><a href=\"http://".$camera->get_hostname().":".$camera->get_port()."\">Camera ".$camera->get_id()."</a></li>";
-}
+   echo "<li><a href='index.php'>Home</a></li>";
+   echo "<li><a href='index.php?page=search'>Search</a></li>";
+   echo "<li><a href='index.php?page=manage'>Manage</a></li>";
+   echo "<li><a href='index.php?page=stats'>Stats</a></li>";
+   echo "<li><a href='index.php?page=view'>Live View</a></li>";
 echo "</ul>";
 echo "</div>";
 ?>
 
 <table id="main">
 <tr>
-<td class="sidebar">
-<ul class="sidebar">
-   <li><a href="index.php">Home</a></li>
-   <li><a href="index.php?page=search">Search</a></li>
-   <li><a href="index.php?page=manage">Manage</a></li>
-   <li><a href="index.php?page=stats">Stats</a></li>
-</ul>
-</td>
-
 <td class="main-page">
 <?php $page->body(); ?>
 </td>

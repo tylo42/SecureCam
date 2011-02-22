@@ -49,4 +49,8 @@ function get_cameras() {
    return $_SESSION['cameras'];
 }
 
+function unset_cameras() {
+   unset($_SESSION['cameras']);
+}
+
 ?>

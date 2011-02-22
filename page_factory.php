@@ -124,6 +124,9 @@ function page_factory($page_name, $page_num) {
       $stats_display = new stats_display($stats);
       return new page($stats_display, "Stats");
       
+   } else if($page_name == "view") {
+      return new page(new view_display(), "Live View");
+      
    } else {
       $videos = $sc_database->get_max_videos();
 

@@ -165,6 +165,7 @@ class securecam_database {
            $host != $cameras[$camera_id]->get_hostname()    || 
            $port != $cameras[$camera_id]->get_port() ) ) 
       {
+         unset_cameras();
          $sql = "update camera set description=\"$desc\", hostname=\"$host\", port=$port where camera_id=$camera_id";
          $result = mysql_query($sql);
       }

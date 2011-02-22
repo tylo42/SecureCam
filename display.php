@@ -239,15 +239,12 @@ class stats_display extends display {
 } // end class stats_display
 
 class manage_display extends display {
-   private $cameras;
-
    public function __construct() {
    }
 
    public function __toString() {
       $string = "<form action='index.php?page=manage' method='post'>";
-      $cameras = get_cameras();
-      foreach($cameras as $camera) {
+      foreach(get_cameras() as $camera) {
          $camnum = $camera->get_id();
          $string .= "<h3>Camera $camnum</h3><br />";
 
@@ -263,6 +260,19 @@ class manage_display extends display {
       return $string;
    }
 } // end class manage_display
+
+class view_display extends display {
+   public function __construct() {
+   }
+   
+   public function __toString() {
+      $string = "";
+      foreach(get_cameras() as $camera) {
+         $string .= "<iframe src=\"http://".$camera->get_hostname().":".$camera->get_port()."\"></iframe>\n";
+      }
+      return $string;
+   }
+} // end class view_display
 
 class login_display extends display {
    
