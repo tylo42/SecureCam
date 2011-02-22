@@ -184,7 +184,7 @@ class stats_display extends display {
       $curyear = $date["year"];
       $curmonnum=12*$curyear+$curmonth;
       
-      $string .= "<table border='1px' width='100%'>";
+      $string .= "<table id='stats'>";
       $string .= "<tr><td></td>";
       $count = 0;
       $countmon=$curmonnum;

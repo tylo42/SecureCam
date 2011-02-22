@@ -27,7 +27,8 @@ table {
 }
 
 table#main {
-   width: 100%;
+   width: 900px;
+   margin: 0 30px 30px 30px;
 }
 
 table.display {
@@ -44,10 +45,16 @@ table.search {
    margin: 0 0 20px 0;
 }
 
-table.stats {
+table#stats {
    border-color: black;
    border-width: 1px;
    border-style: solid;
+   width: 100%;
+}
+
+table#stats td {
+   vertical-align: top;
+   text-align: left;
 }
 
 p#subtitle {
@@ -81,12 +88,6 @@ p#subtitle {
    display: inline;
 }
 
-td.sidebar {
-   vertical-align: top;
-   width: 15%;
-   background: #606060;
-}
-
 td.main-page {
    vertical-align: top;
    text-align: center;
@@ -112,9 +113,10 @@ img.preview {
 }
 
 iframe {
-   width: 320px;
-   height: 240px;
+   width: 440px;
+   height: 330px;
    border: 0;
+   overflow: hidden;
 }
 
 /* Calendar */
