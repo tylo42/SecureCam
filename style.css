@@ -1,14 +1,30 @@
+/* Colors:
+ * #A69E80 - Outer Background
+ * #E0BA9B - Inner Background
+ * #E7A87E - Upper Background, visited links
+ * #D28474 - Links
+ * #3B1922 - Text
+ */ 
+
+
+
 body {
-   background: #C0C0C0;
+   background: #A69E80;
 }
 
 h1,h2,h3 {
    text-align: center;
    margin: 0 0 0 0;
+   color: #3B1922;
 }
 
 p {
    margin: 0 0 10px 0;
+   color: #3B1922;
+}
+
+a {
+   color: #D28474;
 }
 
 img {
@@ -16,7 +32,7 @@ img {
 }
 
 div#heading {
-   background: #909090;
+   background: #E7A87E;
    height: 100px;
 }
 
@@ -31,32 +47,6 @@ table#main {
    margin: 0 30px 30px 30px;
 }
 
-table.display {
-   margin: 20px 0 0 40px;
-}
-
-table.display td {
-   vertical-align: top;
-   text-align: left;
-   padding: 0 10px 35px 0;
-}
-
-table.search {
-   margin: 0 0 20px 0;
-}
-
-table#stats {
-   border-color: black;
-   border-width: 1px;
-   border-style: solid;
-   width: 100%;
-}
-
-table#stats td {
-   vertical-align: top;
-   text-align: left;
-}
-
 p#subtitle {
    text-align: center;
    margin: 0 0 0 0;
@@ -65,7 +55,7 @@ p#subtitle {
 #page_bg {
    margin: 0 auto;
    width: 960px;
-   background: #ffffff;
+   background: #E0BA9B;
 }
 
 #top-bar {
@@ -91,19 +81,35 @@ p#subtitle {
 td.main-page {
    vertical-align: top;
    text-align: center;
-   width: 85%;
 }
 
+/* Home */
 img.home-preview {
    width: 320px;
    height: 240px;
 }
 
+/* Search */
 img.preview {
    width: 160px;
    height: 120px;
 }
 
+table.display {
+   margin: 20px 0 0 40px;
+}
+
+table.display td {
+   vertical-align: top;
+   text-align: left;
+   padding: 0 10px 35px 0;
+}
+
+table.search {
+   margin: 0 auto 20px auto;
+}
+
+/* Manage */
 #manage {
    margin: 0 0 15px 0;
 }
@@ -112,10 +118,25 @@ img.preview {
    margin: 0;
 }
 
-iframe {
+/* Stats */
+table#stats {
+   border-color: black;
+   border-width: 1px;
+   border-style: solid;
+   width: 100%;
+}
+
+table#stats td {
+   vertical-align: top;
+   text-align: left;
+}
+
+/* Live View */
+iframe.view {
    width: 440px;
    height: 330px;
    border: 0;
+   margin: 0 auto 20px auto;
    overflow: hidden;
 }
 

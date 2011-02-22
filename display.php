@@ -267,8 +267,11 @@ class view_display extends display {
    
    public function __toString() {
       $string = "";
+      $counter = 0;
       foreach(get_cameras() as $camera) {
-         $string .= "<iframe src=\"http://".$camera->get_hostname().":".$camera->get_port()."\"></iframe>\n";
+         $string .= "<iframe class='view' src=\"http://".$camera->get_hostname().":".$camera->get_port()."\"></iframe>\n";
+         if($counter > 0 && ($counter % 2) == 0) $string .= "<br />";
+         $counter++;
       }
       return $string;
    }
