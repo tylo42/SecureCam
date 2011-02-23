@@ -31,9 +31,11 @@ class page {
       $this->display   = $display;
       $this->page_name = $page_name;
    }
+   
+   public function page_name() { return $this->page_name; }
 
    public function title() {
-      echo "SecureCam - Camera Security System - ".$this->page_name;
+      return "SecureCam - Camera Security System - ".$this->page_name;
    }
 
    protected function display($begin_time, $end_time, $cameras, $action, $flagged=0) {

@@ -25,18 +25,18 @@ class home_display extends display {
    }
 
    public function __toString() {
-      $string = "<h2>Most Recent Videos</h2>";
+      $string  = "<h2>Most Recent Videos</h2>";
+      $string .= "<hr />";
 
-      $string .= "<table class=\"display\">";
+      $string .= "<table class=\"display\"><tr>";
 
       $counter = 0;
       foreach($this->videos as $video) {
-         if($counter % 2 == 0) {
-            $string .= "<tr>";
+         if($counter > 0 && ($counter % 2) == 0) {
             $string .= $this->print_video($video);
+            $string .= "</tr></tr>";
          } else {
             $string .= $this->print_video($video);
-            $string .= "</tr>";
          }
       }
       if($counter % 2 == 1) {
@@ -56,8 +56,7 @@ class home_display extends display {
    private function print_video($video) {
       $cameras = get_cameras();
       $string = "<td>";
-      $string .= "<h3>Camera ".$video->camera_id()."</h3>";
-      $string .= "<p>".$cameras[$video->camera_id()]->get_description()."</p>";
+      $string .= "<h3>".$cameras[$video->camera_id()]->get_description()."</h3>";
 
       $subpic = $video->picture_name();
       $subvid = $video->video_name();
@@ -176,7 +175,8 @@ class stats_display extends display {
    }
 
    public function __toString() {
-      $string  = "<h2>Stats</h2>";
+      $string  = "<h2>Statistics</h2>";
+      $string .= "<hr />";
 
       //get the current date
       $date = getDate();
@@ -243,7 +243,9 @@ class manage_display extends display {
    }
 
    public function __toString() {
-      $string = "<form action='index.php?page=manage' method='post'>";
+      $string  = "<h2>Update camera data</h2>";
+      $string .= "<hr />";
+      $string .= "<form action='index.php?page=manage' method='post'>";
       foreach(get_cameras() as $camera) {
          $camnum = $camera->get_id();
          $string .= "<h3>Camera $camnum</h3><br />";
@@ -266,7 +268,8 @@ class view_display extends display {
    }
    
    public function __toString() {
-      $string = "";
+      $string  = "<h2>View live cameras</h2>";
+      $string .= "<hr />";
       $counter = 0;
       foreach(get_cameras() as $camera) {
          $string .= "<iframe class='view' src=\"http://".$camera->get_hostname().":".$camera->get_port()."\"></iframe>\n";

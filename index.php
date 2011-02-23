@@ -35,26 +35,35 @@ $page = page_factory($_GET['page'], $_GET['page_num']);
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <link type="text/css" rel="stylesheet" media="all" href="style.css">
-<title><?php $page->title(); ?></title></head>
+<title><?php echo $page->title(); ?></title></head>
 
 <body>
 <div id="page_bg">
-<div id="heading">
+
+<table id="top">
+<tr>
+<td>
 <h1>SecureCam</h1>
 <p id="subtitle">Camera Security System</p>
-</div>
 
+</td><td>
 <?php
+$top_bar = array("Home"      => "",             "Search" => "?page=search", 
+                 "Manage"    => "?page=manage", "Stats"  => "?page=stats",
+                 "Live View" => "?page=view");
 echo "<div id=\"top-bar\">";
 echo "<ul>";
-   echo "<li><a href='index.php'>Home</a></li>";
-   echo "<li><a href='index.php?page=search'>Search</a></li>";
-   echo "<li><a href='index.php?page=manage'>Manage</a></li>";
-   echo "<li><a href='index.php?page=stats'>Stats</a></li>";
-   echo "<li><a href='index.php?page=view'>Live View</a></li>";
+   foreach($top_bar as $page_name => $link) {
+      $class = "";
+      if($page_name == $page->page_name()) $class = "class='current-page'";
+      echo "<li $class><a href='index.php$link'>$page_name</a></li>";
+   }
 echo "</ul>";
 echo "</div>";
 ?>
+</td>
+</tr>
+</table>
 
 <table id="main">
 <tr>

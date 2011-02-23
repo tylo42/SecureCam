@@ -61,6 +61,7 @@ class search_input extends input {
     
    public function __toString() {
       $string  = "<h2>Search for videos&hellip;</h2>";
+      $string .= "<hr />";
       $string .= "<form action=\"index.php?page=search\" method=\"post\">";
       $string .= $this->search_date("Starting",$this->begin_time, "s");
       $string .= $this->search_date("Ending",  $this->end_time,   "e");

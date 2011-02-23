@@ -6,34 +6,88 @@
  * #3B1922 - Text
  */ 
 
-
-
 body {
-   background: #A69E80;
+   background: #FFFFFF;
 }
 
 h1,h2,h3 {
+   margin: 0;
+   padding: 0;
+   color: #000000;
+}
+
+div#heading {
+   background: #FFFFFF;
+   height: 100px;
+   margin
+}
+
+p#subtitle {
+   margin: 0 0 10px 0;
+}
+
+table#top {
+   margin: 30px auto 30px auto;
+}
+
+table#top tr {
+   vertical-align: bottom;
+}
+
+/* Top Bar */
+#top-bar a {
+   font-size: 24px;
+   background: #FF0000;
+   padding: 10px;
+   text-decoration: none;
+   color: #FFFFFF;
+}
+
+
+#top-bar li.current-page a, #top-bar a:hover {
+   color: #FFFFFF;
+   background: #000000;
+   text-decoration: none;
+}
+
+#top-bar {
    text-align: center;
-   margin: 0 0 0 0;
-   color: #3B1922;
+   margin: 0 auto 0 auto;
+   height: 50px;
+}
+
+#top-bar ul {
+   margin: 0 auto;
+   padding: 0 auto;
+   list-style: none;
+}
+
+#top-bar li {
+   margin: 0 auto 0 auto;
+   padding: 0 30px 0 0;
+   display: inline;
 }
 
 p {
    margin: 0 0 10px 0;
-   color: #3B1922;
+   color: #000000;
 }
 
-a {
-   color: #D28474;
+a:link, a:visited {
+   outline: none;
+   text-decoration: underline;
+   font-weight: normal;
+   color: #FF0000;
+}
+
+a:hover {
+   text-decoration: none;
+   font-weight: normal;
+   color: #FF0000;
 }
 
 img {
    border: none;
-}
-
-div#heading {
-   background: #E7A87E;
-   height: 100px;
 }
 
 table {
@@ -47,40 +101,14 @@ table#main {
    margin: 0 30px 30px 30px;
 }
 
-p#subtitle {
-   text-align: center;
-   margin: 0 0 0 0;
-}
-
 #page_bg {
    margin: 0 auto;
    width: 960px;
-   background: #E0BA9B;
-}
-
-#top-bar {
-   text-align: center;
-   margin: 0 auto 0 auto;
-   width: 940px;
-   height: 50px;
-}
-
-#top-bar ul {
-   margin: 0 auto;
-   padding: 0 auto;
-   list-style: none;
-}
-
-#top-bar li {
-   margin: 0 auto;
-   padding: 0 15px 0 0;
-   background: none;
-   display: inline;
+   background: #FFFFFF;
 }
 
 td.main-page {
    vertical-align: top;
-   text-align: center;
 }
 
 /* Home */
@@ -96,7 +124,8 @@ img.preview {
 }
 
 table.display {
-   margin: 20px 0 0 40px;
+   margin: 0 auto;
+   width: 80%;
 }
 
 table.display td {
