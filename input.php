@@ -27,13 +27,13 @@
    }
    
    protected function put_camera_check_boxes() {
-      $string = "";
+      $string = "<p class='search-heading'>Select cameras</p>";
       foreach($this->cameras as $camera) {
          $checked = $camera->get_checked() ? "checked" : "";
+         $string .= "<p>";
          $string .= "<input type='checkbox' name='camera".$camera->get_id()."' value='1' $checked>";
-         $string .= $camera->get_id().".) ".$camera->get_description();
-         
-         $string .= "<br />";
+         $string .= "&nbsp;".$camera->get_description();
+         $string .= "</p>";
       }
       return $string;
    }
@@ -62,12 +62,24 @@ class search_input extends input {
    public function __toString() {
       $string  = "<h2>Search for videos&hellip;</h2>";
       $string .= "<hr />";
+      
       $string .= "<form action=\"index.php?page=search\" method=\"post\">";
+      
+      $string .= "<table id='search'><tr>";
+      
+      $string .= "<td>";
       $string .= $this->search_date("Starting",$this->begin_time, "s");
       $string .= $this->search_date("Ending",  $this->end_time,   "e");
+      $string .= "</td>";
 
+      $string .= "<td>";
       $string .= $this->put_camera_check_boxes();
+      $string .= "</td>";
+      
+      $string .= "</tr></table>";
+
       $string .= "<input type='submit' value='Search' name='submit'>";
+      
       $string .= "</form>";
       return $string;
    }
@@ -97,7 +109,7 @@ class search_input extends input {
       $minArray = array(0 => '00', 15 => '15', 30 => '30', 45 => '45');
       $ampmArray = array(0 => 'am', 12 => 'pm');
 
-      $string  = "<table class=\"search\">";
+      $string  = "<table class='search-time'>";
       $string .= "<tr><th>$name Date</th>";
       $string .= "<td></td>";
       $string .= "<th>$name Time</th></tr>\n";

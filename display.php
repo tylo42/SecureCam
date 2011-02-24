@@ -149,7 +149,7 @@ class results_display extends display {
       $last_video  = min((($this->page_num)*20), $this->number_of_videos);
       assert($first_video < $last_video);
       
-      $string = "";
+      $string = "<p class='navigation'>";
       if($last_video == $first_video) { // just one video on this page
          $string .= "Video $last_video";
       } else {
@@ -161,7 +161,9 @@ class results_display extends display {
       $previous = (($this->page_num - 1) > 0) ? "<a href=".$this->action."&page_num=".($this->page_num - 1).">previous</a>" : "previous";
       $next     = (($this->page_num) < $max_page) ? "<a href=".$this->action."&page_num=".($this->page_num + 1).">next</a>" : "next";
       $last     = ($this->page_num != $max_page) ? "<a href=".$this->action."&page_num=".$max_page.">last</a>" : "last";
-      $string .= "$first | $previous | $next | $last<br />";
+      $string .= "$first | $previous | $next | $last";
+      
+      $string .= "</p>";
 
       return $string;
    }
@@ -185,7 +187,7 @@ class stats_display extends display {
       $curmonnum=12*$curyear+$curmonth;
       
       $string .= "<table id='stats'>";
-      $string .= "<tr><td></td>";
+      $string .= "<tr><th></th>";
       $count = 0;
       $countmon=$curmonnum;
       while($count < 12) {
@@ -196,14 +198,14 @@ class stats_display extends display {
             $year--;
          }
          $monthname=date("M", mktime(0, 0, 0, $month, 1, $year));
-         $string .= "<td>$monthname</td>";
+         $string .= "<th>$monthname</th>";
          $count++;
          $countmon--;
       }
       $string .= "</tr>";
       
       foreach(get_cameras() as $camera) {
-         $string .= $this->print_row($curmonnum, $camera->get_id(), $camera->get_id().".) ".$camera->get_description());
+         $string .= $this->print_row($curmonnum, $camera->get_id(), $camera->get_description());
       }
       $string .= $this->print_row($curmonnum, "total", "Total");
       $string .= "</table>";
