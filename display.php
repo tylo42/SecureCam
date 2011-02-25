@@ -156,11 +156,11 @@ class results_display extends display {
       } else {
          $string .= "Videos $first_video-$last_video of ".$this->number_of_videos."<br />";
       }
-      $max_page = floor($this->number_of_videos/20) + 1;
+      $max_page = ceil($this->number_of_videos/20);
 
       $first    = ($this->page_num != 1)      ? "<a href=".$this->action."&page_num=1>first</a>" : "first";
       $previous = (($this->page_num - 1) > 0) ? "<a href=".$this->action."&page_num=".($this->page_num - 1).">previous</a>" : "previous";
-      $next     = (($this->page_num) < $max_page) ? "<a href=".$this->action."&page_num=".($this->page_num + 1).">next</a>" : "next";
+      $next     = ($this->page_num < $max_page) ? "<a href=".$this->action."&page_num=".($this->page_num + 1).">next</a>" : "next";
       $last     = ($this->page_num != $max_page) ? "<a href=".$this->action."&page_num=".$max_page.">last</a>" : "last";
       $string .= "$first | $previous | $next | $last";
       
