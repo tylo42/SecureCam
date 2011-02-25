@@ -30,9 +30,9 @@ class home_display extends display {
 
       $string .= "<table class=\"display\"><tr>";
 
-      $counter = 0;
+      $counter = 1;
       foreach($this->videos as $video) {
-         if($counter > 0 && ($counter % 2) == 0) {
+         if($counter % 2 == 0) {
             $string .= $this->print_video($video);
             $string .= "</tr></tr>";
          } else {
