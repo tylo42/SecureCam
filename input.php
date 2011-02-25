@@ -53,7 +53,7 @@ class search_input extends input {
       $this->begin_time = $begin_time;
       $this->end_time = $end_time;
       
-      assert($this->first_year < $this->last_year);
+      assert($this->first_year <= $this->last_year);
    }
    
    public function get_begin_time() { return $this->begin_time; }
