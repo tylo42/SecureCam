@@ -272,10 +272,10 @@ class view_display extends display {
    public function __toString() {
       $string  = "<h2>View live cameras</h2>";
       $string .= "<hr />";
-      $counter = 0;
+      $counter = 1;
       foreach(get_cameras() as $camera) {
          $string .= "<iframe class='view' src=\"http://".$camera->get_hostname().":".$camera->get_port()."\"></iframe>\n";
-         if($counter > 0 && ($counter % 2) == 0) $string .= "<br />";
+         if(($counter % 2) == 0) $string .= "<br />";
          $counter++;
       }
       return $string;
