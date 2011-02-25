@@ -38,6 +38,7 @@ class home_display extends display {
          } else {
             $string .= $this->print_video($video);
          }
+         $counter++;
       }
       if($counter % 2 == 1) {
          $string .= "<td>&nbsp</td>";
