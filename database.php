@@ -207,7 +207,7 @@ class securecam_database {
    }
 
    private function generate_video_sql($start_time, $end_time, $what) {
-      $sql = "SELECT $what FROM video WHERE $start_time < time AND time < $end_time AND (";
+      $sql = "SELECT $what FROM video WHERE picture_name != '' AND $start_time < time AND time < $end_time AND (";
 
       $first = true;
       foreach(get_cameras() as $camera) {
