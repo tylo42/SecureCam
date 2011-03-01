@@ -2,7 +2,6 @@
 
 require_once('video.php');
 require_once('camera.php');
-require_once('database.php');
 
 abstract class display {
    abstract function __toString();
@@ -242,7 +241,10 @@ class stats_display extends display {
 } // end class stats_display
 
 class manage_display extends display {
-   public function __construct() {
+   private $max_videos;
+
+   public function __construct($max_videos) {
+      $this->max_videos = $max_videos;
    }
 
    public function __toString() {
@@ -258,6 +260,12 @@ class manage_display extends display {
          $string .= "<tr><td><p>Host: </p></td><td><input type='text' name='host$camnum' value='".$camera->get_hostname()."' /></td></tr>";
          $string .= "<tr><td><p>Port: </p></td><td><input type='text' name='port$camnum' value='".$camera->get_port()."' /></td></tr>";
          $string .= "</table>";
+
+         foreach($this->max_videos as $video) {
+            if($video->camera_id() == $camera->get_id()) {
+               $string .= "<img class='manage-preview' src=".$video->picture_name()." />";
+            }
+         }
       }
       $string .= "<br /><br />";
       $string .= "<input type='submit' name='submit' value='Submit'>";

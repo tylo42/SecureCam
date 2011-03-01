@@ -117,7 +117,9 @@ function page_factory($page_name, $page_num) {
          }
       }
 
-      return new page(new manage_display(), "Manage");
+      $max_videos = $sc_database->get_max_videos();
+      $manage_display = new manage_display($max_videos);
+      return new page($manage_display, "Manage");
       
    } else if($page_name == "stats") {
       $stats = $sc_database->get_stats();
