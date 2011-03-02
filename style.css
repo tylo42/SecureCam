@@ -8,6 +8,10 @@ h1,h2,h3 {
    color: #000000;
 }
 
+hr {
+   margin: 0 0 25px 0;
+}
+
 p#subtitle {
    margin: 0 0 10px 0;
 }
@@ -142,12 +146,21 @@ p.navigation {
 }
 
 /* Manage */
-#manage {
+.manage-input {
    margin: 0 0 15px 0;
 }
 
-#manage p{
+.manage-input p{
    margin: 0;
+}
+
+table.manage {
+   margin: 0 0 25px 0;
+}
+
+table.manage td {
+   vertical-align: top;
+   text-align: left;
 }
 
 /* Stats */

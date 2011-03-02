@@ -255,17 +255,22 @@ class manage_display extends display {
          $camnum = $camera->get_id();
          $string .= "<h3>Camera $camnum</h3><br />";
 
-         $string .= "<table id='manage'>";
-         $string .= "<tr><td><p>Description: </p></td><td><input type='text' name='desc$camnum' value='".$camera->get_description()."' /></td></tr>";
-         $string .= "<tr><td><p>Host: </p></td><td><input type='text' name='host$camnum' value='".$camera->get_hostname()."' /></td></tr>";
-         $string .= "<tr><td><p>Port: </p></td><td><input type='text' name='port$camnum' value='".$camera->get_port()."' /></td></tr>";
-         $string .= "</table>";
-
+         $string .= "<table class='manage'><tr><td>";
          foreach($this->max_videos as $video) {
             if($video->camera_id() == $camera->get_id()) {
                $string .= "<img class='manage-preview' src=".$video->picture_name()." />";
+               break;
             }
          }
+         $string .= "</td><td>";
+
+         $string .= "<table class='manage-input'>";
+         $string .= "<tr><td><p>Description: </p></td><td><input type='text' name='desc$camnum' value='".$camera->get_description()."' /></td></tr>";
+         $string .= "<tr><td><p>Host: </p></td><td><input type='text' name='host$camnum' value='".$camera->get_hostname()."' /></td></tr>";
+         $string .= "<tr><td><p>Port: </p></td><td><input type='text' name='port$camnum' value='".$camera->get_port()."' /></td></tr>";
+
+         $string .= "</table>";
+         $string .= "</td></tr></table>";
       }
       $string .= "<br /><br />";
       $string .= "<input type='submit' name='submit' value='Submit'>";
