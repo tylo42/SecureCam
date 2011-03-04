@@ -76,6 +76,14 @@ function page_factory($page_name, $page_num) {
    $_SESSION['previous_page'] = $page_name;
 
    if($page_name == "search") {
+      if(isset($_POST['flag'])) {
+         if($_POST['flagged'] == 0) {
+            $sc_database->add_flag($_POST['vid_id']);
+         } else {
+            $sc_database->remove_flag($_POST['vid_id']);
+         }
+      }
+
       $date = getDate();
       $begin_day = mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']);
       $end_day   = mktime(0, 0, 0, $date['mon'], $date['mday']+1, $date['year']);
