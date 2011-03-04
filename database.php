@@ -127,13 +127,18 @@ class securecam_database {
       return $this->to_video_collection($result);
    }
 
-   public function add_remove_flag($vid_id, $old_flag) {
-      if(!is_numeric($vid_id) || !is_numeric($old_flag)) {
-         return;
+   public function add_flag($vid_id) {
+      if(is_numeric($vid_id)) {
+         $sql = "UPDATE video SET flagged=1 WHERE vid_id=$vid_id";
+         mysql_query($sql);
       }
-      $flag = ($old_flag==0) ? 1 : 0;
-      $sql = "update video set flagged=$flag where vid_id=$vid_id";
-      mysql_query($sql);
+   }
+
+   public function remove_flag($vid_id) {
+      if(is_numeric($vid_id)) {
+         $sql = "UPDATE video SET flagged=0 WHERE vid_id=$vid_id";
+         mysql_query($sql);
+      }
    }
 
    public function remove_video($vid_id) {

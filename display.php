@@ -143,7 +143,7 @@ class results_display extends display {
          $string .= "<a href=\"".$video->picture_name()."\">Enlarge Picture</a></p>";
 
          $string .= "</td><td>";
-         
+
          $cameras = get_cameras();
          $string .= "<a href=\"".$video->video_name()."\">".$video->print_time()."</a><br />";
          $string .= "<p>Camera ".$video->camera_id()." (".$cameras[$video->camera_id()]->get_description().")</p>";
