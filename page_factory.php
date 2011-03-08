@@ -87,10 +87,12 @@ function page_factory($page_name, $page_num) {
       $date = getDate();
       $begin_day = mktime(0, 0, 0, $date['mon'], $date['mday'], $date['year']);
       $end_day   = mktime(0, 0, 0, $date['mon'], $date['mday']+1, $date['year']);
+      $flagged   = false;
       $selected_cameras = array();
       if(isset($_POST['submit'])) {
          $begin_day = $_SESSION['search_begin'] = mktime($_POST['shour']+$_POST['sampm'], $_POST['smin'], 0, $_POST['smonth'], $_POST['sday'], $_POST['syear']);
          $end_day   = $_SESSION['search_end']   = mktime($_POST['ehour']+$_POST['eampm'], $_POST['emin'], 0, $_POST['emonth'], $_POST['eday'], $_POST['eyear']);
+         $flagged   = $_SESSION['flag_check']   = isset($_POST['flag_check']) ? true : false;
 
          foreach(get_cameras() as $camera) {
             if(isset($_POST['camera'.$camera->get_id()])) { 
@@ -102,12 +104,13 @@ function page_factory($page_name, $page_num) {
       } else if(isset($_SESSION['search_begin'])) {
          $begin_day = $_SESSION['search_begin'];
          $end_day   = $_SESSION['search_end'];
+         $flagged   = $_SESSION['flag_check'];
       }
 
-      $videos = $sc_database->search_videos($begin_day, $end_day, $page_num);
-      $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day);
+      $videos = $sc_database->search_videos($begin_day, $end_day, $page_num, $flagged);
+      $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day, $flagged);
 
-      $input = new search_input(get_cameras(), first_year(), last_year(), $begin_day, $end_day);
+      $input = new search_input(get_cameras(), first_year(), last_year(), $begin_day, $end_day, $flagged);
       $search_display = new results_display($videos, $number_of_videos, $input, $page_name, $page_num);
 
       return new page($search_display, "Search");

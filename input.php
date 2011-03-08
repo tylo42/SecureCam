@@ -31,7 +31,7 @@
       foreach($this->cameras as $camera) {
          $checked = $camera->get_checked() ? "checked" : "";
          $string .= "<p>";
-         $string .= "<input type='checkbox' name='camera".$camera->get_id()."' value='1' $checked>";
+         $string .= "<input type='checkbox' name='camera".$camera->get_id()."' value='1' $checked />";
          $string .= "&nbsp;".$camera->get_description();
          $string .= "</p>";
       }
@@ -44,14 +44,16 @@ class search_input extends input {
    private $last_year;
    private $begin_time;
    private $end_time;
+   private $flagged;
    
-   public function __construct($cameras, $first_year, $last_year, $begin_time, $end_time) {
+   public function __construct($cameras, $first_year, $last_year, $begin_time, $end_time, $flagged) {
       parent::__construct($cameras);
       
       $this->first_year = $first_year;
       $this->last_year  = $last_year;
       $this->begin_time = $begin_time;
       $this->end_time = $end_time;
+      $this->flagged = $flagged;
       
       assert($this->first_year <= $this->last_year);
    }
@@ -76,6 +78,12 @@ class search_input extends input {
       $string .= $this->put_camera_check_boxes();
       $string .= "</td>";
       
+      $string .= "<td>";
+      $checked = $this->flagged ? "checked" : "";
+      $string .= "<p><input type='checkbox' name='flag_check' value='1' $checked/>";
+      $string .= "&nbsp;Flagged";
+      $string .= "</td>";
+
       $string .= "</tr></table>";
 
       $string .= "<input type='submit' value='Search' name='submit'>";
