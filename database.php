@@ -175,7 +175,7 @@ class securecam_database {
          $result = mysql_query($sql);
       }
    }
-   
+
    public function get_time($minmax) {
       $minmax = mysql_real_escape_string($minmax);
       $sql = "select $minmax(time) from video";
@@ -183,22 +183,22 @@ class securecam_database {
       $time = mysql_fetch_array($result, MYSQL_ASSOC);
       return $time[$minmax.'(time)'];
    }
-   
+
    public function get_stats() {
       $sql = "SELECT camera_id,DATE_FORMAT(FROM_UNIXTIME(time), \"%Y-%m\") AS MONTH,COUNT(vid_id) FROM video GROUP BY camera_id,MONTH DESC";
       $result = mysql_query($sql);
-      
+
       $stats = array();
       while($stat = mysql_fetch_array($result,MYSQL_ASSOC)) {
          $stats[$stat['camera_id']."-".$stat['MONTH']] = $stat['COUNT(vid_id)'];
       }
-      
+
       $sql = "SELECT DATE_FORMAT(FROM_UNIXTIME(time), \"%Y-%m\") AS MONTH,COUNT(vid_id) FROM video GROUP BY MONTH DESC";
       $result = mysql_query($sql);
       while($stat = mysql_fetch_array($result,MYSQL_ASSOC)) {
          $stats["total-".$stat['MONTH']] = $stat['COUNT(vid_id)'];
       }
-      
+
       return $stats;
    }
 
@@ -228,7 +228,7 @@ class securecam_database {
       if($first) {
          $sql .= "camera_id = NULL";
       }
-      
+
       $sql .= ")";
 
       return $sql;

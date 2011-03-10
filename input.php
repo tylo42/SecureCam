@@ -16,16 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with SecureCam.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
  abstract class input {
    abstract function __toString();
-   
+
    private $cameras;
-   
+
    public function __construct($cameras) {
       $this->cameras = $cameras;
    }
-   
+
    protected function put_camera_check_boxes() {
       $string = "<p class='search-heading'>Select cameras</p>";
       foreach($this->cameras as $camera) {
@@ -38,37 +38,37 @@
       return $string;
    }
  } // end class input
- 
+
 class search_input extends input {
    private $first_year;
    private $last_year;
    private $begin_time;
    private $end_time;
    private $flagged;
-   
+
    public function __construct($cameras, $first_year, $last_year, $begin_time, $end_time, $flagged) {
       parent::__construct($cameras);
-      
+
       $this->first_year = $first_year;
       $this->last_year  = $last_year;
       $this->begin_time = $begin_time;
       $this->end_time = $end_time;
       $this->flagged = $flagged;
-      
+
       assert($this->first_year <= $this->last_year);
    }
-   
+
    public function get_begin_time() { return $this->begin_time; }
    public function get_end_time()   { return $this->end_time; }
-    
+
    public function __toString() {
       $string  = "<h2>Search for videos&hellip;</h2>";
       $string .= "<hr />";
-      
+
       $string .= "<form action=\"index.php?page=search\" method=\"post\">";
-      
+
       $string .= "<table id='search'><tr>";
-      
+
       $string .= "<td>";
       $string .= $this->search_date("Starting",$this->begin_time, "s");
       $string .= $this->search_date("Ending",  $this->end_time,   "e");
@@ -77,7 +77,7 @@ class search_input extends input {
       $string .= "<td>";
       $string .= $this->put_camera_check_boxes();
       $string .= "</td>";
-      
+
       $string .= "<td>";
       $checked = $this->flagged ? "checked" : "";
       $string .= "<p><input type='checkbox' name='flag_check' value='1' $checked/>";
@@ -87,11 +87,11 @@ class search_input extends input {
       $string .= "</tr></table>";
 
       $string .= "<input type='submit' value='Search' name='submit'>";
-      
+
       $string .= "</form>";
       return $string;
    }
-   
+
    private function search_date($name, $unix_time, $prefix) {
       $monthArray = array();
       for($i=1; $i<=12; $i++) {
@@ -162,7 +162,7 @@ class search_input extends input {
       $string .= "</table>";
       return $string;
    }
-   
+
    private function createOptionFromArray($myArray,$selected) {
       if(!is_array($myArray)) {
          return false;

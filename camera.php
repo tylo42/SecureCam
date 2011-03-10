@@ -33,7 +33,7 @@ class camera {
    public function get_port() { return $this->port; }
    public function get_description() { return $this->description; }
    public function get_checked() { return $this->checked; }
-   
+
    public function put_checked($checked) { assert(is_bool($checked)); $this->checked = $checked; }
 
    private $hostname;
