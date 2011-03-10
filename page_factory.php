@@ -68,7 +68,7 @@ function page_factory($page_name, $page_num) {
    if(!logged_in()) {
       return new page(new login_display(), "Login");
    }
-   
+
    // reset the session if the previous page is not the same as the current page
    if(isset($_SESSION['previous_page']) && $_SESSION['previous_page'] != $page_name) {
       session_destroy();
@@ -82,6 +82,10 @@ function page_factory($page_name, $page_num) {
          } else {
             $sc_database->remove_flag($_POST['vid_id']);
          }
+      }
+
+      if(isset($_POST['remove'])) {
+         $sc_database->remove_video($_POST['vid_id']);
       }
 
       $date = getDate();
