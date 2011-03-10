@@ -153,7 +153,7 @@ class results_display extends display {
          $string .= "<input type='hidden' name='vid_id' value=".$video->vid_id().">";
          $string .= "<input type='hidden' name='flagged' value=".$video->flagged().">";
          $string .= "<input type='submit' name='flag' value='$button'>&nbsp;";
-         $string .= "<input type='submit' name='remove' value='Remove'>";
+         $string .= "<input type='submit' name='remove' value='Remove' onClick='return ConfirmVideoRemove()'>";
          $string .= "</form>";
 
          $string .= "</td>";
