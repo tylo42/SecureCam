@@ -64,7 +64,7 @@ function logged_in() {
 
 function page_factory($page_name, $page_num) {
    $sc_database = securecam_database::singleton();
-   
+
    if(!logged_in()) {
       return new page(new login_display(), "Login");
    }
@@ -135,15 +135,15 @@ function page_factory($page_name, $page_num) {
       $max_videos = $sc_database->get_max_videos();
       $manage_display = new manage_display($max_videos);
       return new page($manage_display, "Manage");
-      
+
    } else if($page_name == "stats") {
       $stats = $sc_database->get_stats();
       $stats_display = new stats_display($stats);
       return new page($stats_display, "Stats");
-      
+
    } else if($page_name == "view") {
       return new page(new view_display(), "Live View");
-      
+
    } else {
       $videos = $sc_database->get_max_videos();
 

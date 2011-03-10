@@ -31,7 +31,7 @@ class page {
       $this->display   = $display;
       $this->page_name = $page_name;
    }
-   
+
    public function page_name() { return $this->page_name; }
 
    public function title() {
@@ -73,7 +73,7 @@ class page {
          echo "<a href=\"".$video['picture_name']."\">Enlarge Picture</a></p>";
 
          echo "</td><td>";
-         
+
          echo "<a href=\"".$video['video_name']."\">".$date_time."</a><br />";
          echo "<p>Camera ".$video['camera_id']." (".$this->get_description($video['camera_id']).")</p>";
 
@@ -94,7 +94,7 @@ class page {
 
    protected function put_camera_check_boxes() {
       $this->camera_check();
-      
+
       $cameras = array();
       for($count=1; $count<=$this->number_of_cameras(); $count++){
          $checked = "";
@@ -124,7 +124,7 @@ class page {
          echo "<a href=$action&page_num=$i>$i</a>&nbsp&nbsp&nbsp";
       }
    }
-   
+
    /// If no cookies no cameras check, else set/keep cameras checked from last submit
    private function camera_check() {
       for($i=1; $i<=$this->number_of_cameras(); $i++) {

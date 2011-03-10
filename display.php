@@ -165,7 +165,7 @@ class results_display extends display {
       $first_video = (($this->page_num-1)*20+1);
       $last_video  = min((($this->page_num)*20), $this->number_of_videos);
       assert($first_video < $last_video);
-      
+
       $string = "<p class='navigation'>";
       if($last_video == $first_video) { // just one video on this page
          $string .= "Video $last_video";
@@ -179,7 +179,7 @@ class results_display extends display {
       $next     = ($this->page_num < $max_page) ? "<a href=".$this->action."&page_num=".($this->page_num + 1).">next</a>" : "next";
       $last     = ($this->page_num != $max_page) ? "<a href=".$this->action."&page_num=".$max_page.">last</a>" : "last";
       $string .= "$first | $previous | $next | $last";
-      
+
       $string .= "</p>";
 
       return $string;
@@ -188,7 +188,7 @@ class results_display extends display {
 
 class stats_display extends display {
    private $stats;
-   
+
    public function __construct($stats) {
       $this->stats = $stats;
    }
@@ -202,7 +202,7 @@ class stats_display extends display {
       $curmonth = $date["mon"];
       $curyear = $date["year"];
       $curmonnum=12*$curyear+$curmonth;
-      
+
       $string .= "<table id='stats'>";
       $string .= "<tr><th></th>";
       $count = 0;
@@ -220,16 +220,16 @@ class stats_display extends display {
          $countmon--;
       }
       $string .= "</tr>";
-      
+
       foreach(get_cameras() as $camera) {
          $string .= $this->print_row($curmonnum, $camera->get_id(), $camera->get_description());
       }
       $string .= $this->print_row($curmonnum, "total", "Total");
       $string .= "</table>";
-      
+
       return $string;
    }
-   
+
    private function print_row($curmonnum, $name, $description) {
       $string  = "<tr>";
       $string .= "<td>$description</td>";
@@ -242,7 +242,7 @@ class stats_display extends display {
             $month=12;
             $year--;
          }
-         
+
          $key = "$name-".date("Y-m", mktime(0, 0, 0, $month, 1, $year));
          if(isset($this->stats[$key])) {
             $string .= "<td>".$this->stats[$key]."</td>";
@@ -299,7 +299,7 @@ class manage_display extends display {
 class view_display extends display {
    public function __construct() {
    }
-   
+
    public function __toString() {
       $string  = "<h2>View live cameras</h2>";
       $string .= "<hr />";
@@ -314,10 +314,10 @@ class view_display extends display {
 } // end class view_display
 
 class login_display extends display {
-   
+
    public function __construct() {
    }
-   
+
    public function __toString() {
       $string  = "<form method='POST' action='index.php'>";
       $string .= "<table>";
