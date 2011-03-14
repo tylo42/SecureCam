@@ -21,6 +21,7 @@ require_once('page.php');
 require_once('display.php');
 require_once('database.php');
 require_once('input.php');
+require_once('settings.php');
 
 
 function first_year() {
@@ -39,14 +40,6 @@ function last_year() {
    return $last_year;
 }
 
-function valid_user($username, $password) {
-   if($username == "Tylo42" && $password == "lame") {
-      return true;
-   } else {
-      return false;
-   }
-}
-
 function logged_in() {
    $secret_word = "jt+*=i>b&woq~;TC/:<60917v]B:xmT7)gWljcr->j.r$%nr#/X{BQi{,~xO[yI";
    if(isset($_COOKIE['login'])) {
@@ -54,7 +47,7 @@ function logged_in() {
       if(md5($username.$secret_word) != $hash) { // invalid cookie
          return false;
       }
-   } else if(isset($_POST['username']) && valid_user($_POST['username'], $_POST['password'])) { // login attempt
+   } else if(isset($_POST['username']) && settings::singleton()->valid_user($_POST['username'], $_POST['password'])) { // login attempt
       setcookie('login', $_POST['username'].','.md5($_POST['username'].$secret_word), time()+60*60*4); // set 4 hour cookie
    } else { // first time visitor
       return false;
