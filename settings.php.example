@@ -1,0 +1,51 @@
+<?php
+
+class settings {
+   private static $instance;
+
+   // DATA
+   private $dbhost;
+   private $dbuser;
+   private $dbpass;
+   private $dbname;
+   private $username;
+   private $password;
+
+   private function __construct() {
+      // MySQL database settings:
+      $this->dbhost = 'localhost';
+      $this->dbuser = 'root';
+      $this->dbpass = 'root';
+      $this->dbname = 'securecam';
+
+      // Site login settings:
+      $this->username = 'securecam';
+      $this->password = 'password';
+   }
+
+   public static function singleton() {
+      if(!isset(self::$instance)) {
+         $c = __CLASS__;
+         self::$instance = new $c;
+      }
+      return self::$instance;
+   }
+
+   // Prevent users to clone the instance
+   public function __clone() {
+      trigger_error('Clone is not allowed.', E_USER_ERROR);
+   }
+
+   public function valid_user($username, $password) {
+      if(strcasecmp($this->username, $username) == 0 && $this->password == $password) {
+         return true;
+      }
+      return false;
+   }
+
+   public function get_dbhost() { return $this->dbhost; }
+   public function get_dbuser() { return $this->dbuser; }
+   public function get_dbpass() { return $this->dbpass; }
+   public function get_dbname() { return $this->dbname; }
+}
+?>

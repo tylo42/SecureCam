@@ -19,6 +19,7 @@
 
 require_once('video.php');
 require_once('camera.php');
+require_once('settings.php');
 
 
 /**
@@ -33,10 +34,10 @@ class securecam_database {
    private $conn;
 
    private function __construct() {
-      $dbhost = 'localhost';
-      $dbuser = 'root';
-      $dbpass = 'root';
-      $dbname = 'securecam';
+      $dbhost = settings::singleton()->get_dbhost();
+      $dbuser = settings::singleton()->get_dbuser();
+      $dbpass = settings::singleton()->get_dbpass();
+      $dbname = settings::singleton()->get_dbname();
 
       $this->conn = mysql_connect($dbhost, $dbuser, $dbpass) or die
          ('Error connecting to mysql');
