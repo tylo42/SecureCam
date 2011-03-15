@@ -28,8 +28,6 @@ Documentation on montion can be found at
 <http://www.lavrsen.dk/twiki/bin/view/Motion/WebHome>
 
 == Installation
-Copy settings.php.example to settings.php and edit dbhost, dbuser
-dbpass, dbname, username, and password to your current environment.
 
 === Link motion.conf, threadX.conf to /etc/motion
 ln /path/to/config/motion.conf /etc/motion/motion.conf

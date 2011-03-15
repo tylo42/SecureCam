@@ -132,32 +132,32 @@ class results_display extends display {
    }
 
    private function print_video($video) {
-         $button="Remove Flag";
-         if($video->flagged()==0) {
-            $button="Flag";
-         }
+      $button="Remove Flag";
+      if($video->flagged()==0) {
+         $button="Flag";
+      }
 
-         $string = "<td>";
+      $string = "<td>";
 
-         $string .= "<a href=\"".$video->video_name()."\"><img class='preview' src=\"".$video->picture_name()."\"></img></a><br />";
-         $string .= "<a href=\"".$video->picture_name()."\">Enlarge Picture</a></p>";
+      $string .= "<a href=\"".$video->video_name()."\"><img class='preview' src=\"".$video->picture_name()."\"></img></a><br />";
+      $string .= "<a href=\"".$video->picture_name()."\">Enlarge Picture</a></p>";
 
-         $string .= "</td><td>";
+      $string .= "</td><td>";
 
-         $cameras = get_cameras();
-         $string .= "<a href=\"".$video->video_name()."\">".$video->print_time()."</a><br />";
-         $string .= "<p>Camera ".$video->camera_id()." (".$cameras[$video->camera_id()]->get_description().")</p>";
+      $cameras = get_cameras();
+      $string .= "<a href=\"".$video->video_name()."\">".$video->print_time()."</a><br />";
+      $string .= "<p>Camera ".$video->camera_id()." (".$cameras[$video->camera_id()]->get_description().")</p>";
 
-         // The page to link to when flagging to keep all the info the same            
-         $string .= "<form action=\"".$this->action."\" method=\"post\">";
-         $string .= "<input type='hidden' name='vid_id' value=".$video->vid_id().">";
-         $string .= "<input type='hidden' name='flagged' value=".$video->flagged().">";
-         $string .= "<input type='submit' name='flag' value='$button'>&nbsp;";
-         $string .= "<input type='submit' name='remove' value='Remove' onClick='return ConfirmVideoRemove()'>";
-         $string .= "</form>";
+      // The page to link to when flagging to keep all the info the same            
+      $string .= "<form action=\"".$this->action."\" method=\"post\">";
+      $string .= "<input type='hidden' name='vid_id' value=".$video->vid_id().">";
+      $string .= "<input type='hidden' name='flagged' value=".$video->flagged().">";
+      $string .= "<input type='submit' name='flag' value='$button'>&nbsp;";
+      $string .= "<input type='submit' name='remove' value='Remove' onClick='return ConfirmVideoRemove()'>";
+      $string .= "</form>";
 
-         $string .= "</td>";
-         return $string;
+      $string .= "</td>";
+      return $string;
    }
 
    private function print_page_navigation() {
@@ -319,7 +319,9 @@ class login_display extends display {
    }
 
    public function __toString() {
-      $string  = "<form method='POST' action='index.php'>";
+      $string  = "<h2>Login</h2>";
+      $string .= "<hr />";
+      $string .= "<form method='POST' action='index.php'>";
       $string .= "<table>";
       $string .= "<tr><td>Username:</td><td><input type='text' name='username'</td></tr>";
       $string .= "<tr><td>Password:</td><td><input type='password' name='password'</td></tr>";
@@ -328,4 +330,95 @@ class login_display extends display {
       $string .= "</form>";
       return $string;
    }
-} // end class login
+} // end class login_display
+
+
+
+class install_display extends display {
+   public function __toString() {
+      $string  = "<h2>Install</h2>";
+      $string .= "<hr />";
+
+      try {
+         if($this->install()) {
+            $string .= "<p>Sucessfully install, click <a href=''>here</a> to login.</p>"; 
+            return $string;
+         } 
+      } catch(Exception $e) {
+         $string .= "<p class='error'>* Failed installation: ".$e->getMessage().".</p>";
+      }
+      
+      $string .= "<form action='' method='post'>";
+      $string .= "<table>";
+      $string .= "<tr><td>MySQL hostname: </td><td><input type='text' name='dbhost' value='".(isset($_POST['dbhost']) ? $_POST['dbhost'] : "localhost")."'></td></tr>";
+      $string .= "<tr><td>MySQL username: </td><td><input type='text' name='dbuser' value='".(isset($_POST['dbhost']) ? $_POST['dbuser'] : "root")."'></td></tr>";
+      $string .= "<tr><td>MySQL password: </td><td><input type='text' name='dbpass' value='".(isset($_POST['dbpass']) ? $_POST['dbpass'] : "")."'></td></tr>";
+      $string .= "<tr><td>MySQL database: </td><td><input type='text' name='dbname' value='".(isset($_POST['dbname']) ? $_POST['dbname'] : "securecam")."'></td></tr>";
+      $string .= "<tr><td>SecureCam username: </td><td><input type='text' name='username' value='".(isset($_POST['username']) ? $_POST['username'] : "")."'></td></tr>";
+      $string .= "<tr><td>SecureCam password: </td><td><input type='password' name='password'></td></tr>";
+      $string .= "<tr><td>Confirm password: </td><td><input type='password' name='confirm'></td></tr>";
+      $string .= "</table>";
+      $string .= "<input type='submit' name='submit' value='Submit'>";
+      $string .= "</form>";
+
+      return $string;
+   }
+
+   private function install() {
+      if(isset($_POST['submit'])) {
+         $dbhost = $_POST['dbhost'];
+         $dbuser = $_POST['dbuser'];
+         $dbpass = $_POST['dbpass'];
+         $dbname = $_POST['dbname'];
+         $username = $_POST['username'];
+         $password = $_POST['password'];
+         $confirm  = $_POST['confirm'];
+         if($dbhost == '' ||
+            $dbuser == '' ||
+            $dbpass == '' ||
+            $dbname == '' ||
+            $username == '' ||
+            $password == '' ||
+            $confirm  == '') {
+            throw new Exception("Must fill all values"); 
+         }
+
+         if($_POST['password'] != $_POST['confirm']) {
+            throw new Exception("Password does not match confirmation");
+         }
+
+         $conn = mysql_connect($_POST['dbhost'], $_POST['dbuser'], $_POST['dbpass']);
+         if(!$conn) {
+            throw new Exception("Invalid MySQL credentials");
+         }
+
+         if(!mysql_select_db($dbname)) {
+            throw new Exception("Please create database ($dbname)");
+         }
+
+         $search = array();
+         $search[0] = "<dbhost>";
+         $search[1] = "<dbuser>";
+         $search[2] = "<dbpass>";
+         $search[3] = "<dbname>";
+         $search[4] = "<username>";
+         $search[5] = "<password>";
+
+         $replace = array();
+         $replace[0] = $dbhost;
+         $replace[1] = $dbuser;
+         $replace[2] = $dbpass;
+         $replace[3] = $dbname;
+         $replace[4] = $username;
+         $replace[5] = $password;
+
+         $settings_php_example = file_get_contents('settings.php.example');
+         $settings_php = str_replace($search, $replace, $settings_php_example);
+         if(!file_put_contents('settings.php', $settings_php)) {
+            throw new Exception("Could not write file");
+         }
+         return true;
+      }
+      return false;
+   }
+} // end class install_display
