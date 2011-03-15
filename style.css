@@ -34,6 +34,10 @@ p#subtitle {
    margin: 0 0 10px 0;
 }
 
+p.error {
+   color: #FF0000;
+}
+
 table#top {
    margin: 30px 0 30px 0;
 }

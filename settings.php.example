@@ -13,14 +13,14 @@ class settings {
 
    private function __construct() {
       // MySQL database settings:
-      $this->dbhost = 'localhost';
-      $this->dbuser = 'root';
-      $this->dbpass = 'root';
-      $this->dbname = 'securecam';
+      $this->dbhost = '<dbhost>';
+      $this->dbuser = '<dbuser>';
+      $this->dbpass = '<dbpass>';
+      $this->dbname = '<dbname>';
 
       // Site login settings:
-      $this->username = 'securecam';
-      $this->password = 'password';
+      $this->username = '<username>';
+      $this->password = '<password>';
    }
 
    public static function singleton() {

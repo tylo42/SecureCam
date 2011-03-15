@@ -18,14 +18,12 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <?php
-require_once('database.php');
 require_once('page_factory.php');
 
 session_start();
 
-error_reporting(E_ALL);
-ini_set('display_errors', 'On');
-
+ini_set('display_errors', 'off');
+ini_set('log_errors', 'on');
 
 if(!isset($_GET['page'])) $_GET['page'] = "";
 if(!isset($_GET['page_num']) || !is_numeric($_GET['page_num'])) $_GET['page_num'] = 1;
