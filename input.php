@@ -40,22 +40,16 @@
  } // end class input
 
 class search_input extends input {
-   private $first_year;
-   private $last_year;
    private $begin_time;
    private $end_time;
    private $flagged;
 
-   public function __construct($cameras, $first_year, $last_year, $begin_time, $end_time, $flagged) {
+   public function __construct($cameras, $begin_time, $end_time, $flagged) {
       parent::__construct($cameras);
 
-      $this->first_year = $first_year;
-      $this->last_year  = $last_year;
       $this->begin_time = $begin_time;
       $this->end_time = $end_time;
       $this->flagged = $flagged;
-
-      assert($this->first_year <= $this->last_year);
    }
 
    public function get_begin_time() { return $this->begin_time; }
@@ -93,21 +87,6 @@ class search_input extends input {
    }
 
    private function search_date($name, $unix_time, $prefix) {
-      $monthArray = array();
-      for($i=1; $i<=12; $i++) {
-         $monthArray[$i] = date("F", mktime(0, 0, 0, $i, 1, 2010));
-      }
-
-      $dayArray = array();
-      for($i=1; $i<=31; $i++) {
-         $dayArray[$i] = $i;
-      }
-
-      $yearArray = array();
-      for($i=$this->first_year; $i<=$this->last_year; $i++) {
-         $yearArray[$i] = $i;
-      }
-
       $hourArray = array();
       $hourArray[0] = 12;
       for($i=1; $i<12; $i++) {
@@ -124,20 +103,8 @@ class search_input extends input {
 
       $string .= "<tr><td>";
 
-      $month = date("n", $unix_time);
-      $string .= "<select name=\"".$prefix."month\">";
-      $string .= $this->createOptionFromArray($monthArray, $month);
-      $string .= "</select>\n";
-
-      $day   = date("j", $unix_time);
-      $string .= "<select name=\"".$prefix."day\">";
-      $string .= $this->createOptionFromArray($dayArray, $day);
-      $string .= "</select>\n";
-
-      $year  = date("Y", $unix_time);
-      $string .= "<select name=\"".$prefix."year\">";
-      $string .= $this->createOptionFromArray($yearArray, $year);
-      $string .= "</select>\n";
+      $date = date("n/j/Y", $unix_time);
+      $string .= "<input name='".$prefix."date' type='text' value='$date' maxlength='10'/>";
 
       $string .= "</td><td>at</td><td>\n";
 

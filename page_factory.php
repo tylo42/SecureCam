@@ -29,22 +29,6 @@ if(!file_exists('settings.php')) {
    require_once('input.php');
    require_once('settings.php');
 
-   function first_year() {
-      static $first_year = 0;
-      if($first_year < 1) {
-         $first_year = date("Y",securecam_database::singleton()->get_time("min"));
-      }
-      return $first_year;
-   }
-
-   function last_year() {
-      static $last_year = 0;
-      if($last_year < 1) {
-         $last_year = date("Y",securecam_database::singleton()->get_time("max"));
-      }
-      return $last_year;
-   }
-
    function logged_in() {
       $secret_word = "jt+*=i>b&woq~;TC/:<60917v]B:xmT7)gWljcr->j.r$%nr#/X{BQi{,~xO[yI";
       if(isset($_COOKIE['login'])) {
@@ -96,8 +80,10 @@ if(!file_exists('settings.php')) {
          $flagged   = false;
          $selected_cameras = array();
          if(isset($_POST['submit'])) {
-            $begin_day = $_SESSION['search_begin'] = mktime($_POST['shour']+$_POST['sampm'], $_POST['smin'], 0, $_POST['smonth'], $_POST['sday'], $_POST['syear']);
-            $end_day   = $_SESSION['search_end']   = mktime($_POST['ehour']+$_POST['eampm'], $_POST['emin'], 0, $_POST['emonth'], $_POST['eday'], $_POST['eyear']);
+            list($smonth, $sday, $syear) = split('/', $_POST['sdate'], 3);
+            list($emonth, $eday, $eyear) = split('/', $_POST['edate'], 3);
+            $begin_day = $_SESSION['search_begin'] = mktime($_POST['shour']+$_POST['sampm'], $_POST['smin'], 0, $smonth, $sday, $syear);
+            $end_day   = $_SESSION['search_end']   = mktime($_POST['ehour']+$_POST['eampm'], $_POST['emin'], 0, $emonth, $eday, $eyear);
             $flagged   = $_SESSION['flag_check']   = isset($_POST['flag_check']) ? true : false;
 
             foreach(get_cameras() as $camera) {
@@ -116,7 +102,7 @@ if(!file_exists('settings.php')) {
          $videos = $sc_database->search_videos($begin_day, $end_day, $page_num, $flagged);
          $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day, $flagged);
 
-         $input = new search_input(get_cameras(), first_year(), last_year(), $begin_day, $end_day, $flagged);
+         $input = new search_input(get_cameras(), $begin_day, $end_day, $flagged);
          $search_display = new results_display($videos, $number_of_videos, $input, $page_name, $page_num);
 
          return new page($search_display, "Search");
