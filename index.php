@@ -47,7 +47,7 @@ $page = page_factory($_GET['page'], $_GET['page_num']);
 
 </td><td>
 <?php
-$top_bar = array("Home"      => "",             "Search" => "?page=search", 
+$top_bar = array("Home"      => "",             "Search" => "?page=search",
                  "Manage"    => "?page=manage", "Stats"  => "?page=stats",
                  "Live View" => "?page=view");
 echo "<div id=\"top-bar\">";

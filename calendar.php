@@ -1,6 +1,6 @@
 <?
 /* Copyright 2008, 2009, 2010, 2011 Tyler Hyndman
- * 
+ *
  * This file is part of SecureCam.
  *
  * SecureCam is free software: you can redistribute it and/or modify
@@ -50,7 +50,7 @@ function calendar($date){
    $this_month = getDate(mktime(0, 0, 0, $month, 1, $year));
    $next_month = getDate(mktime(0, 0, 0, $month + 1, 1, $year));
 
-   //Find out when this month starts and ends.         
+   //Find out when this month starts and ends.
    $first_week_day = $this_month["wday"];
    $days_in_this_month = round(($next_month[0] - $this_month[0]) / (60 * 60 * 24));
 
@@ -70,9 +70,9 @@ function calendar($date){
    $calendar_html .= "<td class=\"cal_top\">S</td>";
    $calendar_html .= "</tr><tr>";
 
-   //Fill the first week of the month with the appropriate number of blanks.       
+   //Fill the first week of the month with the appropriate number of blanks.
    for($week_day = 0; $week_day < $first_week_day; $week_day++) {
-      $calendar_html .= "<td class=\"cal_empty\"> </td>";   
+      $calendar_html .= "<td class=\"cal_empty\"> </td>";
    }
 
    $week_day = $first_week_day;

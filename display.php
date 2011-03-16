@@ -1,6 +1,6 @@
 <?php
 /* Copyright 2008, 2009, 2010, 2011 Tyler Hyndman
- * 
+ *
  * This file is part of SecureCam.
  *
  * SecureCam is free software: you can redistribute it and/or modify
@@ -148,7 +148,7 @@ class results_display extends display {
       $string .= "<a href=\"".$video->video_name()."\">".$video->print_time()."</a><br />";
       $string .= "<p>Camera ".$video->camera_id()." (".$cameras[$video->camera_id()]->get_description().")</p>";
 
-      // The page to link to when flagging to keep all the info the same            
+      // The page to link to when flagging to keep all the info the same
       $string .= "<form action=\"".$this->action."\" method=\"post\">";
       $string .= "<input type='hidden' name='vid_id' value=".$video->vid_id().">";
       $string .= "<input type='hidden' name='flagged' value=".$video->flagged().">";
@@ -341,13 +341,13 @@ class install_display extends display {
 
       try {
          if($this->install()) {
-            $string .= "<p>Sucessfully install, click <a href=''>here</a> to login.</p>"; 
+            $string .= "<p>Sucessfully install, click <a href=''>here</a> to login.</p>";
             return $string;
-         } 
+         }
       } catch(Exception $e) {
          $string .= "<p class='error'>* Failed installation: ".$e->getMessage().".</p>";
       }
-      
+
       $string .= "<form action='' method='post'>";
       $string .= "<table>";
       $string .= "<tr><td>MySQL hostname: </td><td><input type='text' name='dbhost' value='".(isset($_POST['dbhost']) ? $_POST['dbhost'] : "localhost")."'></td></tr>";
@@ -380,7 +380,7 @@ class install_display extends display {
             $username == '' ||
             $password == '' ||
             $confirm  == '') {
-            throw new Exception("Must fill all values"); 
+            throw new Exception("Must fill all values");
          }
 
          if($_POST['password'] != $_POST['confirm']) {

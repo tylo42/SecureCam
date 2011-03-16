@@ -1,6 +1,6 @@
 <?php
 /* Copyright 2008, 2009, 2010, 2011 Tyler Hyndman
- * 
+ *
  * This file is part of SecureCam.
  *
  * SecureCam is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@ $dbhost = 'localhost';
 $dbuser = 'root';
 $dbpass = 'root';
 
-$conn = mysql_connect($dbhost, $dbuser, $dbpass) or die 
+$conn = mysql_connect($dbhost, $dbuser, $dbpass) or die
    ('Error connectiong to mysql');
 
 $dbname = 'securecam';

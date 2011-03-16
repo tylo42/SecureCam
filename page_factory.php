@@ -1,6 +1,6 @@
 <?php
 /* Copyright 2008, 2009, 2010, 2011 Tyler Hyndman
- * 
+ *
  * This file is part of SecureCam.
  *
  * SecureCam is free software: you can redistribute it and/or modify
@@ -101,8 +101,8 @@ if(!file_exists('settings.php')) {
             $flagged   = $_SESSION['flag_check']   = isset($_POST['flag_check']) ? true : false;
 
             foreach(get_cameras() as $camera) {
-               if(isset($_POST['camera'.$camera->get_id()])) { 
-                  $camera->put_checked(true); 
+               if(isset($_POST['camera'.$camera->get_id()])) {
+                  $camera->put_checked(true);
                } else {
                   $camera->put_checked(false);
                }

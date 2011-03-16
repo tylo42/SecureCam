@@ -1,6 +1,6 @@
 <?php
 /* Copyright 2008, 2009, 2010, 2011 Tyler Hyndman
- * 
+ *
  * This file is part of SecureCam.
  *
  * SecureCam is free software: you can redistribute it and/or modify
@@ -68,7 +68,7 @@ class securecam_database {
     * $end_time         Unix timestamp for a date
     * $cameras          Array of cameras in use
     * $page_num         The page to display
-    * $flagged          If 1 only display flagged videos 
+    * $flagged          If 1 only display flagged videos
     */
    public function search_videos($start_time, $end_time, $page_num=1, $flagged=false) {
       if(!is_numeric($start_time) || !is_numeric($end_time)) {
@@ -151,8 +151,8 @@ class securecam_database {
       $port = mysql_real_escape_string($port);
       if( is_numeric($port) &&
          ( $desc != $cameras[$camera_id]->get_description() ||
-           $host != $cameras[$camera_id]->get_hostname()    || 
-           $port != $cameras[$camera_id]->get_port() ) ) 
+           $host != $cameras[$camera_id]->get_hostname()    ||
+           $port != $cameras[$camera_id]->get_port() ) )
       {
          unset_cameras();
          $sql = "update camera set description=\"$desc\", hostname=\"$host\", port=$port where camera_id=$camera_id";

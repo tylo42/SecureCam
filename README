@@ -20,15 +20,29 @@ Email: tyler.hyndman@gmail.com
 
 == About
 
+This project is a web interface used to view recorded videos taken
+with the Linux command line program motion.  It is still very much
+a work in progress.
+
 == Dependencies
 
-Need a working web server with PHP and the program motion installed.
+Need a working web server with PHP5, MySQL5, and the program motion
+installed.
 
-Documentation on montion can be found at 
+Documentation for montion can be found at
 <http://www.lavrsen.dk/twiki/bin/view/Motion/WebHome>
 
-== Installation
+== Installation (Working on making this easier)
 
-=== Link motion.conf, threadX.conf to /etc/motion
-ln /path/to/config/motion.conf /etc/motion/motion.conf
-...
+1.) Download, extract and place where desired on webserver.
+2.) Create a MySQL database named securecam and run database.sql
+3.) Insert cameras into MySQL database
+4.) Open index.php on webserver
+5.) Fill out MySQL information and create username and password
+    for web interface.
+6.) Copy motion.conf and thread*.conf to /etc/motion/motion.conf
+7.) Edit the thread*.conf file so that target_dir is
+    /path/to/securecam/snapshots/cameraXX, webcam_port is unique,
+    and the last number in the script args for on_movie_start and
+    on_picture_save are the number of the camera.
+8.) Run motion from command line and it will start recording motion!
