@@ -147,12 +147,15 @@ table.display td {
 }
 
 table.search-time {
-   margin: 0 auto 30px auto;
    padding: 0;
 }
 
 table.search-time th, p.search-heading {
    font-weight: bold;
+}
+
+table.search-time tr {
+   text-align: center;
 }
 
 table#search {

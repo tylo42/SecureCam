@@ -63,9 +63,11 @@ class search_input extends input {
 
       $string .= "<table id='search'><tr>";
 
-      $string .= "<td>";
+      $string .= "<td>\n\n";
+      $string .= "<table class='search-time'>\n";
       $string .= $this->search_date("Starting",$this->begin_time, "s");
       $string .= $this->search_date("Ending",  $this->end_time,   "e");
+      $string .= "</table>\n\n";
       $string .= "</td>";
 
       $string .= "<td>";
@@ -87,16 +89,6 @@ class search_input extends input {
    }
 
    private function search_date($name, $unix_time, $prefix) {
-      $hourArray = array();
-      $hourArray[0] = 12;
-      for($i=1; $i<12; $i++) {
-         $hourArray[$i] = $i;
-      }
-
-      $minArray = array(0 => '00', 15 => '15', 30 => '30', 45 => '45');
-      $ampmArray = array(0 => 'am', 12 => 'pm');
-
-      $string  = "<table class='search-time'>";
       $string .= "<tr><th>$name Date</th>";
       $string .= "<td></td>";
       $string .= "<th>$name Time</th></tr>\n";
@@ -104,29 +96,16 @@ class search_input extends input {
       $string .= "<tr><td>";
 
       $date = date("n/j/Y", $unix_time);
-      $string .= "<input name='".$prefix."date' type='text' value='$date' maxlength='10'/>";
+      $string .= "<input name='".$prefix."date' type='text' value='$date' maxlength='10' size='10' />"; // "DD/MM/YYYY"
 
-      $string .= "</td><td>at</td><td>\n";
+      $string .= "</td><td>";
+      $string .= "at";
+      $string .= "</td><td>";
 
-      $hour  = date("g", $unix_time);
-      $string .= "<select name=\"".$prefix."hour\">";
-      $string .= $this->createOptionFromArray($hourArray, $hour);
-      $string .= "</select>\n";
-
-      $string .= ":\n";
-
-      $min   = date("i", $unix_time);
-      $string .= "<select name=\"".$prefix."min\">";
-      $string .= $this->createOptionFromArray($minArray, $min);
-      $string .= "</select>\n";
-
-      $ampm  = date("A", $unix_time) == "AM" ? 0 : 12;
-      $string .= "<select name=\"".$prefix."ampm\">";
-      $string .= $this->createOptionFromArray($ampmArray,$ampm);
-      $string .= "</select>\n";
+      $time = date("g:i A", $unix_time);
+      $string .= "<input name='".$prefix."time' type='text' value='$time' maxlength='8' size='10' />"; // "HH:MM AA"
 
       $string .= "</td></tr>\n";
-      $string .= "</table>";
       return $string;
    }
 
