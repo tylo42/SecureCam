@@ -25,7 +25,7 @@ class camera {
       $this->hostname = $hostname;
       $this->port = $port;
       $this->description = $description;
-      $this->checked = true;
+      $this->checked = false;
    }
 
    public function get_id() { return $this->camera_id; }
