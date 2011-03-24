@@ -44,6 +44,23 @@ if(!file_exists('settings.php')) {
       return true;
    }
 
+   function extract_date_time($date, $time) {
+      $arr_date = array();
+      list($arr_date['month'], $arr_date['day'], $arr_date['year']) = split('/', $date, 3);
+      list($arr_date['hour'], $min_ampm) = split(':', $time, 2);
+      list($arr_date['min'], $ampm) = split(' ', $min_ampm, 2);
+      if(strcasecmp($ampm, "PM") == 0) {
+         $arr_date['hour'] += 12;
+      } else if(strcasecmp($ampm, "AM") == 0) {
+         if($arr_date['hour'] == 12) $arr_date['hour'] = 0;
+      } // TODO: throw if not 'AM' or 'PM'
+      // TODO: Make these asserts throw exceptions
+      assert(checkdate($arr_date['month'], $arr_date['day'], $arr_date['year']));
+      assert(0 <= $arr_date['hour'] && $arr_date['hour'] <= 24);
+      assert(0 <= $arr_date['min'] && $arr_date['min'] <= 60);
+      return $arr_date;
+   }
+
    function page_factory($page_name, $page_num) {
       if($install) {
          return new page(new install_display(), "Install");
@@ -80,10 +97,11 @@ if(!file_exists('settings.php')) {
          $flagged   = false;
          $selected_cameras = array();
          if(isset($_POST['submit'])) {
-            list($smonth, $sday, $syear) = split('/', $_POST['sdate'], 3);
-            list($emonth, $eday, $eyear) = split('/', $_POST['edate'], 3);
-            $begin_day = $_SESSION['search_begin'] = mktime($_POST['shour']+$_POST['sampm'], $_POST['smin'], 0, $smonth, $sday, $syear);
-            $end_day   = $_SESSION['search_end']   = mktime($_POST['ehour']+$_POST['eampm'], $_POST['emin'], 0, $emonth, $eday, $eyear);
+            $sdate = extract_date_time($_POST['sdate'], $_POST['stime']);
+            $edate = extract_date_time($_POST['edate'], $_POST['etime']);
+
+            $begin_day = $_SESSION['search_begin'] = mktime($sdate['hour'], $sdate['min'], 0, $sdate['month'], $sdate['day'], $sdate['year']);
+            $end_day   = $_SESSION['search_end']   = mktime($edate['hour'], $edate['min'], 0, $edate['month'], $edate['day'], $edate['year']);
             $flagged   = $_SESSION['flag_check']   = isset($_POST['flag_check']) ? true : false;
 
             foreach(get_cameras() as $camera) {
