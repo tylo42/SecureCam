@@ -17,7 +17,9 @@
  * along with SecureCam.  If not, see <http://www.gnu.org/licenses/>.
  */
 
- abstract class input {
+require_once('layout_utils.php');
+
+abstract class input {
    abstract function __toString();
 
    private $cameras;
@@ -28,16 +30,19 @@
 
    protected function put_camera_check_boxes() {
       $string = "<p class='search-heading'>Select cameras</p>";
+      $tds = array();
       foreach($this->cameras as $camera) {
          $checked = $camera->get_checked() ? "checked" : "";
-         $string .= "<p>";
-         $string .= "<input type='checkbox' name='camera".$camera->get_id()."' value='1' $checked />";
-         $string .= "&nbsp;".$camera->get_description();
-         $string .= "</p>";
+         $td  = "<p>";
+         $td .= "<input type='checkbox' name='camera".$camera->get_id()."' value='1' $checked />";
+         $td .= "&nbsp;".$camera->get_description();
+         $td .= "</p>";
+         $tds[] = $td;
       }
+      $string .= html_table(3, $tds, "search_cameras");
       return $string;
    }
- } // end class input
+} // end class input
 
 class search_input extends input {
    private $begin_time;
@@ -53,40 +58,40 @@ class search_input extends input {
    }
 
    public function get_begin_time() { return $this->begin_time; }
-   public function get_end_time()   { return $this->end_time; }
+      public function get_end_time()   { return $this->end_time; }
 
-   public function __toString() {
-      $string  = "<h2>Search for videos&hellip;</h2>";
-      $string .= "<hr />";
+      public function __toString() {
+         $string  = "<h2>Search for videos&hellip;</h2>";
+         $string .= "<hr />";
 
-      $string .= "<form action=\"index.php?page=search\" method=\"post\">";
+         $string .= "<form action=\"index.php?page=search\" method=\"post\">";
 
-      $string .= "<table id='search'><tr>";
+         $string .= "<table id='search'><tr>";
 
-      $string .= "<td>\n\n";
-      $string .= "<table class='search-time'>\n";
-      $string .= $this->search_date("Starting",$this->begin_time, "s");
-      $string .= $this->search_date("Ending",  $this->end_time,   "e");
-      $string .= "</table>\n\n";
-      $string .= "</td>";
+         $string .= "<td>\n\n";
+         $string .= "<table class='search-time'>\n";
+         $string .= $this->search_date("Starting",$this->begin_time, "s");
+         $string .= $this->search_date("Ending",  $this->end_time,   "e");
+         $string .= "</table>\n\n";
+         $string .= "</td>";
 
-      $string .= "<td>";
-      $string .= $this->put_camera_check_boxes();
-      $string .= "</td>";
+         $string .= "<td>";
+         $string .= $this->put_camera_check_boxes();
+         $string .= "</td>";
 
-      $string .= "<td>";
-      $checked = $this->flagged ? "checked" : "";
-      $string .= "<p><input type='checkbox' name='flag_check' value='1' $checked/>";
-      $string .= "&nbsp;Flagged";
-      $string .= "</td>";
+         $string .= "<td>";
+         $checked = $this->flagged ? "checked" : "";
+         $string .= "<p><input type='checkbox' name='flag_check' value='1' $checked/>";
+         $string .= "&nbsp;Flagged";
+         $string .= "</td>";
 
-      $string .= "</tr></table>";
+         $string .= "</tr></table>";
 
-      $string .= "<input type='submit' value='Search' name='submit'>";
+         $string .= "<input type='submit' value='Search' name='submit'>";
 
-      $string .= "</form>";
-      return $string;
-   }
+         $string .= "</form>";
+         return $string;
+      }
 
    private function search_date($name, $unix_time, $prefix) {
       $string .= "<tr><th>$name Date</th>";

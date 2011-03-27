@@ -22,9 +22,6 @@ require_once('page_factory.php');
 
 session_start();
 
-ini_set('display_errors', 'off');
-ini_set('log_errors', 'on');
-
 if(!isset($_GET['page'])) $_GET['page'] = "";
 if(!isset($_GET['page_num']) || !is_numeric($_GET['page_num'])) $_GET['page_num'] = 1;
 $page = page_factory($_GET['page'], $_GET['page_num']);
