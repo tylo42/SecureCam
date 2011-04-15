@@ -170,6 +170,13 @@ p.navigation {
    text-align: center;
 }
 
+#cal {
+   position: absolute;
+   visibility: hidden;
+   background-color: red;
+   color: white;
+}
+
 /* Manage */
 .manage-input {
    margin: 0 0 15px 0;
@@ -210,37 +217,4 @@ iframe.view {
    border: 0;
    margin: 0 auto 20px auto;
    overflow: hidden;
-}
-
-/* Calendar */
-#cal {
-   background-color: #666699;
-   color: #ffffff;
-}
-
-.cal_title {
-   text-align: center;
-   background-color: #9999cc;
-   color: #000000;
-   font-size: 18;
-}
-
-.cal_top {
-   text-align: center;
-   font-weight: bold;
-}
-
-.cal_empty {
-   background-color: #9999cc;
-   color: #000000;
-}
-
-.cal_day {
-   text-align: center;
-   background-color: #9999cc;
-   color: #000000;
-}
-
-.cal_selected_day {
-   text-align: center;
 }

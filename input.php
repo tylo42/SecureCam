@@ -61,7 +61,8 @@ class search_input extends input {
       public function get_end_time()   { return $this->end_time; }
 
       public function __toString() {
-         $string  = "<h2>Search for videos&hellip;</h2>";
+         $string  = "<div id=\"cal\"></div>";
+         $string .= "<h2>Search for videos&hellip;</h2>";
          $string .= "<hr />";
 
          $string .= "<form action=\"index.php?page=search\" method=\"post\">";
@@ -101,7 +102,7 @@ class search_input extends input {
       $string .= "<tr><td>";
 
       $date = date("n/j/Y", $unix_time);
-      $string .= "<input name='".$prefix."date' type='text' value='$date' maxlength='10' size='10' />"; // "DD/MM/YYYY"
+      $string .= "<input id='".$prefix."date' name='".$prefix."date' type='text' value='$date' maxlength='10' size='10' onfocus=\"display_cal(100, 100, '".$prefix."date')\" />"; // "DD/MM/YYYY"
 
       $string .= "</td><td>";
       $string .= "at";
