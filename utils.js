@@ -4,23 +4,34 @@ function ConfirmVideoRemove() {
 
 function display_cal(x_pos, y_pos, date_id) {
    var str_date = document.getElementById(date_id).value;
-   var arr_date = str_date.split('/'); // FIXME: make more robust
-   var day   = parseInt(arr_date[1]);
-   var month = parseInt(arr_date[0]);
-   var year  = parseInt(arr_date[2]);
-   if(isNaN(day) && isNaN(month) && isNaN(year)) {
-      var date = new Date();
-      set_date(date_id, date.getDate(), date.getMonth(), date.getYear());
-      // FIXME: Some kind of error handling
-   }
+   var arr_date = str_date.match(/[0-9]+/g);
+   var date = new Date();
+   var day = date.getDate();
+   date.setDate(1);
 
-   date = new Date();
-   date.setDate(1); // set to first of month selected
-   date.setMonth(month-1);
-   date.setYear(year);
+   if(arr_date.length == 3) {
+      var input_day = parseInt(arr_date[1]);
+      var month = parseInt(arr_date[0]);
+      var year  = parseInt(arr_date[2]);
+      if( (0 < input_day || input_day <= 31) &&
+          (0 < month     || month <= 12) &&
+          (2000 < year   || year < 2100) ) { // test that input date is resonable
+         var test_date = new Date();
+         test_date.setMonth(month-1);
+         test_date.setYear(year);
+         test_date.setDate(input_day);
+         if(test_date.getMonth() == month-1) { // date is in the month specified
+            day = input_day;
+            date.setMonth(month-1);
+            date.setYear(year);
+         }
+      }
+   }
+   set_date(date.getMonth()+1, day, date.getFullYear(), date_id);
 
    // table header
-   cal  = "<table>";
+   cal  = "<h3>"+month_name(date.getMonth())+"</h3>";
+   cal += "<table>";
    cal += "<tr><td>S</td><td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td></tr>";
 
    // get the day of the week for the first day of the month
@@ -34,7 +45,7 @@ function display_cal(x_pos, y_pos, date_id) {
          if(done || (first && i<first_day)) { // fill blank cells
             cal += "<td>&nbsp</td>";
          } else {                       // print date, increment date
-            cal += "<td onclick=\"set_date("+month+","+date.getDate()+","+year+","+x_pos+","+y_pos+",'"+date_id+"')\">";
+            cal += "<td onclick=\"set_date_update("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+","+x_pos+","+y_pos+",'"+date_id+"')\">";
             if(day == date.getDate()) {
                cal += "<u>"+date.getDate()+"</u>";
             } else {
@@ -72,7 +83,41 @@ function hide_hover_div(div_id) {
    div.style.visibility = "hidden";
 }
 
-function set_date(month, day, year, x_pos, y_pos, date_id) {
+function set_date(month, day, year, date_id) {
    document.getElementById(date_id).value = month + "/" + day + "/" + year;
+}
+
+function set_date_update(month, day, year, x_pos, y_pos, date_id, update) {
+   set_date(month, day, year, date_id);
    display_cal(x_pos, y_pos, date_id);
+}
+
+/// Did this really need to be written???
+function month_name(month_num) {
+   if(month_num == 0) {
+      return "January";
+   } else if(month_num == 1) {
+      return "February";
+   } else if(month_num == 2) {
+      return "March";
+   } else if(month_num == 3) {
+      return "April";
+   } else if(month_num == 4) {
+      return "May";
+   } else if(month_num == 5) {
+      return "June";
+   } else if(month_num == 6) {
+      return "July";
+   } else if(month_num == 7) {
+      return "August";
+   } else if(month_num == 8) {
+      return "September";
+   } else if(month_num == 9) {
+      return "October";
+   } else if(month_num == 10) {
+      return "November";
+   } else if(month_num == 11) {
+      return "December";
+   }
+   return "ERROR";
 }
