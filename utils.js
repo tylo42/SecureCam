@@ -6,7 +6,12 @@ function write_cal(date, day, date_id) {
    // table header
    var cal  = "<h3>"+month_name(date.getMonth())+"</h3>";
    cal += "<table>";
-   cal += "<tr><td>S</td><td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td></tr>";
+   cal += "<tr>";
+   var day_abbr = [ "S", "M", "T", "W", "T", "F", "S" ]
+   for(var i=0; i<day_abbr.length; i++) {
+      cal += "<td class='cal-selected'>"+day_abbr[i]+"</td>";
+   }
+   cal += "<tr>";
 
    // get the day of the week for the first day of the month
    var first_day = date.getDay();
@@ -20,18 +25,19 @@ function write_cal(date, day, date_id) {
             cal += "<td>&nbsp</td>";
          } else {                       // print date, increment date
             var today = new Date();
-            if(today.getMonth() == date.getMonth() &&
-               today.getYear()  == date.getYear() &&
-               today.getDate()+1  >= date.getDate()) {
-               cal += "<td onclick=\"set_date_update("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+",'"+date_id+"')\">";
+            if( (today.getMonth() > date.getMonth() && today.getYear()  >= date.getYear()) || 
+                (today.getMonth() == date.getMonth() && 
+                 today.getYear() == date.getYear() && 
+                 today.getDate()+1  >= date.getDate()) ) {
+               var class_id = "cal-active";
+               if(day == date.getDate()) {
+                  class_id = "cal-selected";
+               }
+               cal += "<td class='"+class_id+"' onclick=\"set_date_update("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+",'"+date_id+"')\">";
             } else {
-               cal += "<td>";
+               cal += "<td class='cal-inactive'>";
             }
-            if(day == date.getDate()) {
-               cal += "<u>"+date.getDate()+"</u>";
-            } else {
-               cal += date.getDate();
-            }
+            cal += date.getDate();
             cal += "</td>";
             date.setDate(date.getDate()+1);
          }

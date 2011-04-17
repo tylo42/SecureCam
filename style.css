@@ -173,8 +173,31 @@ p.navigation {
 #cal {
    position: absolute;
    visibility: hidden;
-   background-color: red;
+   background-color: white;
    color: white;
+}
+
+#cal table, #cal td.cal-active, #cal td.cal-inactive, #cal td.cal-selected {
+   border-color: black;
+   border-style: solid;
+   border-width: 2px;
+   text-align: center;
+}
+
+.cal-active {
+   background-color: red;
+}
+
+.cal-active:hover {
+   background-color: black;
+}
+
+.cal-inactive {
+   background-color: gray;
+}
+
+.cal-selected {
+   background-color: black;
 }
 
 /* Manage */
