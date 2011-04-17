@@ -2,6 +2,50 @@ function ConfirmVideoRemove() {
    return confirm("Are you sure you want to remove video?"); 
 }
 
+function write_cal(date, day, date_id) {
+   // table header
+   var cal  = "<h3>"+month_name(date.getMonth())+"</h3>";
+   cal += "<table>";
+   cal += "<tr><td>S</td><td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td></tr>";
+
+   // get the day of the week for the first day of the month
+   var first_day = date.getDay();
+
+   var done = false;
+   var first = true;
+   while(!done) {
+      cal += "<tr>";
+      for(var i=0; i<7; i++) {
+         if(done || (first && i<first_day)) { // fill blank cells
+            cal += "<td>&nbsp</td>";
+         } else {                       // print date, increment date
+            var today = new Date();
+            if(today.getMonth() == date.getMonth() &&
+               today.getYear()  == date.getYear() &&
+               today.getDate()+1  >= date.getDate()) {
+               cal += "<td onclick=\"set_date_update("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+",'"+date_id+"')\">";
+            } else {
+               cal += "<td>";
+            }
+            if(day == date.getDate()) {
+               cal += "<u>"+date.getDate()+"</u>";
+            } else {
+               cal += date.getDate();
+            }
+            cal += "</td>";
+            date.setDate(date.getDate()+1);
+         }
+         if(date.getDate()==1 && !first) { // if beginning of next month we are done
+            done = true;
+         }
+      }
+      cal += "</tr>";
+      first = false;
+   }
+   cal += "</tr></table>";
+   return cal;
+}
+
 function display_cal(x_pos, y_pos, date_id) {
    var str_date = document.getElementById(date_id).value;
    var arr_date = str_date.match(/[0-9]+/g);
@@ -9,7 +53,7 @@ function display_cal(x_pos, y_pos, date_id) {
    var day = date.getDate();
    date.setDate(1);
 
-   if(arr_date.length == 3) {
+   if(arr_date != null && arr_date.length == 3) {
       var input_day = parseInt(arr_date[1]);
       var month = parseInt(arr_date[0]);
       var year  = parseInt(arr_date[2]);
@@ -28,40 +72,7 @@ function display_cal(x_pos, y_pos, date_id) {
       }
    }
    set_date(date.getMonth()+1, day, date.getFullYear(), date_id);
-
-   // table header
-   cal  = "<h3>"+month_name(date.getMonth())+"</h3>";
-   cal += "<table>";
-   cal += "<tr><td>S</td><td>M</td><td>T</td><td>W</td><td>T</td><td>F</td><td>S</td></tr>";
-
-   // get the day of the week for the first day of the month
-   var first_day = date.getDay();
-
-   var done = false;
-   var first = true;
-   while(!done) {
-      cal += "<tr>";
-      for(var i=0; i<7; i++) {
-         if(done || (first && i<first_day)) { // fill blank cells
-            cal += "<td>&nbsp</td>";
-         } else {                       // print date, increment date
-            cal += "<td onclick=\"set_date_update("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+",'"+date_id+"')\">";
-            if(day == date.getDate()) {
-               cal += "<u>"+date.getDate()+"</u>";
-            } else {
-               cal += date.getDate();
-            }
-            cal += "</td>";
-            date.setDate(date.getDate()+1);
-         }
-         if(date.getDate()==1 && !first) { // if beginning of next month we are done
-            done = true;
-         }
-      }
-      cal += "</tr>";
-      first = false;
-   }
-   cal += "</tr></table>";
+   var cal = write_cal(date, day, date_id);
    show_hover_div(cal, x_pos, y_pos, "cal");
 }
 
