@@ -45,7 +45,7 @@ function display_cal(x_pos, y_pos, date_id) {
          if(done || (first && i<first_day)) { // fill blank cells
             cal += "<td>&nbsp</td>";
          } else {                       // print date, increment date
-            cal += "<td onclick=\"set_date_update("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+","+x_pos+","+y_pos+",'"+date_id+"')\">";
+            cal += "<td onclick=\"set_date_update("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+",'"+date_id+"')\">";
             if(day == date.getDate()) {
                cal += "<u>"+date.getDate()+"</u>";
             } else {
@@ -87,9 +87,9 @@ function set_date(month, day, year, date_id) {
    document.getElementById(date_id).value = month + "/" + day + "/" + year;
 }
 
-function set_date_update(month, day, year, x_pos, y_pos, date_id, update) {
+function set_date_update(month, day, year, date_id) {
    set_date(month, day, year, date_id);
-   display_cal(x_pos, y_pos, date_id);
+   hide_cal();
 }
 
 function month_name(month_num) {

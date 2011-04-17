@@ -114,20 +114,5 @@ class search_input extends input {
       $string .= "</td></tr>\n";
       return $string;
    }
-
-   private function createOptionFromArray($myArray,$selected) {
-      if(!is_array($myArray)) {
-         return false;
-      }
-      $returned = $select = '';
-      foreach($myArray as $key => $value) {
-         if($selected == $key) {
-            $select = ' selected';
-         }
-         $returned .= "<option value=\"$key\"$select>$value</option>";
-         $select = '';
-      }
-      return $returned;
-   }
 } // end class search_input
 ?>
