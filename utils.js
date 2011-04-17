@@ -92,32 +92,11 @@ function set_date_update(month, day, year, x_pos, y_pos, date_id, update) {
    display_cal(x_pos, y_pos, date_id);
 }
 
-/// Did this really need to be written???
 function month_name(month_num) {
-   if(month_num == 0) {
-      return "January";
-   } else if(month_num == 1) {
-      return "February";
-   } else if(month_num == 2) {
-      return "March";
-   } else if(month_num == 3) {
-      return "April";
-   } else if(month_num == 4) {
-      return "May";
-   } else if(month_num == 5) {
-      return "June";
-   } else if(month_num == 6) {
-      return "July";
-   } else if(month_num == 7) {
-      return "August";
-   } else if(month_num == 8) {
-      return "September";
-   } else if(month_num == 9) {
-      return "October";
-   } else if(month_num == 10) {
-      return "November";
-   } else if(month_num == 11) {
-      return "December";
+   if(0 <= month_num && month_num <= 11) {
+      var monthNames = [ "January", "February", "March", "April", "May", "June",
+                         "July", "August", "September", "October", "November", "December", ];
+      return monthNames[month_num];
    }
    return "ERROR";
 }
