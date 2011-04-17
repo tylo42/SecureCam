@@ -175,12 +175,16 @@ p.navigation {
    visibility: hidden;
    background-color: white;
    color: white;
+   border-color: black;
+   border-width: 2px;
+   border-style: solid;
+}
+
+#cal h3 {
+   text-align: center;
 }
 
 #cal table {
-   border-color: black;
-   border-style: solid;
-   border-width: 2px;
    text-align: center;
 }
 
