@@ -203,7 +203,8 @@ p.navigation {
 }
 
 .cal-inactive {
-   background-color: gray;
+   background-color: #AAAAAA;
+   color: #CCCCCC;
 }
 
 .cal-selected {
