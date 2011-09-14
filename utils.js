@@ -3,8 +3,8 @@ function ConfirmVideoRemove() {
 }
 
 eTime = {
-start : 0,
-        end   : 1,
+   start : 0,
+   end   : 1,
 };
 
 function active_day(date, today, time) {
@@ -38,7 +38,7 @@ function active_day(date, today, time) {
    } 
 
    // if current month and before tomorrow
-   if(today.getMonth() == date.getMonth() && 
+   if(   today.getMonth() == date.getMonth() && 
          today.getFullYear() == date.getFullYear() && 
          today.getDate()+1  >= date.getDate()) {
       return true;

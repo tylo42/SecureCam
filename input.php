@@ -59,42 +59,42 @@ class search_input extends input {
    }
 
    public function get_begin_time() { return $this->begin_time; }
-      public function get_end_time()   { return $this->end_time; }
+   public function get_end_time()   { return $this->end_time; }
 
-      public function __toString() {
-         $string  = "<div id='cal'></div>";
-         $string .= "<h2>Search for videos&hellip;</h2>";
-         $string .= "<hr />";
+   public function __toString() {
+      $string  = "<div id='cal'></div>";
+      $string .= "<h2>Search for videos&hellip;</h2>";
+      $string .= "<hr />";
 
-         $string .= "<form action=\"index.php?page=search\" method=\"post\">";
+      $string .= "<form action=\"index.php?page=search\" method=\"post\">";
 
-         $string .= "<table id='search'><tr>";
+      $string .= "<table id='search'><tr>";
 
-         $string .= "<td>\n\n";
-         $string .= "<table class='search-time'>\n";
+      $string .= "<td>\n\n";
+      $string .= "<table class='search-time'>\n";
 
-         $string .= $this->search_date("Starting",$this->begin_time, "s", "\"display_cal(50, 275, eTime.start)\"");
-         $string .= $this->search_date("Ending",  $this->end_time,   "e", "\"display_cal(50, 325, eTime.end)\"");
-         $string .= "</table>\n\n";
-         $string .= "</td>";
+      $string .= $this->search_date("Starting",$this->begin_time, "s", "display_cal(50, 275, eTime.start)");
+      $string .= $this->search_date("Ending",  $this->end_time,   "e", "display_cal(50, 325, eTime.end)");
+      $string .= "</table>\n\n";
+      $string .= "</td>";
 
-         $string .= "<td>";
-         $string .= $this->put_camera_check_boxes();
-         $string .= "</td>";
+      $string .= "<td>";
+      $string .= $this->put_camera_check_boxes();
+      $string .= "</td>";
 
-         $string .= "<td>";
-         $checked = $this->flagged ? "checked" : "";
-         $string .= "<p><input type='checkbox' name='flag_check' value='1' $checked/>";
-         $string .= "&nbsp;Flagged";
-         $string .= "</td>";
+      $string .= "<td>";
+      $checked = $this->flagged ? "checked" : "";
+      $string .= "<p><input type='checkbox' name='flag_check' value='1' $checked/>";
+      $string .= "&nbsp;Flagged";
+      $string .= "</td>";
 
-         $string .= "</tr></table>";
+      $string .= "</tr></table>";
 
-         $string .= "<input type='submit' value='Search' name='submit'>";
+      $string .= "<input type='submit' value='Search' name='submit'>";
 
-         $string .= "</form>";
-         return $string;
-      }
+      $string .= "</form>";
+      return $string;
+   }
 
    private function search_date($name, $unix_time, $prefix, $javascript) {
       $string .= "<tr><th>$name Date</th>";
@@ -104,7 +104,7 @@ class search_input extends input {
       $string .= "<tr><td>";
 
       $date = date("n/j/Y", $unix_time);
-      $string .= "<input id='".$prefix."date' name='".$prefix."date' type='text' value='$date' maxlength='10' size='10' onfocus=$javascript>"; // "DD/MM/YYYY"
+      $string .= "<input id='".$prefix."date' name='".$prefix."date' type='text' value='$date' maxlength='10' size='10' onfocus=\"$javascript\">"; // "DD/MM/YYYY"
 
       $string .= "</td><td>";
       $string .= "at";
