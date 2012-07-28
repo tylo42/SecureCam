@@ -29,22 +29,6 @@ if(!file_exists('settings.php')) {
    require_once('input.php');
    require_once('settings.php');
 
-   function first_year() {
-      static $first_year = 0;
-      if($first_year < 1) {
-         $first_year = date("Y",securecam_database::singleton()->get_time("min"));
-      }
-      return $first_year;
-   }
-
-   function last_year() {
-      static $last_year = 0;
-      if($last_year < 1) {
-         $last_year = date("Y",securecam_database::singleton()->get_time("max"));
-      }
-      return $last_year;
-   }
-
    function logged_in() {
       $secret_word = "jt+*=i>b&woq~;TC/:<60917v]B:xmT7)gWljcr->j.r$%nr#/X{BQi{,~xO[yI";
       if(isset($_COOKIE['login'])) {
@@ -58,6 +42,23 @@ if(!file_exists('settings.php')) {
          return false;
       }
       return true;
+   }
+
+   function extract_date_time($date, $time) {
+      $arr_date = array();
+      list($arr_date['month'], $arr_date['day'], $arr_date['year']) = split('/', $date, 3);
+      list($arr_date['hour'], $min_ampm) = split(':', $time, 2);
+      list($arr_date['min'], $ampm) = split(' ', $min_ampm, 2);
+      if(strcasecmp($ampm, "PM") == 0) {
+         $arr_date['hour'] += 12;
+      } else if(strcasecmp($ampm, "AM") == 0) {
+         if($arr_date['hour'] == 12) $arr_date['hour'] = 0;
+      } // TODO: throw if not 'AM' or 'PM'
+      // TODO: Make these asserts throw exceptions
+      assert(checkdate($arr_date['month'], $arr_date['day'], $arr_date['year']));
+      assert(0 <= $arr_date['hour'] && $arr_date['hour'] <= 24);
+      assert(0 <= $arr_date['min'] && $arr_date['min'] <= 60);
+      return $arr_date;
    }
 
    function page_factory($page_name, $page_num) {
@@ -96,8 +97,11 @@ if(!file_exists('settings.php')) {
          $flagged   = false;
          $selected_cameras = array();
          if(isset($_POST['submit'])) {
-            $begin_day = $_SESSION['search_begin'] = mktime($_POST['shour']+$_POST['sampm'], $_POST['smin'], 0, $_POST['smonth'], $_POST['sday'], $_POST['syear']);
-            $end_day   = $_SESSION['search_end']   = mktime($_POST['ehour']+$_POST['eampm'], $_POST['emin'], 0, $_POST['emonth'], $_POST['eday'], $_POST['eyear']);
+            $sdate = extract_date_time($_POST['sdate'], $_POST['stime']);
+            $edate = extract_date_time($_POST['edate'], $_POST['etime']);
+
+            $begin_day = $_SESSION['search_begin'] = mktime($sdate['hour'], $sdate['min'], 0, $sdate['month'], $sdate['day'], $sdate['year']);
+            $end_day   = $_SESSION['search_end']   = mktime($edate['hour'], $edate['min'], 0, $edate['month'], $edate['day'], $edate['year']);
             $flagged   = $_SESSION['flag_check']   = isset($_POST['flag_check']) ? true : false;
 
             foreach(get_cameras() as $camera) {
@@ -116,7 +120,7 @@ if(!file_exists('settings.php')) {
          $videos = $sc_database->search_videos($begin_day, $end_day, $page_num, $flagged);
          $number_of_videos = $sc_database->number_of_videos($begin_day, $end_day, $flagged);
 
-         $input = new search_input(get_cameras(), first_year(), last_year(), $begin_day, $end_day, $flagged);
+         $input = new search_input(get_cameras(), $begin_day, $end_day, $flagged);
          $search_display = new results_display($videos, $number_of_videos, $input, $page_name, $page_num);
 
          return new page($search_display, "Search");

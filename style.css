@@ -147,12 +147,15 @@ table.display td {
 }
 
 table.search-time {
-   margin: 0 auto 30px auto;
    padding: 0;
 }
 
 table.search-time th, p.search-heading {
    font-weight: bold;
+}
+
+table.search-time tr {
+   text-align: center;
 }
 
 table#search {
@@ -165,6 +168,47 @@ table#search td{
 
 p.navigation {
    text-align: center;
+}
+
+#cal {
+   position: absolute;
+   visibility: hidden;
+   background-color: white;
+   color: white;
+   border-color: black;
+   border-width: 2px;
+   border-style: solid;
+}
+
+#cal h3 {
+   text-align: center;
+}
+
+#cal table {
+   text-align: center;
+}
+
+#cal td {
+   border-color: white;
+   border-style: solid;
+   border-width: 2px;
+}
+
+.cal-active {
+   background-color: red;
+}
+
+.cal-active:hover {
+   background-color: black;
+}
+
+.cal-inactive {
+   background-color: #AAAAAA;
+   color: #CCCCCC;
+}
+
+.cal-selected {
+   background-color: black;
 }
 
 /* Manage */
@@ -207,37 +251,4 @@ iframe.view {
    border: 0;
    margin: 0 auto 20px auto;
    overflow: hidden;
-}
-
-/* Calendar */
-#cal {
-   background-color: #666699;
-   color: #ffffff;
-}
-
-.cal_title {
-   text-align: center;
-   background-color: #9999cc;
-   color: #000000;
-   font-size: 18;
-}
-
-.cal_top {
-   text-align: center;
-   font-weight: bold;
-}
-
-.cal_empty {
-   background-color: #9999cc;
-   color: #000000;
-}
-
-.cal_day {
-   text-align: center;
-   background-color: #9999cc;
-   color: #000000;
-}
-
-.cal_selected_day {
-   text-align: center;
 }
