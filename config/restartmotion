@@ -1,0 +1,3 @@
+killall motion
+sleep 5
+motion &

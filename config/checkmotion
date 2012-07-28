@@ -1,0 +1,5 @@
+#!/bin/bash
+MPID=`pidof motion`
+if [ "x$MPID" == "x" ]; then
+motion &
+fi
