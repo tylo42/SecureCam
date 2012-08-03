@@ -73,8 +73,8 @@ class search_input extends input {
       $string .= "<td>\n\n";
       $string .= "<table class='search-time'>\n";
 
-      $string .= $this->search_date("Starting",$this->begin_time, "s", "display_cal(50, 275, eTime.start)");
-      $string .= $this->search_date("Ending",  $this->end_time,   "e", "display_cal(50, 325, eTime.end)");
+      $string .= $this->search_date("Starting",$this->begin_time, "s", "display_cal(this, eTime.start)");
+      $string .= $this->search_date("Ending",  $this->end_time,   "e", "display_cal(this, eTime.end)");
       $string .= "</table>\n\n";
       $string .= "</td>";
 

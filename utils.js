@@ -107,7 +107,18 @@ function get_time_date(time) {
    return str_date.match(/[0-9]+/g);
 }
 
-function display_cal(x_pos, y_pos, time) {
+function findPos(object) {
+   var curleft = curtop = 0;
+   if(object.offsetParent) {
+      do {
+         curleft += object.offsetLeft;
+         curtop += object.offsetTop;
+      } while(object = object.offsetParent);
+   }
+   return [curleft,curtop + 24];
+}
+
+function display_cal(object, time) {
    var date_id = "ERROR";
    if(time == eTime.start) {
       date_id = 'sdate';
@@ -139,9 +150,10 @@ function display_cal(x_pos, y_pos, time) {
          }
       }
    }
+   var loc = findPos(object);
    set_date(date.getMonth()+1, day, date.getFullYear(), date_id);
    var cal = write_cal(date, day, date_id, time);
-   show_hover_div(cal, x_pos, y_pos, "cal");
+   show_hover_div(cal, loc[0], loc[1], "cal");
 }
 
 function hide_cal() {
