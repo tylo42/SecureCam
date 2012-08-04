@@ -9,7 +9,7 @@ eTime = {
 
 function active_day(date, today, time) {
    if(eTime.start == time) {
-      var arr_end = get_time_date(eTime.end);
+      var arr_end = get_date(eTime.end);
       if(arr_end.length == 3) { // only check if valid
          var end_date = new Date(arr_end[2], arr_end[0]-1, arr_end[1]);
          if(   date.getFullYear() >= end_date.getFullYear() &&
@@ -21,7 +21,7 @@ function active_day(date, today, time) {
    }
 
    if(eTime.end == time) {
-      var arr_start = get_time_date(eTime.start);
+      var arr_start = get_date(eTime.start);
       if(arr_start.length == 3) { // only check if valid
          var start_date = new Date(arr_start[2], arr_start[0]-1, arr_start[1]);
          if(   date.getFullYear() <= start_date.getFullYear() &&
@@ -48,7 +48,7 @@ function active_day(date, today, time) {
    return false;
 }
 
-function write_cal(date, day, date_id, time) {
+function write_cal(date, day, time) {
    // table header
    var cal  = "<h3>"+month_name(date.getMonth())+"</h3>";
    cal += "<table>";
@@ -76,7 +76,7 @@ function write_cal(date, day, date_id, time) {
                if(day == date.getDate()) {
                   class_id = "cal-selected";
                }
-               cal += "<td class='"+class_id+"' onclick=\"set_date_update("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+",'"+date_id+"')\">";
+               cal += "<td class='"+class_id+"' onclick=\"set_date_update("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+",'"+time+"')\">";
             } else {
                cal += "<td class='cal-inactive'>";
             }
@@ -95,15 +95,20 @@ function write_cal(date, day, date_id, time) {
    return cal;
 }
 
-function get_time_date(time) {
-   var str_date = "";
+function eTime_to_date_Id(time) {
+   var date_id = "ERROR";
    if(time == eTime.start) {
-      str_date = document.getElementById('sdate').value;
+      date_id = "sdate";
    } else if(time == eTime.end) {
-      str_date = document.getElementById('edate').value;
+      date_id = "edate";
    } else {
-      alert("ERROR");
+      alert("ERROR" + time);
    }
+   return date_id;
+}
+
+function get_date(time) {
+   var str_date = document.getElementById( eTime_to_date_Id(time) ).value;
    return str_date.match(/[0-9]+/g);
 }
 
@@ -119,15 +124,7 @@ function findPos(object) {
 }
 
 function display_cal(object, time) {
-   var date_id = "ERROR";
-   if(time == eTime.start) {
-      date_id = 'sdate';
-   } else if(time == eTime.end) {
-      date_id = 'edate';
-   } else {
-      alert("ERROR");
-   }
-   var arr_date = get_time_date(time);
+   var arr_date = get_date(time);
    var date = new Date();
    var day = date.getDate();
    date.setDate(1);
@@ -150,9 +147,9 @@ function display_cal(object, time) {
          }
       }
    }
+   set_date(date.getMonth()+1, day, date.getFullYear(), time);
+   var cal = write_cal(date, day, time);
    var loc = findPos(object);
-   set_date(date.getMonth()+1, day, date.getFullYear(), date_id);
-   var cal = write_cal(date, day, date_id, time);
    show_hover_div(cal, loc[0], loc[1], "cal");
 }
 
@@ -174,12 +171,12 @@ function hide_hover_div(div_id) {
    div.style.visibility = "hidden";
 }
 
-function set_date(month, day, year, date_id) {
-   document.getElementById(date_id).value = month + "/" + day + "/" + year;
+function set_date(month, day, year, time) {
+   document.getElementById( eTime_to_date_Id(time) ).value = month + "/" + day + "/" + year;
 }
 
-function set_date_update(month, day, year, date_id) {
-   set_date(month, day, year, date_id);
+function set_date_update(month, day, year, time) {
+   set_date(month, day, year, time);
    hide_cal();
 }
 
