@@ -30,7 +30,7 @@ $page = page_factory($_GET['page'], $_GET['page_num']);
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
 <link type="text/css" rel="stylesheet" media="all" href="style.css">
-<script language="JavaScript" src="utils.js"></script>
+<script language="JavaScript" src="js/utils.js"></script>
 <title><?php echo $page->title(); ?></title></head>
 
 <body>
