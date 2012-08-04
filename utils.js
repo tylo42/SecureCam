@@ -1,5 +1,5 @@
 function ConfirmVideoRemove() {
-   return confirm("Are you sure you want to remove video?"); 
+   return confirm("Are you sure you want to remove video?");
 }
 
 eTime = {
@@ -35,11 +35,11 @@ function active_day(date, today, time) {
    // if displaying a month before current month
    if(today.getMonth() > date.getMonth() && today.getFullYear()  >= date.getFullYear()) {
       return true;
-   } 
+   }
 
    // if current month and before tomorrow
-   if(   today.getMonth() == date.getMonth() && 
-         today.getFullYear() == date.getFullYear() && 
+   if(   today.getMonth() == date.getMonth() &&
+         today.getFullYear() == date.getFullYear() &&
          today.getDate()+1  >= date.getDate()) {
       return true;
    }
@@ -186,7 +186,7 @@ function set_date_update(month, day, year, date_id) {
 function month_name(month_num) {
    if(0 <= month_num && month_num <= 11) {
       var monthNames = [ "January", "February", "March", "April", "May", "June",
-          "July", "August", "September", "October", "November", "December", ];
+         "July", "August", "September", "October", "November", "December", ];
       return monthNames[month_num];
    }
    return "ERROR";
