@@ -28,7 +28,15 @@ function active_day(date, today, time) {
    // if current month and before tomorrow
    if(   today.getMonth() == date.getMonth() &&
          today.getFullYear() == date.getFullYear() &&
-         today.getDate()+1  >= date.getDate()) {
+         today.getDate()  >= date.getDate()) {
+      return true;
+   }
+
+   // if ending date and tomorrow
+   if(   eTime.end == time &&
+         today.getMonth() == date.getMonth() &&
+         today.getFullYear() == date.getFullYear() &&
+         today.getDate()+1 == date.getDate()) {
       return true;
    }
 
