@@ -8,18 +8,6 @@ eTime = {
 };
 
 function active_day(date, today, time) {
-   if(eTime.start == time) {
-      var arr_end = get_date(eTime.end);
-      if(arr_end.length == 3) { // only check if valid
-         var end_date = new Date(arr_end[2], arr_end[0]-1, arr_end[1]);
-         if(   date.getFullYear() >= end_date.getFullYear() &&
-               date.getMonth()    >= end_date.getMonth() &&
-               date.getDate()     >  end_date.getDate() ) {
-            return false;
-         }
-      }
-   }
-
    if(eTime.end == time) {
       var arr_start = get_date(eTime.start);
       if(arr_start.length == 3) { // only check if valid
