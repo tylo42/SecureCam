@@ -177,6 +177,10 @@ function set_date(month, day, year, time) {
 
 function set_date_update(month, day, year, time) {
    set_date(month, day, year, time);
+   if(time == eTime.start) {
+      var next_day = new Date(year, month-1, day+1, 0, 0, 0, 0);
+      set_date(next_day.getMonth()+1, next_day.getDate(), next_day.getFullYear(), eTime.end);
+   }
    hide_cal();
 }
 
