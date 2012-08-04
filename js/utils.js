@@ -17,11 +17,22 @@ function active_day(date, today, time) {
                date.getDate()     <  start_date.getDate() ) {
             return false;
          }
+         if(   date.getFullYear() <= start_date.getFullYear() &&
+               date.getMonth() < start_date.getMonth()) {
+            return false;
+         }
+         if(date.getFullYear() < start_date.getFullYear()) {
+            return false;
+         }
       }
    }
 
    // if displaying a month before current month
    if(today.getMonth() > date.getMonth() && today.getFullYear()  >= date.getFullYear()) {
+      return true;
+   }
+
+   if(today.getFullYear() > date.getFullYear()) {
       return true;
    }
 
@@ -44,9 +55,53 @@ function active_day(date, today, time) {
    return false;
 }
 
+function active_prev_month(date, day, time) {
+   if(time == eTime.start) {
+      return true;
+   }
+
+   var arr_start = get_date(eTime.start);
+   if(arr_start.length == 3) {
+      var start_date = new Date(arr_start[2], arr_start[0]-1, arr_start[1]);
+      if(start_date.getMonth() >= date.getMonth() && start_date.getFullYear() >= date.getFullYear()) {
+         return false;
+      }
+      if(start_date.getFullYear() > date.getFullYear()) {
+         return false;
+      }
+   }
+
+   return true;
+}
+
+function active_next_month(date, day, time) {
+   var today = new Date();
+   if(today.getMonth() <= date.getMonth() && today.getFullYear() <= date.getFullYear()) {
+      return false;
+   }
+   return true;
+}
+
 function write_cal(date, day, time) {
    // table header
-   var cal  = "<h3>"+month_name(date.getMonth())+"</h3>";
+   var cal = "<table>";
+   cal += "<tr>";
+   if(active_prev_month(date, day, time)) {
+      var prev_month = new Date(date.getFullYear(), date.getMonth()-1, day);
+      cal += "<td class='cal-active' onclick=\"set_date_update("+(prev_month.getMonth()+1)+","+prev_month.getDate()+","+prev_month.getFullYear()+","+time+")\">&larr;</td>";
+   } else {
+      cal += "<td class='cal-inactive'>&larr;</td>";
+   }
+   cal += "<td><h3>"+month_name(date.getMonth())+"</h3></td>";
+   if(active_next_month(date, day, time)) {
+      var next_month = new Date(date.getFullYear(), date.getMonth()+1, day);
+      cal += "<td class='cal-active' onclick=\"set_date_update("+(next_month.getMonth()+1)+","+next_month.getDate()+","+next_month.getFullYear()+","+time+")\">&rarr;</td>";
+   } else {
+      cal += "<td class='cal-inactive'>&rarr;</td>";
+   }
+   cal += "</tr>"
+   cal += "</table>";
+
    cal += "<table>";
    cal += "<tr>";
    var day_abbr = [ "S", "M", "T", "W", "T", "F", "S" ]
@@ -72,7 +127,7 @@ function write_cal(date, day, time) {
                if(day == date.getDate()) {
                   class_id = "cal-selected";
                }
-               cal += "<td class='"+class_id+"' onclick=\"set_date_update("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+",'"+time+"')\">";
+               cal += "<td class='"+class_id+"' onclick=\"set_date_close("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+",'"+time+"')\">";
             } else {
                cal += "<td class='cal-inactive'>";
             }
@@ -172,6 +227,11 @@ function set_date(month, day, year, time) {
 }
 
 function set_date_update(month, day, year, time) {
+   set_date(month, day, year, time);
+   display_cal(document.getElementById( eTime_to_date_Id(time) ), time);
+}
+
+function set_date_close(month, day, year, time) {
    set_date(month, day, year, time);
    if(time == eTime.start) {
       var next_day = new Date(year, month-1, day+1, 0, 0, 0, 0);
