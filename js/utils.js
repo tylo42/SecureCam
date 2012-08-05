@@ -1,4 +1,5 @@
 function ConfirmVideoRemove() {
+    "use strict";
     return confirm("Are you sure you want to remove video?");
 }
 
@@ -7,47 +8,41 @@ eTime = {
     end   : 1,
 };
 
-function active_day(date, today, time) {
-    if(eTime.end == time) {
-        var arr_start = get_date(eTime.start);
-        if(arr_start.length == 3) { // only check if valid
-            var start_date = new Date(arr_start[2], arr_start[0]-1, arr_start[1]);
-            if(   date.getFullYear() <= start_date.getFullYear() &&
-                    date.getMonth()    <= start_date.getMonth() &&
-                    date.getDate()     <  start_date.getDate() ) {
-                return false;
-            }
-            if(   date.getFullYear() <= start_date.getFullYear() &&
-                    date.getMonth() < start_date.getMonth()) {
-                return false;
-            }
-            if(date.getFullYear() < start_date.getFullYear()) {
+/**
+ * @param {Date} date   The current date to check if it is selectable
+ * @param {eTime} time  Indicates the calendar that is to be displayed
+ * @return              True if date can be selected
+ */
+function active_day(date, time) {
+    "use strict";
+    if (eTime.end === time) {
+        var start_date = get_date(eTime.start);
+        if (start_date) { // only check if valid
+            if (date < start_date) {
                 return false;
             }
         }
     }
 
+    var today = new Date();
+
     // if displaying a month before current month
-    if(today.getMonth() > date.getMonth() && today.getFullYear()  >= date.getFullYear()) {
+    if (today.getMonth() > date.getMonth() && today.getFullYear()  >= date.getFullYear()) {
         return true;
     }
 
-    if(today.getFullYear() > date.getFullYear()) {
+    // if displaying a year before the current month
+    if (today.getFullYear() > date.getFullYear()) {
         return true;
     }
 
     // if current month and before tomorrow
-    if(   today.getMonth() == date.getMonth() &&
-            today.getFullYear() == date.getFullYear() &&
-            today.getDate()  >= date.getDate()) {
+    if (today.getMonth() === date.getMonth() && today.getFullYear() === date.getFullYear() && today.getDate()  >= date.getDate()) {
         return true;
     }
 
     // if ending date and tomorrow
-    if(   eTime.end == time &&
-            today.getMonth() == date.getMonth() &&
-            today.getFullYear() == date.getFullYear() &&
-            today.getDate()+1 == date.getDate()) {
+    if (eTime.end === time && today.getMonth() === date.getMonth() && today.getFullYear() === date.getFullYear() && today.getDate() + 1 === date.getDate()) {
         return true;
     }
 
@@ -55,18 +50,40 @@ function active_day(date, today, time) {
     return false;
 }
 
-function active_prev_month(date, day, time) {
-    if(time == eTime.start) {
+/**
+ * @param {Date} lhs  Date to be compared on the left hand side
+ * @param {Date} rhs  Date to be compared on the right hand side
+ * @return            True if lhs's month is less than or equal to rhs's month
+ */
+function month_less_or_equal(lhs, rhs) {
+    "use strict";
+    if(lhs.getFullYear() < rhs.getFullYear()) {
         return true;
     }
 
-    var arr_start = get_date(eTime.start);
-    if(arr_start.length == 3) {
-        var start_date = new Date(arr_start[2], arr_start[0]-1, arr_start[1]);
-        if(start_date.getMonth() >= date.getMonth() && start_date.getFullYear() >= date.getFullYear()) {
-            return false;
-        }
-        if(start_date.getFullYear() > date.getFullYear()) {
+    if(lhs.getFullYear() === rhs.getFullYear() && lhs.getMonth() <= rhs.getMonth()) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * @param {Date} date   The current date to check if previous month is selectable
+ * @param {eTime} time  Indicates the calendar that is to be displayed
+ * @return              True if the previous month can be selected
+ */
+function active_prev_month(date, time) {
+    "use strict";
+    // Any previous month is valid for the starting calendar
+    if (time === eTime.start) {
+        return true;
+    }
+
+    // Do not allow the previous month be selectable if it would should a month before the starting date
+    var start_date  = get_date(eTime.start);
+    if (start_date) {
+        if(month_less_or_equal(date, start_date)) {
             return false;
         }
     }
@@ -74,33 +91,47 @@ function active_prev_month(date, day, time) {
     return true;
 }
 
-function active_next_month(date, day, time) {
+/**
+ * @param {Date} date   The current date to check if next month is selectable
+ * @param {eTime} time  Indicates the calendar that is to be displayed
+ * @return              True if the next month can be selected
+ */
+function active_next_month(date, time) {
+    "use strict";
+    // Do not allow the next month to be selectable if it would go past today
     var today = new Date();
-    if(today.getMonth() <= date.getMonth() && today.getFullYear() <= date.getFullYear()) {
+    if (month_less_or_equal(today, date)) {
         return false;
     }
+
     return true;
 }
 
-function write_cal(date, day, time) {
-    // table header
+function write_cal_header(date, time) {
     var cal = "<table>";
     cal += "<tr>";
-    if(active_prev_month(date, day, time)) {
-        var prev_month = new Date(date.getFullYear(), date.getMonth()-1, day);
+    if(active_prev_month(date, time)) {
+        var prev_month = new Date(date.getFullYear(), date.getMonth()-1, date.getDate());
         cal += "<td class='cal-active' onclick=\"set_date_update("+(prev_month.getMonth()+1)+","+prev_month.getDate()+","+prev_month.getFullYear()+","+time+")\">&larr;</td>";
     } else {
         cal += "<td class='cal-inactive'>&larr;</td>";
     }
     cal += "<td><h3>"+month_name(date.getMonth())+"</h3></td>";
-    if(active_next_month(date, day, time)) {
-        var next_month = new Date(date.getFullYear(), date.getMonth()+1, day);
+    if(active_next_month(date, time)) {
+        var next_month = new Date(date.getFullYear(), date.getMonth()+1, date.getDate());
         cal += "<td class='cal-active' onclick=\"set_date_update("+(next_month.getMonth()+1)+","+next_month.getDate()+","+next_month.getFullYear()+","+time+")\">&rarr;</td>";
     } else {
         cal += "<td class='cal-inactive'>&rarr;</td>";
     }
     cal += "</tr>";
     cal += "</table>";
+    return cal;
+}
+
+function write_cal(date, time) {
+    "use strict";
+
+    var cal = write_cal_header(date, time);
 
     cal += "<table>";
     cal += "<tr>";
@@ -110,8 +141,11 @@ function write_cal(date, day, time) {
         }
     cal += "<tr>";
 
+    var cur_date = new Date(date);
+    cur_date.setDate(1);
+
     // get the day of the week for the first day of the month
-    var first_day = date.getDay();
+    var first_day = cur_date.getDay();
 
     var done = false;
     var first = true;
@@ -121,21 +155,20 @@ function write_cal(date, day, time) {
             if(done || (first && i<first_day)) { // fill blank cells
                 cal += "<td>&nbsp</td>";
             } else {                       // print date, increment date
-                var today = new Date();
-                if(active_day(date,today,time)) {
+                if(active_day(cur_date,time)) {
                     var class_id = "cal-active";
-                    if(day == date.getDate()) {
+                    if(date.getDate() == cur_date.getDate()) {
                         class_id = "cal-selected";
                     }
-                    cal += "<td class='"+class_id+"' onclick=\"set_date_close("+(date.getMonth()+1)+","+date.getDate()+","+date.getFullYear()+",'"+time+"')\">";
+                    cal += "<td class='"+class_id+"' onclick=\"set_date_close("+(cur_date.getMonth()+1)+","+cur_date.getDate()+","+cur_date.getFullYear()+",'"+time+"')\">";
                 } else {
                     cal += "<td class='cal-inactive'>";
                 }
-                cal += date.getDate();
+                cal += cur_date.getDate();
                 cal += "</td>";
-                date.setDate(date.getDate()+1);
+                cur_date.setDate(cur_date.getDate()+1);
             }
-            if(date.getDate()==1 && !first) { // if beginning of next month we are done
+            if(cur_date.getDate()==1 && !first) { // if beginning of next month we are done
                 done = true;
             }
         }
@@ -147,6 +180,7 @@ function write_cal(date, day, time) {
 }
 
 function eTime_to_date_Id(time) {
+    "use strict";
     var date_id = "ERROR";
     if(time == eTime.start) {
         date_id = "sdate";
@@ -159,12 +193,23 @@ function eTime_to_date_Id(time) {
 }
 
 function get_date(time) {
+    "use strict";
     var str_date = document.getElementById( eTime_to_date_Id(time) ).value;
-    return str_date.match(/[0-9]+/g);
+    var arr = str_date.match(/[0-9]+/g);
+    if (arr != null && arr.length === 3) {
+        var day = parseInt(arr[1]);
+        var month = parseInt(arr[0]);
+        var year = parseInt(arr[2]);
+        if ( (0 < day || day <= 31) && (0 < month || month <= 12) && (2000 < year || year < 2100) ) {
+            return new Date(year, month - 1, day);
+        }
+    }
+    return null;
 }
 
 function findPos(object) {
-    var curleft = curtop = 0;
+    "use strict";
+    var curleft = 0, curtop = 0;
     if(object.offsetParent) {
         do {
             curleft += object.offsetLeft;
@@ -175,40 +220,28 @@ function findPos(object) {
 }
 
 function display_cal(object, time) {
-    var arr_date = get_date(time);
-    var date = new Date();
-    var day = date.getDate();
-    date.setDate(1);
+    "use strict";
 
-    if(arr_date != null && arr_date.length == 3) {
-        var input_day = parseInt(arr_date[1]);
-        var month = parseInt(arr_date[0]);
-        var year  = parseInt(arr_date[2]);
-        if( (0 < input_day || input_day <= 31) &&
-                (0 < month     || month <= 12) &&
-                (2000 < year   || year < 2100) ) { // test that input date is resonable
-            var test_date = new Date();
-            test_date.setMonth(month-1);
-            test_date.setYear(year);
-            test_date.setDate(input_day);
-            if(test_date.getMonth() == month-1) { // date is in the month specified
-                day = input_day;
-                date.setMonth(month-1);
-                date.setYear(year);
-            }
-        }
+    var date = new Date();
+
+    var input_date = get_date(time);
+    if(input_date) {
+        date = input_date;
     }
-    set_date(date.getMonth()+1, day, date.getFullYear(), time);
-    var cal = write_cal(date, day, time);
+
+    set_date(date, time);
+    var cal = write_cal(date, time);
     var loc = findPos(object);
     show_hover_div(cal, loc[0], loc[1], "cal");
 }
 
 function hide_cal() {
+    "use strict";
     hide_hover_div("cal");
 }
 
 function show_hover_div(text, x_pos, y_pos, div_id) {
+    "use strict";
     var cal = document.getElementById(div_id);
     cal.innerHTML = text;
     cal.style.left = x_pos+"px";
@@ -217,30 +250,36 @@ function show_hover_div(text, x_pos, y_pos, div_id) {
 }
 
 function hide_hover_div(div_id) {
+    "use strict";
     var div = document.getElementById(div_id);
     div.innerHTML = "";
     div.style.visibility = "hidden";
 }
 
-function set_date(month, day, year, time) {
-    document.getElementById( eTime_to_date_Id(time) ).value = month + "/" + day + "/" + year;
+function set_date(date, time) {
+    "use strict";
+    document.getElementById( eTime_to_date_Id(time) ).value = (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear();
 }
 
 function set_date_update(month, day, year, time) {
-    set_date(month, day, year, time);
+    "use strict";
+    set_date(new Date(year, month-1, day), time);
     display_cal(document.getElementById( eTime_to_date_Id(time) ), time);
 }
 
 function set_date_close(month, day, year, time) {
-    set_date(month, day, year, time);
+    "use strict";
+    var date = new Date(year, month-1, day);
+    set_date(date, time);
     if(time == eTime.start) {
-        var next_day = new Date(year, month-1, day+1, 0, 0, 0, 0);
-        set_date(next_day.getMonth()+1, next_day.getDate(), next_day.getFullYear(), eTime.end);
+        date.setDate(date.getDate()+1);
+        set_date(date, eTime.end);
     }
     hide_cal();
 }
 
 function month_name(month_num) {
+    "use strict";
     if(0 <= month_num && month_num <= 11) {
         var monthNames = [ "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December", ];
