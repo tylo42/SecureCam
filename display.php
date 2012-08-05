@@ -380,8 +380,8 @@ class install_display extends display {
             $username == '' ||
             $password == '' ||
             $confirm  == '') {
-            throw new Exception("Must fill all values");
-         }
+               throw new Exception("Must fill all values");
+            }
 
          if($_POST['password'] != $_POST['confirm']) {
             throw new Exception("Password does not match confirmation");
