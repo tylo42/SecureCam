@@ -15,16 +15,15 @@ eTime = {
  */
 function active_day(date, time) {
     "use strict";
+    var start_date, today = new Date();
     if (eTime.end === time) {
-        var start_date = get_date(eTime.start);
+        start_date = get_date(eTime.start);
         if (start_date) { // only check if valid
             if (date < start_date) {
                 return false;
             }
         }
     }
-
-    var today = new Date();
 
     // if displaying a month before current month
     if (today.getMonth() > date.getMonth() && today.getFullYear()  >= date.getFullYear()) {
@@ -57,11 +56,11 @@ function active_day(date, time) {
  */
 function month_less_or_equal(lhs, rhs) {
     "use strict";
-    if(lhs.getFullYear() < rhs.getFullYear()) {
+    if (lhs.getFullYear() < rhs.getFullYear()) {
         return true;
     }
 
-    if(lhs.getFullYear() === rhs.getFullYear() && lhs.getMonth() <= rhs.getMonth()) {
+    if (lhs.getFullYear() === rhs.getFullYear() && lhs.getMonth() <= rhs.getMonth()) {
         return true;
     }
 
@@ -83,7 +82,7 @@ function active_prev_month(date, time) {
     // Do not allow the previous month be selectable if it would should a month before the starting date
     var start_date  = get_date(eTime.start);
     if (start_date) {
-        if(month_less_or_equal(date, start_date)) {
+        if (month_less_or_equal(date, start_date)) {
             return false;
         }
     }
@@ -96,7 +95,7 @@ function active_prev_month(date, time) {
  * @param {eTime} time  Indicates the calendar that is to be displayed
  * @return              True if the next month can be selected
  */
-function active_next_month(date, time) {
+function active_next_month(date) {
     "use strict";
     // Do not allow the next month to be selectable if it would go past today
     var today = new Date();
@@ -108,56 +107,50 @@ function active_next_month(date, time) {
 }
 
 function write_cal_header(date, time) {
-    var cal = "<table>";
+    "use strict";
+    var cal = "<table>", prev_month = new Date(date.getFullYear(), date.getMonth() - 1, date.getDate()), next_month = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate()), width = 20;
     cal += "<tr>";
-    if(active_prev_month(date, time)) {
-        var prev_month = new Date(date.getFullYear(), date.getMonth()-1, date.getDate());
-        cal += "<td class='cal-active' onclick=\"set_date_update("+(prev_month.getMonth()+1)+","+prev_month.getDate()+","+prev_month.getFullYear()+","+time+")\">&larr;</td>";
+    if (active_prev_month(date, time)) {
+        cal += "<td class='cal-active' width='" + width + "%' onclick=\"set_date_update(" + (prev_month.getMonth() + 1) + "," + prev_month.getDate() + "," + prev_month.getFullYear() + "," + time + ")\">&larr;</td>";
     } else {
-        cal += "<td class='cal-inactive'>&larr;</td>";
+        cal += "<td class='cal-inactive' width='" + width + "%'>&larr;</td>";
     }
-    cal += "<td><h3>"+month_name(date.getMonth())+"</h3></td>";
-    if(active_next_month(date, time)) {
-        var next_month = new Date(date.getFullYear(), date.getMonth()+1, date.getDate());
-        cal += "<td class='cal-active' onclick=\"set_date_update("+(next_month.getMonth()+1)+","+next_month.getDate()+","+next_month.getFullYear()+","+time+")\">&rarr;</td>";
+    cal += "<td><h3>" + month_name(date.getMonth()) + "</h3></td>";
+    if (active_next_month(date)) {
+        cal += "<td class='cal-active'  width='" + width + "%'onclick=\"set_date_update(" + (next_month.getMonth() + 1) + "," + next_month.getDate() + "," + next_month.getFullYear() + "," + time + ")\">&rarr;</td>";
     } else {
-        cal += "<td class='cal-inactive'>&rarr;</td>";
+        cal += "<td class='cal-inactive' width='" + width + "%'>&rarr;</td>";
     }
     cal += "</tr>";
     cal += "</table>";
     return cal;
 }
 
-function write_cal(date, time) {
+function write_cal_header_row() {
     "use strict";
-
-    var cal = write_cal_header(date, time);
-
-    cal += "<table>";
+    var cal = "<tr>", day_abbr = [ "S", "M", "T", "W", "T", "F", "S" ], i = 0;
+    for (i=0; i<day_abbr.length; i++) {
+        cal += "<td class='cal-selected'>"+day_abbr[i]+"</td>";
+    }
     cal += "<tr>";
-    var day_abbr = [ "S", "M", "T", "W", "T", "F", "S" ]
-        for(var i=0; i<day_abbr.length; i++) {
-            cal += "<td class='cal-selected'>"+day_abbr[i]+"</td>";
-        }
-    cal += "<tr>";
+    return cal;
+}
 
-    var cur_date = new Date(date);
-    cur_date.setDate(1);
+function write_cal_date_rows(date, time) {
+    "use strict";
+    var cal = "", cur_date = new Date(date.getFullYear(), date.getMonth(), 1), first_day = cur_date.getDay(), done = false, first = true, class_id;
 
-    // get the day of the week for the first day of the month
-    var first_day = cur_date.getDay();
-
-    var done = false;
-    var first = true;
+    done = false;
+    first = true;
     while(!done) {
         cal += "<tr>";
-        for(var i=0; i<7; i++) {
-            if(done || (first && i<first_day)) { // fill blank cells
+        for (var i=0; i<7; i++) {
+            if (done || (first && i<first_day)) { // fill blank cells
                 cal += "<td>&nbsp</td>";
             } else {                       // print date, increment date
-                if(active_day(cur_date,time)) {
-                    var class_id = "cal-active";
-                    if(date.getDate() == cur_date.getDate()) {
+                if (active_day(cur_date,time)) {
+                    class_id = "cal-active";
+                    if (date.getDate() == cur_date.getDate()) {
                         class_id = "cal-selected";
                     }
                     cal += "<td class='"+class_id+"' onclick=\"set_date_close("+(cur_date.getMonth()+1)+","+cur_date.getDate()+","+cur_date.getFullYear()+",'"+time+"')\">";
@@ -168,23 +161,32 @@ function write_cal(date, time) {
                 cal += "</td>";
                 cur_date.setDate(cur_date.getDate()+1);
             }
-            if(cur_date.getDate()==1 && !first) { // if beginning of next month we are done
+            if (cur_date.getDate()==1 && !first) { // if beginning of next month we are done
                 done = true;
             }
         }
         cal += "</tr>";
         first = false;
     }
-    cal += "</tr></table>";
     return cal;
+}
+
+function write_cal_body(date, time) {
+    "use strict";
+    return "<table>" + write_cal_header_row() + write_cal_date_rows(date, time) + "</table>";
+}
+
+function write_cal(date, time) {
+    "use strict";
+    return write_cal_header(date, time) + write_cal_body(date, time);
 }
 
 function eTime_to_date_Id(time) {
     "use strict";
     var date_id = "ERROR";
-    if(time == eTime.start) {
+    if (time == eTime.start) {
         date_id = "sdate";
-    } else if(time == eTime.end) {
+    } else if (time == eTime.end) {
         date_id = "edate";
     } else {
         alert("ERROR" + time);
@@ -210,7 +212,7 @@ function get_date(time) {
 function findPos(object) {
     "use strict";
     var curleft = 0, curtop = 0;
-    if(object.offsetParent) {
+    if (object.offsetParent) {
         do {
             curleft += object.offsetLeft;
             curtop += object.offsetTop;
@@ -225,7 +227,7 @@ function display_cal(object, time) {
     var date = new Date();
 
     var input_date = get_date(time);
-    if(input_date) {
+    if (input_date) {
         date = input_date;
     }
 
@@ -271,7 +273,7 @@ function set_date_close(month, day, year, time) {
     "use strict";
     var date = new Date(year, month-1, day);
     set_date(date, time);
-    if(time == eTime.start) {
+    if (time == eTime.start) {
         date.setDate(date.getDate()+1);
         set_date(date, eTime.end);
     }
@@ -280,7 +282,7 @@ function set_date_close(month, day, year, time) {
 
 function month_name(month_num) {
     "use strict";
-    if(0 <= month_num && month_num <= 11) {
+    if (0 <= month_num && month_num <= 11) {
         var monthNames = [ "January", "February", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December", ];
         return monthNames[month_num];
