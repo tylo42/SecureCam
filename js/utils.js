@@ -5,7 +5,7 @@ function ConfirmVideoRemove() {
 
 eTime = {
     start : 0,
-    end   : 1,
+    end   : 1
 };
 
 /**
@@ -150,10 +150,10 @@ function write_cal_date_rows(date, time) {
             } else {                       // print date, increment date
                 if (active_day(cur_date,time)) {
                     class_id = "cal-active";
-                    if (date.getDate() == cur_date.getDate()) {
+                    if (date.getDate() === cur_date.getDate()) {
                         class_id = "cal-selected";
                     }
-                    cal += "<td class='"+class_id+"' onclick=\"set_date_close("+(cur_date.getMonth()+1)+","+cur_date.getDate()+","+cur_date.getFullYear()+",'"+time+"')\">";
+                    cal += "<td class='"+class_id+"' onclick=\"set_date_close("+(cur_date.getMonth()+1)+","+cur_date.getDate()+","+cur_date.getFullYear()+","+time+")\">";
                 } else {
                     cal += "<td class='cal-inactive'>";
                 }
@@ -161,7 +161,7 @@ function write_cal_date_rows(date, time) {
                 cal += "</td>";
                 cur_date.setDate(cur_date.getDate()+1);
             }
-            if (cur_date.getDate()==1 && !first) { // if beginning of next month we are done
+            if (cur_date.getDate()===1 && !first) { // if beginning of next month we are done
                 done = true;
             }
         }
@@ -184,9 +184,9 @@ function write_cal(date, time) {
 function eTime_to_date_Id(time) {
     "use strict";
     var date_id = "ERROR";
-    if (time == eTime.start) {
+    if (time === eTime.start) {
         date_id = "sdate";
-    } else if (time == eTime.end) {
+    } else if (time === eTime.end) {
         date_id = "edate";
     } else {
         alert("ERROR" + time);
@@ -198,10 +198,10 @@ function get_date(time) {
     "use strict";
     var str_date = document.getElementById( eTime_to_date_Id(time) ).value;
     var arr = str_date.match(/[0-9]+/g);
-    if (arr != null && arr.length === 3) {
-        var day = parseInt(arr[1]);
-        var month = parseInt(arr[0]);
-        var year = parseInt(arr[2]);
+    if (arr !== null && arr.length === 3) {
+        var day = parseInt(arr[1], 10);
+        var month = parseInt(arr[0], 10);
+        var year = parseInt(arr[2], 10);
         if ( (0 < day || day <= 31) && (0 < month || month <= 12) && (2000 < year || year < 2100) ) {
             return new Date(year, month - 1, day);
         }
@@ -273,7 +273,7 @@ function set_date_close(month, day, year, time) {
     "use strict";
     var date = new Date(year, month-1, day);
     set_date(date, time);
-    if (time == eTime.start) {
+    if (time === eTime.start) {
         date.setDate(date.getDate()+1);
         set_date(date, eTime.end);
     }
@@ -284,7 +284,7 @@ function month_name(month_num) {
     "use strict";
     if (0 <= month_num && month_num <= 11) {
         var monthNames = [ "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December", ];
+            "July", "August", "September", "October", "November", "December" ];
         return monthNames[month_num];
     }
     return "ERROR";
