@@ -73,8 +73,8 @@ class search_input extends input {
       $string .= "<td>\n\n";
       $string .= "<table class='search-time'>\n";
 
-      $string .= $this->search_date("Starting",$this->begin_time, "s", "display_cal(this, eTime.start)");
-      $string .= $this->search_date("Ending",  $this->end_time,   "e", "display_cal(this, eTime.end)");
+      $string .= $this->search_date("Starting",$this->begin_time, "s");
+      $string .= $this->search_date("Ending",  $this->end_time,   "e");
       $string .= "</table>\n\n";
       $string .= "</td>";
 
@@ -96,7 +96,7 @@ class search_input extends input {
       return $string;
    }
 
-   private function search_date($name, $unix_time, $prefix, $javascript) {
+   private function search_date($name, $unix_time, $prefix) {
       $string .= "<tr><th>$name Date</th>";
       $string .= "<td></td>";
       $string .= "<th>$name Time</th></tr>\n";
@@ -104,7 +104,7 @@ class search_input extends input {
       $string .= "<tr><td>";
 
       $date = date("n/j/Y", $unix_time);
-      $string .= "<input id='".$prefix."date' name='".$prefix."date' type='text' value='$date' maxlength='10' size='10' onfocus=\"$javascript\">"; // "DD/MM/YYYY"
+      $string .= "<input id='".$prefix."date' name='".$prefix."date' type='text' value='$date' maxlength='10' size='10'>"; // "DD/MM/YYYY"
 
       $string .= "</td><td>";
       $string .= "at";

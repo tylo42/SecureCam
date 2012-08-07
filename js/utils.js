@@ -1,12 +1,29 @@
-function ConfirmVideoRemove() {
-    "use strict";
-    return confirm("Are you sure you want to remove video?");
-}
-
 eTime = {
     start : 0,
     end   : 1
 };
+
+var sdate = document.getElementById('sdate');
+var edate = document.getElementById('edate');
+
+if(sdate) {
+    sdate.onclick = function() {
+        "use strict";
+        display_cal(this, eTime.start);
+    }
+}
+
+if(edate) {
+    edate.onclick = function() {
+        "use strict";
+        display_cal(this, eTime.end);
+    }
+}
+
+function ConfirmVideoRemove() {
+    "use strict";
+    return confirm("Are you sure you want to remove video?");
+}
 
 /**
  * @param {Date} date   The current date to check if it is selectable
