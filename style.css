@@ -245,6 +245,10 @@ table#stats th {
    text-align: left;
 }
 
+table#stats td.empty-stat {
+   width: 7%;
+}
+
 /* Live View */
 iframe.view {
    width: 440px;

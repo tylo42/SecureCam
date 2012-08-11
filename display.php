@@ -205,17 +205,26 @@ class stats_display extends display {
 
    public function __construct($stats) {
       $this->stats = $stats;
+      $this->total = 12;
+
+      $date = getDate();
+      $cur_month = 12 * $date["year"] + $date["mon"] - 12;
+      for($i=12; $i>0; $i--) {
+         $year = floor($cur_month/12);
+         $month = $cur_month % 12 + 1;
+         $key = generate_key("total", $year, $month);
+         if(!isset($this->stats[$key])) {
+            $this->total--;
+         } else {
+            break;
+         }
+         $cur_month++;
+      }
    }
 
    public function __toString() {
       $string  = "<h2>Statistics</h2>";
       $string .= "<hr />";
-
-      //get the current date
-      $date = getDate();
-      $curmonth = $date["mon"];
-      $curyear = $date["year"];
-      $curmonnum=12*$curyear+$curmonth;
 
       $string .= "<table id='stats'>";
 
@@ -250,9 +259,13 @@ class stats_display extends display {
       $cur_month = 12 * $date["year"] + $date["mon"] - 1;
 
       for($i=0; $i<12; $i++) {
-         $year = floor($cur_month/12);
-         $month = $cur_month % 12 + 1;
-         $result .= $data_col($year, $month);
+         if($i < $this->total) {
+            $year = floor($cur_month/12);
+            $month = $cur_month % 12 + 1;
+            $result .= $data_col($year, $month);
+         } else {
+            $result .= "<td class='empty-stat'>&nbsp;</td>";
+         }
          $cur_month--;
       }
 
