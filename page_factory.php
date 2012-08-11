@@ -46,9 +46,9 @@ if(!file_exists('settings.php')) {
 
    function extract_date_time($date, $time) {
       $arr_date = array();
-      list($arr_date['month'], $arr_date['day'], $arr_date['year']) = split('/', $date, 3);
-      list($arr_date['hour'], $min_ampm) = split(':', $time, 2);
-      list($arr_date['min'], $ampm) = split(' ', $min_ampm, 2);
+      list($arr_date['month'], $arr_date['day'], $arr_date['year']) = explode('/', $date, 3);
+      list($arr_date['hour'], $min_ampm) = explode(':', $time, 2);
+      list($arr_date['min'], $ampm) = explode(' ', $min_ampm, 2);
       if(strcasecmp($ampm, "PM") == 0) {
          $arr_date['hour'] += 12;
       } else if(strcasecmp($ampm, "AM") == 0) {
