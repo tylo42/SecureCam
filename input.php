@@ -97,7 +97,7 @@ class search_input extends input {
    }
 
    private function search_date($name, $unix_time, $prefix) {
-      $string .= "<tr><th>$name Date</th>";
+      $string  = "<tr><th>$name Date</th>";
       $string .= "<td></td>";
       $string .= "<th>$name Time</th></tr>\n";
 
