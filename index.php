@@ -18,6 +18,9 @@
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once('page_factory.php');
 
 session_start();

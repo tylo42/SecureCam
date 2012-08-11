@@ -186,8 +186,22 @@ class results_display extends display {
    }
 } // end class results_display
 
+
+function generate_key($name, $year, $month) {
+   return "$name-".date("Y-m", mktime(0, 0, 0, $month, 1, $year));
+}
+
+function data_cell($stats, $name, $year, $month) {
+   $key = generate_key($name, $year, $month);
+   if(isset($stats[$key])) {
+      return "<td>".$stats[$key]."</td>";
+   }
+   return "<td>0</td>";
+}
+
 class stats_display extends display {
    private $stats;
+   private $total;
 
    public function __construct($stats) {
       $this->stats = $stats;
@@ -204,56 +218,46 @@ class stats_display extends display {
       $curmonnum=12*$curyear+$curmonth;
 
       $string .= "<table id='stats'>";
-      $string .= "<tr><th></th>";
-      $count = 0;
-      $countmon=$curmonnum;
-      while($count < 12) {
-         $year=floor($countmon/12);
-         $month=$countmon%12;
-         if($month==0){
-            $month=12;
-            $year--;
-         }
-         $monthname=date("M", mktime(0, 0, 0, $month, 1, $year));
-         $string .= "<th>$monthname</th>";
-         $count++;
-         $countmon--;
-      }
-      $string .= "</tr>";
 
+      $string .= $this->table_row(
+         function() { return "<th>&nbsp;</th>"; },
+         function($year, $month) { return "<th>".date("M", mktime(0, 0, 0, $month, 1, $year))."</th>"; }
+      );
+
+      $stats = $this->stats; // copy it to local variable so it can be used in lambdas
       foreach(get_cameras() as $camera) {
-         $string .= $this->print_row($curmonnum, $camera->get_id(), $camera->get_description());
+         $string .= $this->table_row(
+            function() use ($camera) { return "<td>".$camera->get_description()."</td>"; },
+            function($year, $month) use ($camera, $stats) { return data_cell($stats, $camera->get_id(), $year, $month); }
+         );
       }
-      $string .= $this->print_row($curmonnum, "total", "Total");
+
+      $string .= $this->table_row(
+         function() { return "<td>Total</td>"; },
+         function($year, $month) use ($stats) { return data_cell($stats, "total", $year, $month); }
+      );
+
       $string .= "</table>";
 
       return $string;
    }
 
-   private function print_row($curmonnum, $name, $description) {
-      $string  = "<tr>";
-      $string .= "<td>$description</td>";
-      $count = 0;
-      $countmon=$curmonnum;
-      while($count < 12) {
-         $year=floor($countmon/12);
-         $month=$countmon%12;
-         if($month==0){
-            $month=12;
-            $year--;
-         }
+   private function table_row($title_col, $data_col) {
+      $result  = "<tr>";
+      $result .= $title_col();
 
-         $key = "$name-".date("Y-m", mktime(0, 0, 0, $month, 1, $year));
-         if(isset($this->stats[$key])) {
-            $string .= "<td>".$this->stats[$key]."</td>";
-         } else {
-            $string .= "<td>0</td>";
-         }
-         $count++;
-         $countmon--;
+      $date = getDate();
+      $cur_month = 12 * $date["year"] + $date["mon"] - 1;
+
+      for($i=0; $i<12; $i++) {
+         $year = floor($cur_month/12);
+         $month = $cur_month % 12 + 1;
+         $result .= $data_col($year, $month);
+         $cur_month--;
       }
-      $string .= "</tr>";
-      return $string;
+
+      $result .= "</tr>";
+      return $result;
    }
 } // end class stats_display
 

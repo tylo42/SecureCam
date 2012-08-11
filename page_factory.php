@@ -62,10 +62,6 @@ if(!file_exists('settings.php')) {
    }
 
    function page_factory($page_name, $page_num) {
-      if($install) {
-         return new page(new install_display(), "Install");
-      }
-
       $sc_database = securecam_database::singleton();
 
       if(!logged_in()) {
